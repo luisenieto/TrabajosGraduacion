@@ -23,7 +23,6 @@ import gui.trabajos.vistas.VentanaTrabajos;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
-import java.util.Comparator;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
