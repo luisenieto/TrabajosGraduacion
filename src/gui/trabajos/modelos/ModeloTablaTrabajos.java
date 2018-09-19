@@ -8,7 +8,6 @@ package gui.trabajos.modelos;
 import gui.interfaces.IGestorTrabajos;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 

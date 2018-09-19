@@ -10,7 +10,8 @@ public enum Cargo {
     ASOCIADO("Asociado"),
     ADJUNTO("Adjunto"),
     JTP("Jefe de Trabajos Prácticos"),
-    ADG("Aux. Docente Graduado"),;
+    ADG("Aux. Docente Graduado"),
+    EXTERNO("Externo");
     
     private String valor;
     

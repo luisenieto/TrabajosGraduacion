@@ -7,6 +7,7 @@ package gui.personas.vistas;
 
 import gui.interfaces.IControladorAMProfesor;
 import java.awt.Dialog;
+import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JTextField;
@@ -86,7 +87,7 @@ public class VentanaAMProfesor extends JDialog {
 
         txtApellidos.setToolTipText("Apellidos del profesor");
         txtApellidos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtApellidosPresionarTecla(evt);
             }
         });
@@ -95,7 +96,7 @@ public class VentanaAMProfesor extends JDialog {
 
         txtNombres.setToolTipText("Nombres del profesor");
         txtNombres.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombresPresionarTecla(evt);
             }
         });
@@ -125,7 +126,7 @@ public class VentanaAMProfesor extends JDialog {
 
         txtDocumento.setToolTipText("Documento del profesor");
         txtDocumento.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtDocumentoPresionarTecla(evt);
             }
         });
@@ -206,13 +207,13 @@ public class VentanaAMProfesor extends JDialog {
         this.controlador.txtApellidosPresionarTecla(evt);
     }//GEN-LAST:event_txtApellidosPresionarTecla
 
-    private void txtNombresPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresPresionarTecla
-       this.controlador.txtNombresPresionarTecla(evt);
-    }//GEN-LAST:event_txtNombresPresionarTecla
-
     private void txtDocumentoPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDocumentoPresionarTecla
         this.controlador.txtDocumentoPresionarTecla(evt);
     }//GEN-LAST:event_txtDocumentoPresionarTecla
+
+    private void txtNombresPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresPresionarTecla
+        this.controlador.txtNombresPresionarTecla(evt);
+    }//GEN-LAST:event_txtNombresPresionarTecla
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

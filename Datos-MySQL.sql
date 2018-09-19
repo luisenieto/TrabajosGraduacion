@@ -331,10 +331,10 @@ INSERT INTO Trabajos VALUES(21, 'Osciloscopio para dispositivos móviles', 6, '2
 INSERT INTO Trabajos VALUES(22, 'Dispositivos móviles para identificar y registrar la contaminación de afluentes y ríos', 6, '2017-04-21', '2017-05-17', NULL);
 INSERT INTO Trabajos VALUES(23, 'Desarrollo de sistema de optimización mediante partículas utilizando lenguaje orientado a agentes', 3, '2016-09-05', '2016-08-12', NULL);
 INSERT INTO Trabajos VALUES(24, 'Software de gestión y administración - Frigorífico C.T.S.A. Ltda.', 5, '2015-12-01', '2015-12-09', NULL);
--- INSERT INTO Trabajos VALUES(25, 'Método de estimación de Puntos de Casos de Uso Mejorado', 3, '2018-05-29', '', NULL); Roldán, Graciana
--- INSERT INTO Trabajos VALUES(26, 'Aplicación móvil de Gestión para Laboratorio de Análisis Clínicos', 5, '2018-05-24', '', NULL); Martínez, Gimena
--- INSERT INTO Trabajos VALUES(27, 'Sistema inalámbrico para relacionar la actividad muscular con los movimientos de las extremidades', 10, '2018-06-05', '', NULL); Pérez, Franco
--- INSERT INTO Trabajos VALUES(28, 'Sistema para seguimiento de órdenes y solicitudes de compra', 6, '2018-04-17', '', NULL); Gallardo Grazio - González
+INSERT INTO Trabajos VALUES(25, 'Método de estimación de Puntos de Casos de Uso Mejorado', 3, '2018-05-29', '2018-08-22', NULL);
+INSERT INTO Trabajos VALUES(26, 'Aplicación móvil de Gestión para Laboratorio de Análisis Clínicos', 5, '2018-05-24', '2018-08-22', NULL);
+INSERT INTO Trabajos VALUES(27, 'Sistema inalámbrico para relacionar la actividad muscular con los movimientos de las extremidades', 10, '2018-06-05', '2018-08-22', NULL);
+INSERT INTO Trabajos VALUES(28, 'Sistema para seguimiento de órdenes y solicitudes de compra', 6, '2018-04-17', '2018-08-22', NULL);
 INSERT INTO Trabajos VALUES(29, 'Sistema de Gestión Web para el manejo de una empresa de Serigrafía', 6, '2015-12-15', '2015-12-15', NULL); 
 INSERT INTO Trabajos VALUES(30, 'Estudio de la optimización de la gestión de una mesa de ayuda de un contact center utilizando ITIL', 5, '2013-10-29', '2013-10-29', NULL); 
 INSERT INTO Trabajos VALUES(31, 'Framework en Java para Gene Expression Programming (GEPFramework)', 6, '2015-10-08', '2015-10-27', NULL); 
@@ -360,31 +360,31 @@ INSERT INTO Trabajos VALUES(50, 'Aplicación Web GEFOUNT Módulo de stock y fact
 INSERT INTO Trabajos VALUES(51, 'Aplicación Web GEFOUNT Módulo contable', 6, '2016-09-09', '2016-09-09', NULL); 
 INSERT INTO Trabajos VALUES(52, 'Investigación y experimentación con protocolos y procesos asociados a IPv6', 4, '2016-05-10', '2016-06-02', NULL); 
 INSERT INTO Trabajos VALUES(53, 'Diseño y desarrollo de un co-procesador de imágenes basado en redes neuronales convolucionales utilizando RISC V', 4, '2015-10-14', '2015-09-27', NULL); 
--- INSERT INTO Trabajos VALUES(54, 'Sistema operativo de tiempo real con tareas dinámicas (PortOS)', 6, '2018-07-26', '', NULL); Balsells/José Liezún/Pace
+INSERT INTO Trabajos VALUES(54, 'Sistema operativo de tiempo real con tareas dinámicas (PortOS)', 6, '2018-07-26', '2018-08-22', NULL); 
 INSERT INTO Trabajos VALUES(55, 'Trabajos prácticos y laboratorios de concurrencia para Sistemas Operativos', 5, '2015-12-10', '2016-08-19', NULL); 
 INSERT INTO Trabajos VALUES(56, 'Desarrollo y análisis comparativo de medidores de energía monofásicos', 6, '2015-12-04', '2015-12-04', NULL); 
 INSERT INTO Trabajos VALUES(57, 'Refactorización del modelo de presentación de una aplicación web de comercio electrónico', 6, '2015-12-14', '2015-12-14', NULL); 
 
 -- UPDATE Trabajos SET fechaFinalizacion = '2018-07-26' WHERE idTrabajo = 24; -- Gutiérrez/Moreno
 -- UPDATE Trabajos SET fechaFinalizacion = '2018-08-03' WHERE idTrabajo = 10; -- Anzorena Ostengo/Ruíz
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 39; -- Cuevas
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 40; -- Rosino
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 41; -- Quinteros
+-- UPDATE Trabajos SET fechaFinalizacion = '2018-03-22' WHERE idTrabajo = 39; -- Cuevas
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-09-14' WHERE idTrabajo = 40; -- Rosino
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-09-06' WHERE idTrabajo = 41; -- Quinteros
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 42; -- Salinas Mendoza
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 43; -- Abuin/Bravo Córdoba/Ciotola
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 44; -- Forcada/Masclef
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 45; -- Pedraza
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 46; -- Alderete
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 47; -- Hardoy/Villagra
+-- UPDATE Trabajos SET fechaFinalizacion = '2016-12-07' WHERE idTrabajo = 47; -- Hardoy/Villagra
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 48; -- Avellaneda
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 49; -- Vazquez Lozano/Vega
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 50; -- Forns/Navarro Peralta
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 51; -- García Zeman/Maciel
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-08-23' WHERE idTrabajo = 49; -- Vazquez Lozano/Vega
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-03-31' WHERE idTrabajo = 50; -- Forns/Navarro Peralta
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-03-31' WHERE idTrabajo = 51; -- García Zeman/Maciel
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 52; -- Wolfenson
 -- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 53; -- De Amicis
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 55; -- Benicio
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 56; -- Albornoz/Richard/Toledo
--- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 57; -- Barrionuevo
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-03-27' WHERE idTrabajo = 55; -- Benicio
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-04-17' WHERE idTrabajo = 56; -- Albornoz/Richard/Toledo
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-04-19' WHERE idTrabajo = 57; -- Barrionuevo
 
 INSERT INTO AreasDeTrabajos VALUES(3, 1);
 INSERT INTO AreasDeTrabajos VALUES(2, 2);
@@ -421,12 +421,12 @@ INSERT INTO AreasDeTrabajos VALUES(2, 22);
 INSERT INTO AreasDeTrabajos VALUES(3, 22);
 INSERT INTO AreasDeTrabajos VALUES(3, 23);
 INSERT INTO AreasDeTrabajos VALUES(3, 24);
--- INSERT INTO AreasDeTrabajos VALUES(3, 25);  Roldán, Graciana
--- INSERT INTO AreasDeTrabajos VALUES(3, 26);  Martínez, Gimena
--- INSERT INTO AreasDeTrabajos VALUES(1, 27);  Pérez, Franco
--- INSERT INTO AreasDeTrabajos VALUES(2, 27);  Pérez, Franco
--- INSERT INTO AreasDeTrabajos VALUES(3, 27);  Pérez, Franco
--- INSERT INTO AreasDeTrabajos VALUES(3, 28);  Gallardo Grazio - González
+INSERT INTO AreasDeTrabajos VALUES(3, 25);
+INSERT INTO AreasDeTrabajos VALUES(3, 26);
+INSERT INTO AreasDeTrabajos VALUES(1, 27);
+INSERT INTO AreasDeTrabajos VALUES(2, 27);
+INSERT INTO AreasDeTrabajos VALUES(3, 27);
+INSERT INTO AreasDeTrabajos VALUES(3, 28);
 INSERT INTO AreasDeTrabajos VALUES(3, 29);
 INSERT INTO AreasDeTrabajos VALUES(2, 30);
 INSERT INTO AreasDeTrabajos VALUES(3, 31);
@@ -456,8 +456,8 @@ INSERT INTO AreasDeTrabajos VALUES(3, 51);
 INSERT INTO AreasDeTrabajos VALUES(2, 52);
 INSERT INTO AreasDeTrabajos VALUES(1, 53);
 INSERT INTO AreasDeTrabajos VALUES(3, 53);
--- INSERT INTO AreasDeTrabajos VALUES(1, 54); Balsells/José Liezún/Pace
--- INSERT INTO AreasDeTrabajos VALUES(3, 54); Balsells/José Liezún/Pace
+INSERT INTO AreasDeTrabajos VALUES(1, 54);
+INSERT INTO AreasDeTrabajos VALUES(3, 54);
 INSERT INTO AreasDeTrabajos VALUES(3, 55);
 INSERT INTO AreasDeTrabajos VALUES(1, 56);
 INSERT INTO AreasDeTrabajos VALUES(3, 57);
@@ -600,26 +600,26 @@ INSERT INTO RolesEnTrabajos VALUES(24, 23518045, 'Jurado', '2015-12-09', NULL, N
 INSERT INTO RolesEnTrabajos VALUES(24, 20433775, 'Jurado', '2015-12-09', NULL, NULL);
 INSERT INTO RolesEnTrabajos VALUES(24, 26923992, 'Jurado', '2015-12-09', NULL, NULL);
 
--- INSERT INTO RolesEnTrabajos VALUES(25, 23518045, 'Tutor', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(25, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(25, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(25, , 'Jurado', '', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(25, 23518045, 'Tutor', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(25, 30117830, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(25, 20433775, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(25, 26923992, 'Jurado', '2018-08-22', NULL, NULL);
 
--- INSERT INTO RolesEnTrabajos VALUES(26, 26923992, 'Tutor', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(26, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(26, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(26, , 'Jurado', '', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(26, 26923992, 'Tutor', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(26, 28476143, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(26, 30117830, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(26, 29878607, 'Jurado', '2018-08-22', NULL, NULL);
 
--- INSERT INTO RolesEnTrabajos VALUES(27, 23517968, 'Tutor', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(27, 31505375, 'Cotutor', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(27, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(27, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(27, , 'Jurado', '', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(27, 23517968, 'Tutor', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(27, 31505375, 'Cotutor', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(27, 27365680, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(27, 16039418, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(27, 23518045, 'Jurado', '2018-08-22', NULL, NULL);
 
--- INSERT INTO RolesEnTrabajos VALUES(28, 30117830, 'Tutor', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(28, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(28, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(28, , 'Jurado', '', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(28, 30117830, 'Tutor', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(28, 26485355, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(28, 23517082, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(28, 29878607, 'Jurado', '2018-08-22', NULL, NULL);
 
 INSERT INTO RolesEnTrabajos VALUES(29, 27364012, 'Tutor', '2015-12-15', NULL, NULL);
 INSERT INTO RolesEnTrabajos VALUES(29, 28883519, 'Jurado', '2015-12-15', NULL, NULL);
@@ -761,10 +761,10 @@ INSERT INTO RolesEnTrabajos VALUES(53, 10013664, 'Jurado', '2015-09-27', NULL, N
 INSERT INTO RolesEnTrabajos VALUES(53, 20433775, 'Jurado', '2015-09-27', NULL, NULL);
 INSERT INTO RolesEnTrabajos VALUES(53, 23517968, 'Jurado', '2015-09-27', NULL, NULL);
 
--- INSERT INTO RolesEnTrabajos VALUES(54, 23517968, 'Tutor', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(54, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(54, , 'Jurado', '', NULL, NULL);
--- INSERT INTO RolesEnTrabajos VALUES(54, , 'Jurado', '', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(54, 23517968, 'Tutor', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(54, 10013664, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(54, 11909386, 'Jurado', '2018-08-22', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(54, 27365680, 'Jurado', '2018-08-22', NULL, NULL);
 
 INSERT INTO RolesEnTrabajos VALUES(55, 11909386, 'Tutor', '2016-08-19', NULL, NULL);
 INSERT INTO RolesEnTrabajos VALUES(55, 16039418, 'Jurado', '2016-08-19', NULL, NULL);
@@ -821,11 +821,11 @@ INSERT INTO AlumnosEnTrabajos VALUES(22, 33971162, '2017-05-17', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(23, 37309622, '2016-08-12', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(24, 34603951, '2015-12-09', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(24, 35917837, '2015-12-09', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(25, 30919732, '', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(26, 35822926, '', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(27, 38248621, '', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(28, 34953697, '', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(28, 34286439, '', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(25, 30919732, '2018-08-22', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(26, 35822926, '2018-08-22', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(27, 38248621, '2018-08-22', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(28, 34953697, '2018-08-22', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(28, 34286439, '2018-08-22', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(29, 31451758, '2015-12-15', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(29, 30072261, '2015-12-15', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(30, 28223166, '2013-10-29', NULL, NULL);
@@ -864,9 +864,9 @@ INSERT INTO AlumnosEnTrabajos VALUES(51, 37456013, '2016-10-10', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(51, 36867442, '2016-10-10', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(52, 34132393, '2016-06-02', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(53, 36865839, '2015-09-27', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(54, 39142069, '', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(54, 39574773, '', NULL, NULL);
--- INSERT INTO AlumnosEnTrabajos VALUES(54, 39478639, '', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(54, 39142069, '2018-08-22', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(54, 39574773, '2018-08-22', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(54, 39478639, '2018-08-22', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(55, 33690456, '2016-08-19', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(56, 36838523, '2015-12-04', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(56, 36866011, '2015-12-04', NULL, NULL);

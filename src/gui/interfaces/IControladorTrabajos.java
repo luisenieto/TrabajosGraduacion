@@ -14,6 +14,17 @@ public interface IControladorTrabajos {
     public static final String TITULO = "Trabajos";
     public static final String CONFIRMACION_TRABAJO = "¿Desea borrar el trabajo especificado?";    
     
+    //Constantes para manejar la tabla de trabajos
+    public static final String OPERACION_ALTA = "Alta";
+    public static final String OPERACION_BAJA = "Baja";    
+    public static final String OPERACION_MODIFICACION = "Modificación"; 
+    public static final String OPERACION_SEMINARIOS = "Seminarios"; 
+    public static final String OPERACION_NINGUNA = "Ninguna"; 
+    //Constantes para manejar la tabla de profesores
+    public static final String OPERACION_PROFESORES = "Profesores";
+    //Constantes para manejar la tabla de alumnos
+    public static final String OPERACION_ALUMNOS = "Alumnos";
+    
     /**
      * Acción a ejecutar cuando se selecciona el botón Nuevo
      * @param evt evento

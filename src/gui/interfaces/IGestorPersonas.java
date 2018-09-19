@@ -146,5 +146,35 @@ public interface IGestorPersonas {
      * @param alumno alumno al cual se le determina el orden
      * @return int  - orden que ocupa el alumno
      */
-    public int ordenAlumno(Alumno alumno);    
+    public int ordenAlumno(Alumno alumno); 
+    
+    /**
+     * Devuelve la posición del último profesor agregado
+     * Sirve para manejar la tabla tablaProfesores
+     * Si cuando se agrega un profesor se cancela la operación, devuelve - 1
+     * Cada vez que se agrega un profesor, este valor toma la posición del profesor agregado en el ArrayList
+     * @return int  - posición del último profesor agregado
+     */
+    public int verUltimoProfesor();
+    
+    /**
+     * Devuelve la posición del último alumno agregado
+     * Sirve para manejar la tabla tablaAlumnos
+     * Si cuando se agrega un alumno se cancela la operación, devuelve - 1
+     * Cada vez que se agrega un alumno, este valor toma la posición del alumno agregado en el ArrayList
+     * @return int  - posición del último alumno agregado
+     */
+    public int verUltimoAlumno();    
+    
+    /**
+     * Asigna en -1 la variable que controla el último profesor agregado/modificado
+     * Sirve para manejar la tabla tablaProfesores
+     */
+    public void cancelarProfesor(); 
+    
+/**
+     * Asigna en -1 la variable que controla el último alumno agregado/modificado
+     * Sirve para manejar la tabla tablaAlumnos
+     */
+    public void cancelarAlumno();     
 }

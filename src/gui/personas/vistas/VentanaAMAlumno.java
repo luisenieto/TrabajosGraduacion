@@ -85,7 +85,7 @@ public class VentanaAMAlumno extends JDialog {
 
         txtApellidos.setToolTipText("Apellidos del alumno");
         txtApellidos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtApellidosPresionarTecla(evt);
             }
         });
@@ -94,7 +94,7 @@ public class VentanaAMAlumno extends JDialog {
 
         txtNombres.setToolTipText("Nombres del alumno");
         txtNombres.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombresPresionarTecla(evt);
             }
         });
@@ -121,14 +121,14 @@ public class VentanaAMAlumno extends JDialog {
 
         txtDocumento.setToolTipText("Documento del alumno");
         txtDocumento.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtDocumentoPresionarTecla(evt);
             }
         });
 
         txtCX.setToolTipText("CX del alumno");
         txtCX.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCXPresionarTecla(evt);
             }
         });
@@ -210,7 +210,7 @@ public class VentanaAMAlumno extends JDialog {
     }//GEN-LAST:event_txtApellidosPresionarTecla
 
     private void txtNombresPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresPresionarTecla
-       this.controlador.txtNombresPresionarTecla(evt);
+        this.controlador.txtNombresPresionarTecla(evt);
     }//GEN-LAST:event_txtNombresPresionarTecla
 
     private void txtDocumentoPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDocumentoPresionarTecla

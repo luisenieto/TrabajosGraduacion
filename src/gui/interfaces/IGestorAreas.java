@@ -16,11 +16,12 @@ public interface IGestorAreas {
     public static final String ESCRITURA_ERROR = "Error al guardar las áreas";
     public static final String ESCRITURA_OK = "Se pudieron guardar las áreas";    
 
-    //Constantes para el ABM de niveles    
+    //Constantes para el ABM de áreas    
     public static final String EXITO = "Area creada/borrada con éxito";
     public static final String ERROR = "El nombre del área no puede ser nulo";
     public static final String DUPLICADOS = "Ya existe un área con ese nombre";
     public static final String AREA_CON_TRABAJO = "No se puede borrar el área porque hay trabajo(s) con la misma";    
+
     
     /**
      * Crea un nueva área

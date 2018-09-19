@@ -25,6 +25,7 @@ import gui.trabajos.modelos.Trabajo;
 import gui.trabajos.vistas.VentanaAMTrabajo;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -308,5 +309,16 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
     public void btnCancelarClic(ActionEvent evt) {
         this.gt.cancelar();
         this.ventana.dispose();
+    }
+    
+    /**
+     * Acción a ejecutar cuando se presiona una tecla en el campo txtDuracion
+     * @param evt evento
+     */
+    @Override
+    public void txtDuracionPresionarTecla(KeyEvent evt) {
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)) //sólo se aceptan los dígitos del 0-9
+            evt.consume();
     }
 }

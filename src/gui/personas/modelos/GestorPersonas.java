@@ -29,6 +29,12 @@ public class GestorPersonas implements IGestorPersonas {
     private List<Persona> personas = new ArrayList<>();    
     private static GestorPersonas gestor;
     
+    private int ultimoProfesor;
+    //sirve para manejar la tabla tablaProfesores
+    
+    private int ultimoAlumno;
+    //sirve para manejar la tabla tablaAlumnos
+    
     /**
      * Constructor
     */                                            
@@ -61,9 +67,12 @@ public class GestorPersonas implements IGestorPersonas {
             Persona profesor = new Profesor(apellidos, nombres, dni, cargo);
             if (!this.personas.contains(profesor)) { //no existe este profesor
                 this.personas.add(profesor);
+                Collections.sort(this.personas);
                 String resultado = this.escribirArchivoProfesores();
-                if (resultado.equals(ESCRITURA_PROFESORES_OK))
+                if (resultado.equals(ESCRITURA_PROFESORES_OK)) {
+                    this.ultimoProfesor = this.obtenerUltimoProfesor((Profesor)profesor);
                     return EXITO_PROFESORES;
+                }
                 else
                     return ESCRITURA_PROFESORES_ERROR;               
             }
@@ -88,9 +97,12 @@ public class GestorPersonas implements IGestorPersonas {
             Persona alumno = new Alumno(apellidos, nombres, dni, cx);
             if (!this.personas.contains(alumno)) { //no existe este alumno
                 this.personas.add(alumno);
+                Collections.sort(this.personas);
                 String resultado = this.escribirArchivoAlumnos();
-                if (resultado.equals(ESCRITURA_ALUMNOS_OK))
+                if (resultado.equals(ESCRITURA_ALUMNOS_OK)) {
+                    this.ultimoAlumno = this.obtenerUltimoAlumno((Alumno)alumno);
                     return EXITO_ALUMNOS;
+                }
                 else
                     return ESCRITURA_ALUMNOS_ERROR;               
             }
@@ -117,8 +129,10 @@ public class GestorPersonas implements IGestorPersonas {
                 profesor.asignarNombres(nombres);
                 profesor.asignarCargo(cargo);
                 String resultado = this.escribirArchivoProfesores();                      
-                if (resultado.equals(ESCRITURA_PROFESORES_OK))
+                if (resultado.equals(ESCRITURA_PROFESORES_OK)) {
+                    this.ultimoProfesor = this.obtenerUltimoProfesor(profesor);
                     return EXITO_PROFESORES;
+                }
                 else
                     return ESCRITURA_PROFESORES_ERROR;
             }
@@ -145,8 +159,10 @@ public class GestorPersonas implements IGestorPersonas {
                 alumno.asignarNombres(nombres);
                 alumno.asignarCX(cx);
                 String resultado = this.escribirArchivoAlumnos();                      
-                if (resultado.equals(ESCRITURA_ALUMNOS_OK))
+                if (resultado.equals(ESCRITURA_ALUMNOS_OK)) {
+                    this.ultimoAlumno = this.obtenerUltimoAlumno(alumno);
                     return EXITO_ALUMNOS;
+                }
                 else
                     return ESCRITURA_ALUMNOS_ERROR;
             }
@@ -165,7 +181,6 @@ public class GestorPersonas implements IGestorPersonas {
     */                                                                            
     @Override
     public List<Profesor> buscarProfesores(String apellidos) {
-        Collections.sort(this.personas);
         List<Profesor> profesoresBuscados = new ArrayList<>();
         for(Persona persona : this.personas) {
             if (persona instanceof Profesor) {
@@ -173,9 +188,8 @@ public class GestorPersonas implements IGestorPersonas {
                     if (persona.verApellidos().toLowerCase().contains(apellidos.toLowerCase()))
                         profesoresBuscados.add((Profesor)persona);
                 }
-                else { //todos los profesores
-                    profesoresBuscados.add((Profesor)persona);
-                }                
+                else  //todos los profesores
+                    profesoresBuscados.add((Profesor)persona);            
             }
         }
         return profesoresBuscados;
@@ -217,6 +231,7 @@ public class GestorPersonas implements IGestorPersonas {
             return TRABAJO_CON_PROFESOR;
         }
         else { //no hay trabajos con este profesor
+            this.ultimoProfesor = this.obtenerUltimoProfesor(profesor);
             this.personas.remove(profesor);
             String resultado = this.escribirArchivoProfesores();
             if (resultado.equals(ESCRITURA_PROFESORES_OK))
@@ -238,8 +253,9 @@ public class GestorPersonas implements IGestorPersonas {
             return TRABAJO_CON_ALUMNO;
         }
         else { //no hay trabajos con este profesor
+            this.ultimoAlumno = this.obtenerUltimoAlumno(alumno);
             this.personas.remove(alumno);
-            String resultado = this.escribirArchivoProfesores();
+            String resultado = this.escribirArchivoAlumnos();
             if (resultado.equals(ESCRITURA_ALUMNOS_OK))
                 return EXITO_ALUMNOS;
             else
@@ -305,7 +321,73 @@ public class GestorPersonas implements IGestorPersonas {
     public int ordenAlumno(Alumno alumno) {
         List<Alumno> alumnos = this.buscarAlumnos(null);
         return alumnos.indexOf(alumno);
+    } 
+
+    /**
+     * Devuelve la posición del último profesor agregado
+     * Sirve para manejar la tabla tablaProfesores
+     * Si cuando se agrega un profesor se cancela la operación, devuelve - 1
+     * Cada vez que se agrega un profesor, este valor toma la posición del profesor agregado en el ArrayList
+     * @return int  - posición del último profesor agregado
+     */    
+    @Override
+    public int verUltimoProfesor() {
+        return this.ultimoProfesor;
+    }
+    
+    /**
+     * Devuelve la posición del último alumno agregado
+     * Sirve para manejar la tabla tablaAlumnos
+     * Si cuando se agrega un alumno se cancela la operación, devuelve - 1
+     * Cada vez que se agrega un alumno, este valor toma la posición del alumno agregado en el ArrayList
+     * @return int  - posición del último alumno agregado
+     */
+    @Override
+    public int verUltimoAlumno() {
+        return this.ultimoAlumno;
+    }
+    
+    /**
+     * Obtiene la posición del último profesor creado (tiene en cuenta sólo los profesores)
+     * @param profesor profesor al que se le busca la posición
+     * @return int  - posición en el ArrayList del último profesor creado
+     */
+    private int obtenerUltimoProfesor(Profesor profesor) {
+        List<Profesor> profesores = this.buscarProfesores(null);
+        return profesores.indexOf(profesor);
+    }
+    
+    /**
+     * Obtiene la posición del último alumno creado (tiene en cuenta sólo los alumnos)
+     * @param alumno alumno al que se le busca la posición
+     * @return int  - posición en el ArrayList del último alumno creado
+     */
+    private int obtenerUltimoAlumno(Alumno alumno) {
+        List<Alumno> alumnos = this.buscarAlumnos(null);
+        return alumnos.indexOf(alumno);
+    }
+    
+    
+
+    /**
+     * Asigna en -1 la variable que controla el último profesor agregado/modificado
+     * Sirve para manejar la tabla tablaProfesores
+     */
+    @Override
+    public void cancelarProfesor() {
+        this.ultimoProfesor = -1;
+    }
+    
+    /**
+     * Asigna en -1 la variable que controla el último alumno agregado/modificado
+     * Sirve para manejar la tabla tablaAlumnos
+     */
+    @Override
+    public void cancelarAlumno() {
+        this.ultimoAlumno = -1;
     }    
+    
+    
         
     /**
      * Lee del archivo de texto y carga el ArrayList empleando un try con recursos

@@ -30,7 +30,13 @@ import javax.swing.event.ListSelectionListener;
 
 public class ControladorTrabajos implements IControladorTrabajos {
     private VentanaTrabajos ventana;
-    private int numeroTrabajoSeleccionado;
+    private int trabajoSeleccionado;
+    //sirve para manejar la tabla tablaTrabajos
+    private int profesorSeleccionado = -1;
+    //sirve para manejar la tabla tablaProfesores
+    private int alumnoSeleccionado = -1;
+    //sirve para manejar la tabla tablaAlumnos
+    private String operacion;
     //sirve para manejar la tabla tablaTrabajos
     
     /**
@@ -41,37 +47,9 @@ public class ControladorTrabajos implements IControladorTrabajos {
     public ControladorTrabajos(Frame ventanaPadre) {
         this.ventana = new VentanaTrabajos(this, ventanaPadre);
         this.ventana.setLocationRelativeTo(null);   
-//        this.configurarTablaTrabajos();
         this.ventana.setVisible(true);
     }          
-    
-    /**
-     * Configura la tabla de trabajos para que responda cuando se le seleccione un trabajo
-     */
-    private void configurarTablaTrabajos() {
-        JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-                
-        tablaTrabajos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    //En esta tabla se puede seleccionar sólo un elemento a la vez, 
-                    //por lo que cuando se realiza una nueva selección, 
-                    //el elemento seleccionado anteriormente se convierte en no seleccionado, 
-                    //disparándose 2 eventos cada vez que se selecciona un elemento diferente
-                    //Para evitar responder al evento cuando un elemento deja de estar seleccionado
-                    //y luego cuando otro queda seleccionado, se comprueba que esta secuencia de eventos
-                    //esté terminada mediante getValueIsAdjusting()
-                    int fila = tablaTrabajos.getSelectedRow();
-                    if (fila != -1) {
-                        Trabajo trabajoSeleccionado = ((ModeloTablaTrabajos)tablaTrabajos.getSelectionModel()).obtenerTrabajo(fila);
-//                        mostrarTablaAlumnos(trabajoSeleccionado);
-                    }
-                }
-            }            
-        }); 
-    }
-    
+        
     /**
      * Muestra la tabla de profesores
      * @param trabajo trabajo al cual se le muestran los profesores
@@ -80,6 +58,10 @@ public class ControladorTrabajos implements IControladorTrabajos {
         JTable tablaProfesores = this.ventana.verTablaProfesores();
         ModeloTablaRolesEnTrabajos mtret = new ModeloTablaRolesEnTrabajos(trabajo);
         tablaProfesores.setModel(mtret);
+        
+        if (this.profesorSeleccionado == -1) //no hay seleccionado un profesor
+            this.profesorSeleccionado = 0;
+        tablaProfesores.setRowSelectionInterval(this.profesorSeleccionado, this.profesorSeleccionado);         
     }        
         
     
@@ -91,6 +73,10 @@ public class ControladorTrabajos implements IControladorTrabajos {
         JTable tablaAlumnos = this.ventana.verTablaAlumnos();
         ModeloTablaAlumnosEnTrabajos mtaet = new ModeloTablaAlumnosEnTrabajos(trabajo);
         tablaAlumnos.setModel(mtaet);
+        
+        if (this.alumnoSeleccionado == -1) //no hay seleccionado un alumno
+            this.alumnoSeleccionado = 0;
+        tablaAlumnos.setRowSelectionInterval(this.alumnoSeleccionado, this.alumnoSeleccionado);         
     }        
     
     /**
@@ -99,6 +85,9 @@ public class ControladorTrabajos implements IControladorTrabajos {
      */                            
     @Override
     public void btnNuevoClic(ActionEvent evt) {
+        JTable tablaTrabajos = this.ventana.verTablaTrabajos();
+        this.trabajoSeleccionado = tablaTrabajos.getSelectedRow(); 
+        this.operacion = OPERACION_ALTA;
         IControladorAMTrabajo controlador = new ControladorAMTrabajo(this.ventana, TRABAJO_NUEVO);
     }
 
@@ -108,24 +97,13 @@ public class ControladorTrabajos implements IControladorTrabajos {
      */                            
     @Override
     public void btnModificarClic(ActionEvent evt) {
-        JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        this.numeroTrabajoSeleccionado = tablaTrabajos.getSelectedRow();
-        if (this.numeroTrabajoSeleccionado != -1) { //hay seleccionado un trabajo
-            Trabajo trabajo = this.obtenerTrabajoSeleccionado(this.numeroTrabajoSeleccionado);
+        Trabajo trabajo = this.obtenerTrabajoSeleccionado();        
+        if (trabajo != null) { //hay seleccionado un trabajo
+            this.operacion = OPERACION_MODIFICACION;
             IControladorAMTrabajo controlador = new ControladorAMTrabajo(this.ventana, TRABAJO_MODIFICAR, trabajo);
         }
     }
     
-    /**
-     * Obtiene el trabajo correspondiente al número especificado (se corresponde con su posición dentro de la tabla)
-     * @return Trabajo  - trabajo seleccionado
-     */
-    private Trabajo obtenerTrabajoSeleccionado(int numTrabajo) {
-        JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        ModeloTablaTrabajos mtt = (ModeloTablaTrabajos)tablaTrabajos.getModel();
-        return mtt.obtenerTrabajo(numTrabajo);
-    }    
-
     /**
      * Obtiene el profesor (y su rol) seleccionado en la tabla
      * Si no hay un profesor seleccionado, devuelve null
@@ -162,40 +140,21 @@ public class ControladorTrabajos implements IControladorTrabajos {
      */                           
     @Override
     public void btnBorrarClic(ActionEvent evt) {
-        JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        this.numeroTrabajoSeleccionado = tablaTrabajos.getSelectedRow();
-        if (this.numeroTrabajoSeleccionado != -1) { //hay seleccionado un trabajo
-            Trabajo trabajo = this.obtenerTrabajoSeleccionado(this.numeroTrabajoSeleccionado);
+        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
+        if (trabajo != null) { //hay seleccionado un trabajo
+            this.operacion = OPERACION_BAJA;
+            IGestorTrabajos gt = GestorTrabajos.instanciar();
             int opcion = JOptionPane.showConfirmDialog(null, CONFIRMACION_TRABAJO, TITULO, JOptionPane.YES_NO_OPTION);
             if (opcion == JOptionPane.YES_OPTION) { //se quiere borrar el trabajo
-                IGestorTrabajos gt = GestorTrabajos.instanciar();
                 String resultado = gt.borrarTrabajo(trabajo);
-                if (resultado.equals(IGestorTrabajos.EXITO)) { //se pudo borrar el trabajo
-                    ModeloTablaTrabajos mtt = new ModeloTablaTrabajos();
-                    tablaTrabajos.setModel(mtt);
-                    if (mtt.getRowCount() > 0)
-                        this.numeroTrabajoSeleccionado = 0; //para que se seleccione el primer trabajo
-                }
-                else
+                if (!resultado.equals(IGestorTrabajos.EXITO)) { //no se pudo borrar el trabajo
+                    gt.cancelar();
                     JOptionPane.showMessageDialog(null, resultado, TITULO, JOptionPane.ERROR_MESSAGE);
+                }
             }
-        }
-                        
-//        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
-//        if (trabajo != null) { //hay seleccionado un trabajo
-//            int opcion = JOptionPane.showConfirmDialog(null, CONFIRMACION_TRABAJO, TITULO, JOptionPane.YES_NO_OPTION);
-//            if (opcion == JOptionPane.YES_OPTION) { //se quiere borrar el trabajo
-//                IGestorTrabajos gt = GestorTrabajos.instanciar();
-//                String resultado = gt.borrarTrabajo(trabajo);
-//                if (resultado.equals(IGestorTrabajos.EXITO)) { //se pudo borrar el trabajo
-//                    Comparator<Trabajo> cmp = (t1, t2) -> t1.verFechaAprobacion().compareTo(t2.verFechaAprobacion());
-//                    JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-//                    tablaTrabajos.setModel(new ModeloTablaTrabajos());
-//                }
-//                else
-//                    JOptionPane.showMessageDialog(null, resultado, TITULO, JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+            else
+                gt.cancelar();
+        }        
     }
 
     /**
@@ -215,74 +174,138 @@ public class ControladorTrabajos implements IControladorTrabajos {
     public void ventanaGanaFoco(WindowEvent evt) {        
         //La ventana gana el foco cuando:
         //  1. Se presiona el botón "Trabajos" en la ventana principal
-        //  2. Se vuelve de la ventana de alta/modificación de trabajos
-        //  3. Se vuelve después de borrar un trabajo
+        //  2. Se vuelve de la ventana de alta de trabajos
+        //  3. Se vuelve de la ventana de modificación de trabajos
+        //  4. Se vuelve de borrar un trabajo
+        //  5. Se vuelve de la ventana de seminarios
+        //  6. Se vuelve de la ventana de modificar un profesor
+        //  7. Se vuelve de la ventana de modificar un alumno
         
         //1.  Implica que la tabla no tiene asignado ModeloTablaTrabajos
-        //    Hay que asignárselo, si tiene filas, hay que seleccionar la primera, y tiene que escuchar cuando cambia de selección
-        
+        //    Hay que asignárselo, si tiene filas, hay que seleccionar la primera (inicializar la tabla)
+        //    Hay que hacer que escuche el cambio de selección para que refrezque las tablas de jurado y de alumnos
+
+        //2., 3., 4., 5., 6. y 7. Implica que la tabla ya tiene asignados ModeloTablaTrabajos
         //2.  Se puede volver:
-            //2.1 Sin haber creado ningún trabajo: 
-            //    Si no hay trabajos, no se hace nada
-            //    Si hay trabajos, se selecciona el que estaba seleccionado
-            //2.2 Habiendo creado el primer trabajo: se lo debe mostrar y seleccionar
-            //2.3 Habiendo creado el trabajo N: se lo debe mostrar y seleccionar
-            //2.4 Habiendo modificado un trabajo: se lo debe mostrar y seleccionar
+            //2.1 Sin haber creado ningún trabajo: seleccionar el trabajo que estaba seleccionado
+            //2.2 Habiendo creado un trabajo: seleccionar el trabajo recién creado
+            
+        //3.  Se puede volver:
+            //3.1 Sin haber modificado ningún trabajo: seleccionar el trabajo que estaba seleccionado
+            //3.2 Habiendo modificado un trabajo: seleccionar el trabajo recién modificado (que es el que estaba seleccionado)
+            
+        //4. Se puede volver:
+            //4.1 Sin haber borrado el trabajo: seleccionar el trabajo que estaba seleccionado
+            //4.2 Habiendo borrado el trabajo: si hay filas, seleccionar la primera        
+            
+        //5. Se puede volver:
+            //...
+            
+        //6. Se puede volver:
+            //6.1 Sin haber modificado el profesor: hay que seleccionar el profesor que estaba seleccionado
+            //6.2 Habiendo modificado el profesor: hay que seleccionar el profesor que estaba seleccionado y actualizar la tabla de profesores
         
-        //3.  Si hay trabajos, seleccionar el primero
-        
+            
         JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        if (tablaTrabajos.getModel() instanceof ModeloTablaTrabajos) {  //2: se vuelve de la ventana AMTrabajo            
-            ModeloTablaTrabajos mtt = (ModeloTablaTrabajos)tablaTrabajos.getModel();
-            mtt.fireTableDataChanged(); //se refresca la tabla
-            IGestorTrabajos gt = GestorTrabajos.instanciar();
-            if (mtt.getRowCount() > 0) {
-                if (gt.verUltimoTrabajo() == -1) //no se agregó ni modificó un trabajo
-                    tablaTrabajos.setRowSelectionInterval(this.numeroTrabajoSeleccionado, this.numeroTrabajoSeleccionado);               
-                else //se agregó o modificó un trabajo
-                    tablaTrabajos.setRowSelectionInterval(gt.verUltimoTrabajo(), gt.verUltimoTrabajo());
+        if (tablaTrabajos.getModel() instanceof ModeloTablaTrabajos) {   //2, 3, 4 y 5: se vuelve de la ventana AMTrabajo, de borrar un trabajo o de la ventana de seminarios
+            this.seleccionarTrabajoEnTabla(tablaTrabajos);
+        }
+        else  {//1: se viene de la ventana principal
+            this.inicializarTablaTrabajos(tablaTrabajos);
+        }
+
+        this.operacion = OPERACION_NINGUNA;
+    }
+    
+    /**
+     * Selecciona una fila en la tabla tablaTrabajos según la operación realizada
+     * @param tablaTrabajos tabla de trabajos
+     */
+    private void seleccionarTrabajoEnTabla(JTable tablaTrabajos) {
+        IGestorTrabajos gt = GestorTrabajos.instanciar();
+        ModeloTablaTrabajos mtt = (ModeloTablaTrabajos)tablaTrabajos.getModel();
+        if (this.operacion.equals(OPERACION_ALTA)) { //se vuelve de la ventana AMTrabajo
+            if (gt.verUltimoTrabajo() == -1) {  //no se creó ningún trabajo: se selecciona el que estaba seleccionado
+                if (this.trabajoSeleccionado != -1) //hay filas
+                    tablaTrabajos.setRowSelectionInterval(this.trabajoSeleccionado, this.trabajoSeleccionado);               
+            }
+            else {  //se creó un trabajo: se lo selecciona
+                mtt.fireTableDataChanged(); //se refresca la tabla
+                tablaTrabajos.setRowSelectionInterval(gt.verUltimoTrabajo(), gt.verUltimoTrabajo()); 
             }
         }
-        else { //1: se viene de la ventana principal
-            ModeloTablaTrabajos mtt = new ModeloTablaTrabajos();
-            tablaTrabajos.setModel(mtt);
-            
-            tablaTrabajos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-                @Override
-                public void valueChanged(ListSelectionEvent e) {
-                    if (!e.getValueIsAdjusting()) {
-                        //En esta tabla se puede seleccionar sólo un elemento a la vez, 
-                        //por lo que cuando se realiza una nueva selección, 
-                        //el elemento seleccionado anteriormente se convierte en no seleccionado, 
-                        //disparándose 2 eventos cada vez que se selecciona un elemento diferente
-                        //Para evitar responder al evento cuando un elemento deja de estar seleccionado
-                        //y luego cuando otro queda seleccionado, se comprueba que esta secuencia de eventos
-                        //esté terminada mediante getValueIsAdjusting()
-                        int fila = tablaTrabajos.getSelectedRow();
-                        if (fila != -1) {
-                            Trabajo trabajoSeleccionado = mtt.obtenerTrabajo(fila);
-                            mostrarTablaProfesores(trabajoSeleccionado);
-                            mostrarTablaAlumnos(trabajoSeleccionado);
-                        }
-                    }
-                }            
-            });
-
-            if (mtt.getRowCount() > 0) 
-                tablaTrabajos.setRowSelectionInterval(0, 0);
-            else {
-                mostrarTablaProfesores(null); //para mostrar los títulos de las columnas
-                mostrarTablaAlumnos(null); //para mostrar los títulos de las columnas
+        else if (this.operacion.equals(OPERACION_MODIFICACION)) { //se vuelve de la ventana AMTrabajo
+            mtt.fireTableDataChanged();
+            tablaTrabajos.setRowSelectionInterval(this.trabajoSeleccionado, this.trabajoSeleccionado);               
+        }
+        else if (this.operacion.equals(OPERACION_BAJA)) { //se vuelve de borrar un trabajo
+            if (gt.verUltimoTrabajo() == -1)  //no se borró ningún trabajo: se selecciona el que estaba seleccionado
+                tablaTrabajos.setRowSelectionInterval(this.trabajoSeleccionado, this.trabajoSeleccionado);               
+            else {  //se borró un trabajo: se selecciona la primera (si hay)
+                mtt.fireTableDataChanged(); //se refresca la tabla
+                if (mtt.getRowCount() > 0) { //si hay filas, se selecciona la primera
+                    this.trabajoSeleccionado = 0;
+                    tablaTrabajos.setRowSelectionInterval(this.trabajoSeleccionado, this.trabajoSeleccionado);                           
+                }
+                else
+                    this.trabajoSeleccionado = -1;
             }
-        }        
+        } 
+        else if (this.operacion.equals(OPERACION_SEMINARIOS)) {
+            
+        }
+        else if (this.operacion.equals(OPERACION_PROFESORES)) {
+            Trabajo trabajo = this.obtenerTrabajoSeleccionado();
+            this.mostrarTablaProfesores(trabajo);            
+        }
+        else if (this.operacion.equals(OPERACION_ALUMNOS)) {
+            Trabajo trabajo = this.obtenerTrabajoSeleccionado();
+            this.mostrarTablaAlumnos(trabajo);            
+        }
+    }
+    
+    /**
+     * Inicializa la tabla de trabajos cuando se muestra la ventana por primera vez
+     * @param tablaTrabajos tabla de trabajos
+     */
+    private void inicializarTablaTrabajos(JTable tablaTrabajos) {
+//        ModeloTablaTrabajos mtt = new ModeloTablaTrabajos(null); //todos los trabajos
+        ModeloTablaTrabajos mtt = new ModeloTablaTrabajos(); //todos los trabajos
+        tablaTrabajos.setModel(mtt);
+        
+        tablaTrabajos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    //En esta tabla se puede seleccionar sólo un elemento a la vez, 
+                    //por lo que cuando se realiza una nueva selección, 
+                    //el elemento seleccionado anteriormente se convierte en no seleccionado, 
+                    //disparándose 2 eventos cada vez que se selecciona un elemento diferente
+                    //Para evitar responder al evento cuando un elemento deja de estar seleccionado
+                    //y luego cuando otro queda seleccionado, se comprueba que esta secuencia de eventos
+                    //esté terminada mediante getValueIsAdjusting()
+                    
+                    Trabajo trabajoSeleccionado = obtenerTrabajoSeleccionado();
+                    mostrarTablaProfesores(trabajoSeleccionado);
+                    mostrarTablaAlumnos(trabajoSeleccionado);
+                }
+            }            
+        });        
         
         tablaTrabajos.getColumn("Título").setPreferredWidth(200);      
         tablaTrabajos.getColumn("Duración").setPreferredWidth(10);                    
         tablaTrabajos.getColumn("Area").setPreferredWidth(20);                    
         tablaTrabajos.getColumn("Presentación").setPreferredWidth(20);     
         tablaTrabajos.getColumn("Aprobación").setPreferredWidth(15);     
-        tablaTrabajos.getColumn("Exposición").setPreferredWidth(15);             
-    }
+        tablaTrabajos.getColumn("Exposición").setPreferredWidth(15);                     
+
+        if (mtt.getRowCount() > 0) { //si hay filas, se selecciona la primera
+            this.trabajoSeleccionado = 0;
+            tablaTrabajos.setRowSelectionInterval(this.trabajoSeleccionado, this.trabajoSeleccionado);                           
+        }
+        else
+            this.trabajoSeleccionado = -1;
+    }    
 
     /**
      * Acción a ejecutar cuando se selecciona el botón Seminarios 
@@ -291,15 +314,10 @@ public class ControladorTrabajos implements IControladorTrabajos {
     @Override
     public void btnSeminariosClic(ActionEvent evt) {
         JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        this.numeroTrabajoSeleccionado = tablaTrabajos.getSelectedRow();
-        if (this.numeroTrabajoSeleccionado != -1) { //hay seleccionado un trabajo
-            Trabajo trabajo = this.obtenerTrabajoSeleccionado(this.numeroTrabajoSeleccionado);
+        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
+        if (trabajo != null) {
             IControladorSeminarios controlador = new ControladorSeminarios(this.ventana, trabajo);
-        }                        
-//        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
-//        if (trabajo != null) {
-//            IControladorSeminarios controlador = new ControladorSeminarios(this.ventana, trabajo);
-//        }
+        }
     }
 
     /**
@@ -309,19 +327,16 @@ public class ControladorTrabajos implements IControladorTrabajos {
     @Override
     public void btnModificarProfesorClic(ActionEvent evt) {
         JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        this.numeroTrabajoSeleccionado = tablaTrabajos.getSelectedRow();
-        if (this.numeroTrabajoSeleccionado != -1) { //hay seleccionado un trabajo
-            Trabajo trabajo = this.obtenerTrabajoSeleccionado(this.numeroTrabajoSeleccionado);
+        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
+        if (trabajo != null) { //hay seleccionado un trabajo
             RolEnTrabajo rolEnTrabajo = this.obtenerRolEnTrabajoSeleccionado();
             if (rolEnTrabajo != null) { //hay seleccioado un profesor
+                JTable tablaProfesores = this.ventana.verTablaProfesores();
+                this.profesorSeleccionado = tablaProfesores.getSelectedRow(); 
+                this.operacion = OPERACION_PROFESORES;
                 IControladorModificarProfesor controlador = new ControladorModificarProfesor(this.ventana, trabajo, rolEnTrabajo);
             }
-        }                
-//        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
-//        RolEnTrabajo rolEnTrabajo = this.obtenerRolEnTrabajoSeleccionado();
-//        if (rolEnTrabajo != null) { //hay seleccioado un profesor
-//            IControladorModificarProfesor controlador = new ControladorModificarProfesor(this.ventana, trabajo, rolEnTrabajo);
-//        }        
+        }
     }
 
     /**
@@ -331,24 +346,34 @@ public class ControladorTrabajos implements IControladorTrabajos {
     @Override
     public void btnModificarAlumnoClic(ActionEvent evt) {
         JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        this.numeroTrabajoSeleccionado = tablaTrabajos.getSelectedRow();
-        if (this.numeroTrabajoSeleccionado != -1) { //hay seleccionado un trabajo
-            Trabajo trabajo = this.obtenerTrabajoSeleccionado(this.numeroTrabajoSeleccionado);
+        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
+        if (trabajo != null) { //hay seleccionado un trabajo
             AlumnoEnTrabajo alumnoEnTrabajo = this.obtenerAlumnoEnTrabajoSeleccionado();
-            if (alumnoEnTrabajo != null) { //hay seleccionado un alumno
+            if (alumnoEnTrabajo != null) { //hay seleccioado un alumno
+                JTable tablaAlumnos = this.ventana.verTablaAlumnos();
+                this.alumnoSeleccionado = tablaAlumnos.getSelectedRow(); 
+                this.operacion = OPERACION_ALUMNOS;
                 IControladorModificarAlumno controlador = new ControladorModificarAlumno(this.ventana, trabajo, alumnoEnTrabajo);
             }
         }
-        
-        
-        
-//        Trabajo trabajo = this.obtenerTrabajoSeleccionado();
-//        AlumnoEnTrabajo alumnoEnTrabajo = this.obtenerAlumnoEnTrabajoSeleccionado();
-//        if (alumnoEnTrabajo != null) { //hay seleccioado un alumno
-//            IControladorModificarAlumno controlador = new ControladorModificarAlumno(this.ventana, trabajo, alumnoEnTrabajo);
-//        }
     }
     
     
-    
+    /**
+     * Obtiene el trabajo en la tabla
+     * Si no hay un trabajo seleccionado, devuelve null
+     * @return Trabajo  - trabajo seleccionado
+     */
+    private Trabajo obtenerTrabajoSeleccionado() {
+        JTable tablaTrabajos = this.ventana.verTablaTrabajos();
+        if (tablaTrabajos.getSelectedRow() != -1) { //hay un trabajo seleccionado
+            ModeloTablaTrabajos mtt = (ModeloTablaTrabajos)tablaTrabajos.getModel();
+            this.trabajoSeleccionado = tablaTrabajos.getSelectedRow();
+            return mtt.obtenerTrabajo(tablaTrabajos.getSelectedRow());
+        }
+        else {
+            this.trabajoSeleccionado = -1;
+            return null;
+        }
+    }        
 }

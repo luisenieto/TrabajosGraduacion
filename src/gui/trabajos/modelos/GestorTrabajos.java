@@ -38,7 +38,7 @@ public class GestorTrabajos implements IGestorTrabajos {
     private List<Trabajo> trabajos = new ArrayList<>();    
     private static GestorTrabajos gestor;
     
-    private int ultimoTrabajo = - 1;
+    private int ultimoTrabajo;
     //sirve para manejar la tabla tablaTrabajos
     
     private int ultimoSeminario = - 1;
@@ -330,7 +330,6 @@ public class GestorTrabajos implements IGestorTrabajos {
     
     /**
      * Muestra los trabajos ordenados con el criterio especificado
-     * @param cmp criterio de ordenamiento
      */
     @Override
     public void mostrarTrabajos() {
@@ -417,7 +416,6 @@ public class GestorTrabajos implements IGestorTrabajos {
     */                                                                    
     @Override
     public String modificarTrabajo(Trabajo trabajo, LocalDate fechaExposicion) {
-        this.ultimoTrabajo = - 1;
         if (trabajo != null) {
             if ((fechaExposicion != null) && (fechaExposicion.isAfter(trabajo.verFechaAprobacion()))) {
                 trabajo.asignarFechaExposicion(fechaExposicion);
@@ -454,6 +452,7 @@ public class GestorTrabajos implements IGestorTrabajos {
         if (trabajo.tieneSeminarios())
             return TRABAJO_CON_SEMINARIO;
         else {
+            this.ultimoTrabajo = this.trabajos.indexOf(trabajo);
             this.trabajos.remove(trabajo);
             String resultado = this.escribirArchivo();
             if (resultado.equals(ESCRITURA_OK))
@@ -477,7 +476,6 @@ public class GestorTrabajos implements IGestorTrabajos {
      */
     @Override
     public String reemplazarProfesor(Trabajo trabajo, Profesor profesorReemplazado, LocalDate fechaHasta, String razon, Profesor nuevoProfesor) {
-        this.ultimoTrabajo = - 1;
         if (trabajo != null) { //existe el trabajo
             if ((profesorReemplazado != null) && (fechaHasta != null) && (razon != null) && (nuevoProfesor != null)) {
                 if (!trabajo.tieneEsteProfesor(nuevoProfesor)) {
@@ -827,8 +825,8 @@ public class GestorTrabajos implements IGestorTrabajos {
      */    
     @Override
     public void cancelar() {
-        this.ultimoTrabajo = - 1;
-        this.ultimoSeminario = - 1; 
+        this.ultimoTrabajo = -1;
+        this.ultimoSeminario = -1; 
     }
                     
     /**

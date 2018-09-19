@@ -148,6 +148,12 @@ public class VentanaAMTrabajo extends JDialog {
 
         jLabel2.setText("Duración:");
 
+        txtDuracion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDuracionPresionarTecla(evt);
+            }
+        });
+
         jLabel3.setText("Area:");
 
         comboArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -340,6 +346,10 @@ public class VentanaAMTrabajo extends JDialog {
     private void btnCancelarClic(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarClic
         this.controlador.btnCancelarClic(evt);
     }//GEN-LAST:event_btnCancelarClic
+
+    private void txtDuracionPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDuracionPresionarTecla
+        this.controlador.txtDuracionPresionarTecla(evt);
+    }//GEN-LAST:event_txtDuracionPresionarTecla
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

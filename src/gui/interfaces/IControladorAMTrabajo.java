@@ -6,6 +6,7 @@
 package gui.interfaces;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public interface IControladorAMTrabajo {
     /**
@@ -19,5 +20,11 @@ public interface IControladorAMTrabajo {
      * @param evt evento
      */                        
     public void btnCancelarClic(ActionEvent evt);
+    
+    /**
+     * Acción a ejecutar cuando se presiona una tecla en el campo txtDuracion
+     * @param evt evento
+     */
+    public void txtDuracionPresionarTecla(KeyEvent evt);
     
 }

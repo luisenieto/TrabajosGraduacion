@@ -110,7 +110,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Apellidos del profesor"/>
       </Properties>
       <Events>
-        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtApellidosPresionarTecla"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtApellidosPresionarTecla"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -123,7 +123,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Nombres del profesor"/>
       </Properties>
       <Events>
-        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNombresPresionarTecla"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNombresPresionarTecla"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnGuardar">
@@ -175,7 +175,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Documento del profesor"/>
       </Properties>
       <Events>
-        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDocumentoPresionarTecla"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtDocumentoPresionarTecla"/>
       </Events>
     </Component>
   </SubComponents>

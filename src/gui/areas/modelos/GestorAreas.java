@@ -25,7 +25,7 @@ public class GestorAreas implements IGestorAreas {
     private List<Area> areas = new ArrayList<>();
     private static GestorAreas gestor;
     
-    private int ultimaArea = - 1;
+    private int ultimaArea;
     //sirve para manejar la tabla tablaAreas
     
     /**
@@ -52,7 +52,6 @@ public class GestorAreas implements IGestorAreas {
     */                                                                    
     @Override
     public String nuevaArea(String nombre) {
-        this.ultimaArea = - 1;
         if (!nombre.trim().isEmpty()) { //nombre del área no nulo
             Area area = new Area(nombre);
             if (!this.areas.contains(area)) {
@@ -90,9 +89,8 @@ public class GestorAreas implements IGestorAreas {
             }
             return areasBuscadas;
         }
-        else { //todas las áreas            
-            return this.areas;
-        }                                
+        else  //todas las áreas            
+            return this.areas;                            
     }
         
     /**
@@ -106,9 +104,10 @@ public class GestorAreas implements IGestorAreas {
         if (gt.hayTrabajosConEsteArea(area)) //hay al menos un trabajo con este área
             return AREA_CON_TRABAJO;
         else { //no hay trabajos con este área
+            this.ultimaArea = this.areas.indexOf(area);
             this.areas.remove(area);
             String resultado = this.escribirArchivo();
-            if (resultado.equals(ESCRITURA_OK))
+            if (resultado.equals(ESCRITURA_OK)) 
                 return EXITO;
             else
                 return ESCRITURA_ERROR;
@@ -150,7 +149,7 @@ public class GestorAreas implements IGestorAreas {
      */    
     @Override
     public void cancelar() {
-        this.ultimaArea = - 1;
+        this.ultimaArea = -1;
     }
             
     /**

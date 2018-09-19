@@ -17,7 +17,18 @@ public interface IControladorPersonas {
     public static final String ALUMNO_MODIFICAR = "Alumnos - Modificar";    
     public static final String TITULO = "Personas";
     public static final String CONFIRMACION_PROFESOR = "¿Desea borrar el profesor especificado?";    
-    public static final String CONFIRMACION_ALUMNO = "¿Desea borrar el alumno especificado?";    
+    public static final String CONFIRMACION_ALUMNO = "¿Desea borrar el alumno especificado?";
+    
+    //Constantes para manejar las tablas de profesores/alumnos
+    public static final String OPERACION_ALTA_PROFESOR = "Alta";
+    public static final String OPERACION_BAJA_PROFESOR = "Baja";    
+    public static final String OPERACION_MODIFICACION_PROFESOR = "Modificación"; 
+    public static final String OPERACION_NINGUNA_PROFESOR = "Ninguna";    
+    public static final String OPERACION_ALTA_ALUMNO = "Alta";
+    public static final String OPERACION_BAJA_ALUMNO = "Baja";    
+    public static final String OPERACION_MODIFICACION_ALUMNO = "Modificación"; 
+    public static final String OPERACION_NINGUNA_ALUMNO = "Ninguna";        
+    
     
     /**
      * Acción a ejecutar cuando se selecciona el botón Nuevo Profesor

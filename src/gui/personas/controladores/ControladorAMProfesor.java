@@ -75,12 +75,16 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
     private void nuevoProfesor() {
         String apellidos = this.ventana.verTxtApellidos().getText().trim();
         String nombres = this.ventana.verTxtNombres().getText().trim();
-        int documento = Integer.parseInt(this.ventana.verTxtDocumento().getText().trim());
+        int documento = 0;
+        if (!this.ventana.verTxtDocumento().getText().trim().isEmpty())
+            documento = Integer.parseInt(this.ventana.verTxtDocumento().getText().trim());
         Cargo cargo = ((ModeloComboCargos)this.ventana.verComboCargo().getModel()).obtenerCargo();
         IGestorPersonas gp = GestorPersonas.instanciar();
         String resultado = gp.nuevoProfesor(apellidos, nombres, documento, cargo);
-        if (!resultado.equals(IGestorPersonas.EXITO_PROFESORES))
+        if (!resultado.equals(IGestorPersonas.EXITO_PROFESORES)) {
+            gp.cancelarProfesor();
             JOptionPane.showMessageDialog(null, resultado, IControladorPersonas.TITULO, JOptionPane.ERROR_MESSAGE);
+        }    
         else
             this.ventana.dispose();                                    
     }
@@ -94,8 +98,10 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
         Cargo cargo = ((ModeloComboCargos)this.ventana.verComboCargo().getModel()).obtenerCargo();
         IGestorPersonas gp = GestorPersonas.instanciar();
         String resultado = gp.modificarProfesor(this.profesor, apellidos, nombres, cargo);
-        if (!resultado.equals(IGestorPersonas.EXITO_PROFESORES))
+        if (!resultado.equals(IGestorPersonas.EXITO_PROFESORES)) {
+            gp.cancelarProfesor();
             JOptionPane.showMessageDialog(null, resultado, IControladorPersonas.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();                                    
     }    
@@ -106,6 +112,8 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
      */                            
     @Override
     public void btnCancelarClic(ActionEvent evt) {
+        IGestorPersonas gp = GestorPersonas.instanciar();
+        gp.cancelarProfesor();
         this.ventana.dispose();
     }
 
@@ -114,13 +122,18 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
      * @param evt evento
      */    
     @Override
-    public void txtDocumentoPresionarTecla(KeyEvent evt) {
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (this.profesor == null) //nuevo profesor
-                this.nuevoProfesor();
-            else //modificar profesor
-                this.modificarProfesor();
-        }
+    public void txtDocumentoPresionarTecla(KeyEvent evt) { 
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)) { //sólo se aceptan los dígitos del 0-9
+            if(c == KeyEvent.VK_ENTER) {
+                if (this.profesor == null) //nuevo profesor
+                    this.nuevoProfesor();
+                else //modificar profesor
+                    this.modificarProfesor();
+            }
+            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE))
+                evt.consume();
+        }        
     }
 
     /**
@@ -129,7 +142,7 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
      */    
     @Override
     public void txtNombresPresionarTecla(KeyEvent evt) {
-        this.txtDocumentoPresionarTecla(evt);
+        this.txtApellidosPresionarTecla(evt);
     }
 
     /**
@@ -138,6 +151,16 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
      */    
     @Override
     public void txtApellidosPresionarTecla(KeyEvent evt) {
-        this.txtDocumentoPresionarTecla(evt);
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c)) { //sólo se aceptan letras
+            if(c == KeyEvent.VK_ENTER) {
+                if (this.profesor == null) //nuevo profesor
+                    this.nuevoProfesor();
+                else //modificar profesor
+                    this.modificarProfesor();
+            }
+            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE))
+                evt.consume();
+        }
     }
 }

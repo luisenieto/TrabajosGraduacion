@@ -14,7 +14,6 @@ import gui.trabajos.modelos.AlumnoEnTrabajo;
 import gui.trabajos.modelos.RolEnTrabajo;
 import gui.trabajos.modelos.Trabajo;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 
 public interface IGestorTrabajos {

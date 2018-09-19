@@ -69,12 +69,16 @@ public class ControladorAMAlumno implements IControladorAMAlumno {
     private void nuevoAlumno() {
         String apellidos = this.ventana.verTxtApellidos().getText().trim();
         String nombres = this.ventana.verTxtNombres().getText().trim();
-        int documento = Integer.parseInt(this.ventana.verTxtDocumento().getText().trim());
+        int documento = 0;
+        if (!this.ventana.verTxtDocumento().getText().trim().isEmpty())
+            documento = Integer.parseInt(this.ventana.verTxtDocumento().getText().trim());        
         String cx = this.ventana.verTxtCX().getText().trim();
         IGestorPersonas gp = GestorPersonas.instanciar();
         String resultado = gp.nuevoAlumno(apellidos, nombres, documento, cx);
-        if (!resultado.equals(IGestorPersonas.EXITO_ALUMNOS))
+        if (!resultado.equals(IGestorPersonas.EXITO_ALUMNOS)) {
+            gp.cancelarAlumno();
             JOptionPane.showMessageDialog(null, resultado, IControladorPersonas.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();                                    
     }
@@ -88,8 +92,10 @@ public class ControladorAMAlumno implements IControladorAMAlumno {
         String cx = this.ventana.verTxtCX().getText().trim();
         IGestorPersonas gp = GestorPersonas.instanciar();
         String resultado = gp.modificarAlumno(this.alumno, apellidos, nombres, cx);
-        if (!resultado.equals(IGestorPersonas.EXITO_ALUMNOS))
+        if (!resultado.equals(IGestorPersonas.EXITO_ALUMNOS)) {
+            gp.cancelarAlumno();
             JOptionPane.showMessageDialog(null, resultado, IControladorPersonas.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();                                    
     }    
@@ -100,6 +106,8 @@ public class ControladorAMAlumno implements IControladorAMAlumno {
      */                            
     @Override
     public void btnCancelarClic(ActionEvent evt) {
+        IGestorPersonas gp = GestorPersonas.instanciar();
+        gp.cancelarAlumno();
         this.ventana.dispose();
     }
 
@@ -109,11 +117,16 @@ public class ControladorAMAlumno implements IControladorAMAlumno {
      */    
     @Override
     public void txtDocumentoPresionarTecla(KeyEvent evt) {
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (this.alumno == null) //nuevo alumno
-                this.nuevoAlumno();
-            else //modificar alumno
-                this.modificarAlumno();
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c)) { //sólo se aceptan los dígitos del 0-9
+            if(c == KeyEvent.VK_ENTER) {
+                if (this.alumno == null) //nuevo alumno
+                    this.nuevoAlumno();
+                else //modificar alumno
+                    this.modificarAlumno();
+            }
+            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE))
+                evt.consume();
         }
     }
 
@@ -123,7 +136,7 @@ public class ControladorAMAlumno implements IControladorAMAlumno {
      */    
     @Override
     public void txtNombresPresionarTecla(KeyEvent evt) {
-        this.txtDocumentoPresionarTecla(evt);
+        this.txtApellidosPresionarTecla(evt);
     }
 
     /**
@@ -132,7 +145,17 @@ public class ControladorAMAlumno implements IControladorAMAlumno {
      */    
     @Override
     public void txtApellidosPresionarTecla(KeyEvent evt) {
-        this.txtDocumentoPresionarTecla(evt);
+        char c = evt.getKeyChar();
+        if (!Character.isLetter(c)) { //sólo se aceptan letras
+            if(c == KeyEvent.VK_ENTER) {
+                if (this.alumno == null) //nuevo alumno
+                    this.nuevoAlumno();
+                else //modificar alumno
+                    this.modificarAlumno();
+            }
+            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE))
+                evt.consume();
+        }
     }
     
     /**

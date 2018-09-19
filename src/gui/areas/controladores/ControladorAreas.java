@@ -21,8 +21,9 @@ import javax.swing.JTable;
 
 public class ControladorAreas implements IControladorAreas {
     private VentanaAreas ventana;
-    private int numeroAreaSeleccionada;
+    private int areaSeleccionada;
     //sirve para manejar la tabla tablaAreas
+    private String operacion;
     
     /**
      * Constructor
@@ -42,8 +43,8 @@ public class ControladorAreas implements IControladorAreas {
     @Override
     public void btnNuevaClic(ActionEvent evt) {
         JTable tablaAreas = this.ventana.verTablaAreas();
-        ModeloTablaAreas mta = (ModeloTablaAreas)tablaAreas.getModel();
-        this.numeroAreaSeleccionada = mta.getRowCount() > 0 ? tablaAreas.getSelectedRow() : -1;        
+        this.areaSeleccionada = tablaAreas.getSelectedRow();
+        this.operacion = OPERACION_ALTA;
         IControladorAMArea controlador = new ControladorAMArea(this.ventana);
     }
     
@@ -56,10 +57,13 @@ public class ControladorAreas implements IControladorAreas {
         JTable tablaAreas = this.ventana.verTablaAreas();
         if (tablaAreas.getSelectedRow() != -1) { //hay un área seleccionada
             ModeloTablaAreas mta = (ModeloTablaAreas)tablaAreas.getModel();
+            this.areaSeleccionada = tablaAreas.getSelectedRow();
             return mta.obtenerArea(tablaAreas.getSelectedRow());
         }
-        else
+        else {
+            this.areaSeleccionada = -1;
             return null;
+        }
     }
 
     /**
@@ -68,26 +72,20 @@ public class ControladorAreas implements IControladorAreas {
      */                            
     @Override
     public void btnBorrarClic(ActionEvent evt) {
-        Area area = this.obtenerAreaSeleccionada();
+        Area area = this.obtenerAreaSeleccionada();        
         if (area != null) { //hay seleccionada un área
+            this.operacion = OPERACION_BAJA;
+            IGestorAreas ga = GestorAreas.instanciar();
             int opcion = JOptionPane.showConfirmDialog(null, CONFIRMACION, TITULO, JOptionPane.YES_NO_OPTION);
-            if (opcion == JOptionPane.YES_OPTION) { //se quiere borrar el área
-                IGestorAreas ga = GestorAreas.instanciar();
+            if (opcion == JOptionPane.YES_OPTION) { //se quiere borrar el área                
                 String resultado = ga.borrarArea(area);
-                if (resultado.equals(IGestorAreas.EXITO)) { //se pudo borrar el área
-                    JTable tablaAreas = this.ventana.verTablaAreas();
-                    ModeloTablaAreas mta = new ModeloTablaAreas("");
-                    tablaAreas.setModel(mta);
-                    if (mta.getRowCount() > 0) { //si hay filas, se selecciona la primera
-                        tablaAreas.setRowSelectionInterval(0, 0);           
-                        this.numeroAreaSeleccionada = 0;
-                    }
-                    else
-                        this.numeroAreaSeleccionada = -1;                        
-                }
-                else
+                if (!resultado.equals(IGestorAreas.EXITO)) { //no se pudo borrar el área
+                    ga.cancelar();
                     JOptionPane.showMessageDialog(null, resultado, TITULO, JOptionPane.ERROR_MESSAGE);
-            }            
+                }
+            }
+            else
+                ga.cancelar();
         }
     }
 
@@ -135,70 +133,76 @@ public class ControladorAreas implements IControladorAreas {
         //La ventana gana el foco cuando:
         //  1. Se presiona el botón "Areas" en la ventana principal
 	//  2. Se vuelve de la ventana de alta de áreas
-        //  3. Se vuelve al borrar un área
+        //  3. Se vuelve de borrar un área
 
         //1.  Implica que la tabla no tiene asignado ModeloTablaAreas
         //    Hay que asignárselo, si tiene filas, hay que seleccionar la primera
 
+        //2. y 3. Implica que la tabla ya tiene asignado ModeloTablaAreas
         //2.  Se puede volver:
-            //2.1 Sin haber creado ningún área: 
-            //    Si no hay áreas, no se hace nada
-            //    Si ya hay áreas, se selecciona la que estaba seleccionada
-            //2.2 Habiendo creado un área: se la debe mostrar y seleccionar
+            //2.1 Sin haber creado ningún área: seleccionar el área que estaba seleccionada
+            //2.2 Habiendo creado un área: seleccionar el área recién creada
             
         //3. Se puede volver:
-            //3.1 Sin haber borrado el área
-                //Se selecciona el área que estaba seleccionada
-            //3.2 Habiendo borrado el área
-                //Si no hay áreas, no se hace nada
-                //Si hay áreas, se selecciona la primera
+            //3.1 Sin haber borrado el área: seleccionar el área que estaba seleccionada
+            //3.2 Habiendo borrado el área: si hay filas, seleccionar la primera
                 
         JTable tablaAreas = this.ventana.verTablaAreas();
+        if (tablaAreas.getModel() instanceof ModeloTablaAreas)   //2 y 3: se vuelve de la ventana AMArea, o de borrar un área
+            this.seleccionarAreaEnTabla(tablaAreas);
+        else  //1: se viene de la ventana principal
+            this.inicializarTablaProfesores(tablaAreas);
+        
+        this.operacion = OPERACION_NINGUNA;
+    } 
+    
+    /**
+     * Selecciona una fila en la tabla tablaAreas según la operación realizada
+     * @param tablaAreas tabla de áreas
+     */
+    private void seleccionarAreaEnTabla(JTable tablaAreas) {
         IGestorAreas ga = GestorAreas.instanciar();
-        if (tablaAreas.getModel() instanceof ModeloTablaAreas) {  //2 y 3: se vuelve de la ventana AMArea, o de borrar un área
-            ModeloTablaAreas mta = (ModeloTablaAreas)tablaAreas.getModel();
-            mta.fireTableDataChanged(); //se refresca la tabla
-//            IGestorAreas ga = GestorAreas.instanciar();
-            if (ga.verUltimaArea() == -1) { //2.1 no se creó ningún área
-//                if (mta.getRowCount() > 0) //si ya hay áreas
-                    tablaAreas.setRowSelectionInterval(this.numeroAreaSeleccionada, this.numeroAreaSeleccionada);               
+        ModeloTablaAreas mta = (ModeloTablaAreas)tablaAreas.getModel();
+        if (this.operacion.equals(OPERACION_ALTA)) { //se vuelve de la ventana AMArea
+            if (ga.verUltimaArea() == -1) {  //no se creó ningún área: se selecciona la que estaba seleccionada
+                if (this.areaSeleccionada != -1) //hay filas
+                    tablaAreas.setRowSelectionInterval(this.areaSeleccionada, this.areaSeleccionada);               
             }
-            else { //2.2 se creó un área: se la selecciona
+            else {  //se creó un área: se la selecciona
+                mta.fireTableDataChanged(); //se refresca la tabla
                 tablaAreas.setRowSelectionInterval(ga.verUltimaArea(), ga.verUltimaArea()); 
             }
-            System.out.println("AMArea - " + "this.numeroAreaSeleccionada: " + this.numeroAreaSeleccionada + ", ga.verUltimaArea(): " + ga.verUltimaArea());
         }
-        else { //1: se viene de la ventana principal
-            ModeloTablaAreas mta = new ModeloTablaAreas(null); //todas las áreas
-            tablaAreas.setModel(mta);
-            
-            if (mta.getRowCount() > 0) { //si hay filas, se selecciona la primera
-                tablaAreas.setRowSelectionInterval(0, 0);           
-                this.numeroAreaSeleccionada = 0;
+        else if (this.operacion.equals(OPERACION_BAJA)) { //se vuelve de borrar un área
+            if (ga.verUltimaArea() == -1)  //no se borró ningún área: se selecciona la que estaba seleccionada
+                tablaAreas.setRowSelectionInterval(this.areaSeleccionada, this.areaSeleccionada);               
+            else {  //se borró un área: se selecciona la primera (si hay)
+                mta.fireTableDataChanged(); //se refresca la tabla
+                if (mta.getRowCount() > 0) { //si hay filas, se selecciona la primera
+                    this.areaSeleccionada = 0;
+                    tablaAreas.setRowSelectionInterval(this.areaSeleccionada, this.areaSeleccionada);                           
+                }
+                else
+                    this.areaSeleccionada = -1;
             }
-            else
-                this.numeroAreaSeleccionada = -1;
-            System.out.println("principal - " + "this.numeroAreaSeleccionada: " + this.numeroAreaSeleccionada + ", ga.verUltimaArea(): " + ga.verUltimaArea());
-        }
+        }                    
+    }
         
-//        System.out.println(this.numeroAreaSeleccionada);
-            
-//        JTable tablaAreas = this.ventana.verTablaAreas();
-//        if (tablaAreas.getSelectedRow() == -1) {
-//            //si no hay seleccionada ninguna fila, 
-//            //y hay filas para seleccionar, se selecciona la primera
-//            ModeloTablaAreas mta = new ModeloTablaAreas(null); //todas las áreas
-//            tablaAreas.setModel(mta); //todas las áreas
-//            if (mta.getRowCount() > 0)
-//                tablaAreas.setRowSelectionInterval(0, 0); 
-//        }     
-//        else { //sí hay seleccionada una fila
-//            int fila = tablaAreas.getSelectedRow();
-//            tablaAreas.setModel(new ModeloTablaAreas(null)); 
-//            //Se hace esto porque a lo mejor se modificó alguno
-//            tablaAreas.setRowSelectionInterval(fila, fila); 
-//        }        
-    } 
+    /**
+     * Inicializa la tabla de áreas cuando se muestra la ventana por primera vez
+     * @param tablaAreas tabla de áreas
+     */
+    private void inicializarTablaProfesores(JTable tablaAreas) {
+        ModeloTablaAreas mta = new ModeloTablaAreas(null); //todas las áreas
+        tablaAreas.setModel(mta);
+
+        if (mta.getRowCount() > 0) { //si hay filas, se selecciona la primera
+            this.areaSeleccionada = 0;
+            tablaAreas.setRowSelectionInterval(this.areaSeleccionada, this.areaSeleccionada);                           
+        }
+        else
+            this.areaSeleccionada = -1;
+    }
 
     /**
      * Acción a ejecutar cuando se presiona una tecla en el campo txtNombre

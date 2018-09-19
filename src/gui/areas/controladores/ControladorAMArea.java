@@ -47,8 +47,10 @@ public class ControladorAMArea implements IControladorAMArea {
         IGestorAreas ga = GestorAreas.instanciar();
         String resultado;
         resultado = ga.nuevaArea(nombre);
-        if (!resultado.equals(IGestorAreas.EXITO))
+        if (!resultado.equals(IGestorAreas.EXITO)) {
+            ga.cancelar();
             JOptionPane.showMessageDialog(null, resultado, IControladorAreas.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();
     }
@@ -59,6 +61,8 @@ public class ControladorAMArea implements IControladorAMArea {
      */                            
     @Override
     public void btnCancelarClic(ActionEvent evt) {
+        IGestorAreas ga = GestorAreas.instanciar();
+        ga.cancelar();
         this.ventana.dispose();
     }
 

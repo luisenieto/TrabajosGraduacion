@@ -65,6 +65,9 @@ public class ModeloTablaProfesores extends AbstractTableModel {
     */                        
     @Override
     public int getRowCount() { 
+        IGestorPersonas gp = GestorPersonas.instanciar();
+        this.profesores = gp.buscarProfesores(null);
+        //hay que volver a obtener los profesores porque se puede haber agregado uno
         return this.profesores.size();
     }
 
