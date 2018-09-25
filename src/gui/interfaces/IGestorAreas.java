@@ -70,4 +70,13 @@ public interface IGestorAreas {
      * Sirve para manejar la tabla tablaAreas
      */
     public void cancelar();    
+    
+    /**
+     * Devuelve el orden que ocupa el área en todo el conjunto de áreas
+     * Si no existe el área especificada, devuelve -1
+     * Este método es necesario para poder seleccionar las áreas a las que pertenece el trabajo en una JList
+     * @param area área al cual se le determina el orden
+     * @return int  - orden que ocupa el área
+     */
+    public int ordenArea(Area area);    
 }

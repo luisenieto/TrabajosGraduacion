@@ -14,6 +14,8 @@ import javax.swing.table.AbstractTableModel;
  * Clase para mostrar las áreas en una tabla
  */
 public class ModeloTablaAreas extends AbstractTableModel {
+    public static final String COLUMNA_NOMBRE = "Nombre";
+    //constantes para los nombres de las columnas 
     private List<Area> areas;
     //los datos los saca de GestorAreas
     private List<String> nombresColumnas = new ArrayList<>();        
@@ -24,7 +26,7 @@ public class ModeloTablaAreas extends AbstractTableModel {
     * @param nombre nombre que se usa para filtrar la búsqueda de áreas
     */                                                        
     public ModeloTablaAreas(String nombre) {
-        this.nombresColumnas.add("Nombre");
+        this.nombresColumnas.add(COLUMNA_NOMBRE);
         IGestorAreas ga = GestorAreas.instanciar();        
         this.areas = ga.buscarAreas(nombre);
     }    

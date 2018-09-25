@@ -7,9 +7,12 @@ package gui.trabajos.controladores;
 
 import com.toedter.calendar.JDateChooser;
 import gui.areas.modelos.Area;
+import gui.areas.modelos.GestorAreas;
 import gui.interfaces.IControladorAMTrabajo;
 import gui.areas.modelos.ModeloComboAreas;
+import gui.areas.modelos.ModeloListaAreas;
 import gui.interfaces.IControladorTrabajos;
+import gui.interfaces.IGestorAreas;
 import gui.interfaces.IGestorPersonas;
 import gui.interfaces.IGestorTrabajos;
 import gui.personas.modelos.Alumno;
@@ -85,17 +88,31 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
     }
         
     /**
-     * Configura todo lo relacionado al área del trabajo
+     * Configura todo lo relacionado a las áreas del trabajo
      */
     private void configurarArea() {
-        this.ventana.verComboArea().setModel(new ModeloComboAreas());
-        
+        this.ventana.verListaAreas().setModel(new ModeloListaAreas());
         if (this.trabajo != null) { //modificación de trabajo
-            ((ModeloComboAreas)this.ventana.verComboArea().getModel()).seleccionarArea(this.trabajo.verArea());        
-            this.ventana.verComboArea().setEnabled(false);
+            List<Area> areas = this.trabajo.verAreas();
+            int i = 0;
+            int ordenAreas[] = new int[areas.size()];
+            IGestorAreas ga = GestorAreas.instanciar();
+            for(Area area : areas) 
+                ordenAreas[i++] = ga.ordenArea(area);
+            
+            this.ventana.verListaAreas().setSelectedIndices(ordenAreas);            
+            this.ventana.verListaAreas().setEnabled(false);
+            
         }
-        else
-            ((ModeloComboAreas)this.ventana.verComboArea().getModel()).seleccionarArea(null);
+        
+//        this.ventana.verComboArea().setModel(new ModeloComboAreas());
+//        
+//        if (this.trabajo != null) { //modificación de trabajo
+//            ((ModeloComboAreas)this.ventana.verComboArea().getModel()).seleccionarArea(this.trabajo.verArea());        
+//            this.ventana.verComboArea().setEnabled(false);
+//        }
+//        else
+//            ((ModeloComboAreas)this.ventana.verComboArea().getModel()).seleccionarArea(null);
     }    
     
     /**
@@ -152,7 +169,7 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
         if (this.trabajo != null) { //modificación de trabajo
             List<Profesor> jurado = this.trabajo.verJurado();
             int i = 0;
-            int ordenJurado[] = new int[3];
+            int ordenJurado[] = new int[jurado.size()];
             IGestorPersonas gp = GestorPersonas.instanciar();
             for(Profesor profesor : jurado) 
                 ordenJurado[i++] = gp.ordenProfesor(profesor);
@@ -207,7 +224,10 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
             duracion = Integer.parseInt(this.ventana.verTxtDuracion().getText().trim());
         else
             duracion = 0;
-        Area area = ((ModeloComboAreas)this.ventana.verComboArea().getModel()).obtenerArea();
+        
+        List<Area> areas = this.ventana.verListaAreas().getSelectedValuesList();
+        //areas es la lista de áreas seleccionadas
+        
         LocalDate fechaPresentacion = this.obtenerFechaDeJDateChooser(this.ventana.verFechaPresentacion());
         LocalDate fechaAprobacion = this.obtenerFechaDeJDateChooser(this.ventana.verFechaAprobacion());
         Profesor tutor = ((ModeloComboProfesores)this.ventana.verComboTutor().getModel()).obtenerProfesor();
@@ -216,6 +236,7 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
         //profesores es la lista de profesores seleccionados como jurado
         List<Alumno> alumnos = this.ventana.verListaAlumnos().getSelectedValuesList();
         //alumnos es la lista de alumnos que participan en el trabajo
+        
         List<AlumnoEnTrabajo> aet = new ArrayList<>();
         for(Alumno alumno : alumnos) 
             aet.add(new AlumnoEnTrabajo(alumno, fechaAprobacion));
@@ -230,7 +251,7 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
             profesoresEnElTrabajo.add(cotutorEnTrabajo);
         }
                       
-        String resultado = this.gt.nuevoTrabajo(titulo, duracion, fechaPresentacion, fechaAprobacion, area, profesoresEnElTrabajo, aet);
+        String resultado = this.gt.nuevoTrabajo(titulo, duracion, fechaPresentacion, fechaAprobacion, areas, profesoresEnElTrabajo, aet);
         if (!resultado.equals(IGestorTrabajos.EXITO))
             JOptionPane.showMessageDialog(null, resultado, IControladorTrabajos.TITULO, JOptionPane.ERROR_MESSAGE);
         else

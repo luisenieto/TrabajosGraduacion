@@ -63,12 +63,12 @@ public interface IGestorTrabajos {
      * @param duracion duración del trabajo (en meses)
      * @param fechaPresentacion fecha en que se presenta el trabajo a la comisión académica para tratar su aprobación
      * @param fechaAprobacion fecha en que la comisión académica aprueba la propuesta de trabajo
-     * @param area área del trabajo
+     * @param areas áreas del trabajo
      * @param profesores lista con los profesores que actúan como tutor, cotutor (si hubiera) y jurado
      * @param aet alumnos que realizan el trabajo
      * @return String  - cadena con el resultado de la operación
     */                                                                    
-    public String nuevoTrabajo(String titulo, int duracion, LocalDate fechaPresentacion, LocalDate fechaAprobacion, Area area, List<RolEnTrabajo> profesores, List<AlumnoEnTrabajo> aet);
+    public String nuevoTrabajo(String titulo, int duracion, LocalDate fechaPresentacion, LocalDate fechaAprobacion, List<Area> areas, List<RolEnTrabajo> profesores, List<AlumnoEnTrabajo> aet);
     
     /**
      * Modifica un trabajo asignándole su fecha de exposición, con lo cual termina el trabajo

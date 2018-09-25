@@ -14,6 +14,12 @@ import javax.swing.table.AbstractTableModel;
  * Clase para mostrar los alumnos en una tabla
  */
 public class ModeloTablaAlumnos extends AbstractTableModel {
+    public static final String COLUMNA_APELLIDOS = "Apellidos";
+    public static final String COLUMNA_NOMBRES = "Nombres";
+    public static final String COLUMNA_DNI = "DNI";
+    public static final String COLUMNA_CX = "CX";
+    //constantes para los nombres de las columnas
+    
     private List<Alumno> alumnos;
     //los datos los saca de GestorPersonas
     private List<String> nombresColumnas = new ArrayList<>();        
@@ -24,10 +30,10 @@ public class ModeloTablaAlumnos extends AbstractTableModel {
     * @param apellidos apellidos que se usan para filtrar la búsqueda de alumnos
     */                                                        
     public ModeloTablaAlumnos(String apellidos) {
-        this.nombresColumnas.add("Apellidos");
-        this.nombresColumnas.add("Nombres");
-        this.nombresColumnas.add("DNI");
-        this.nombresColumnas.add("CX");
+        this.nombresColumnas.add(COLUMNA_APELLIDOS);
+        this.nombresColumnas.add(COLUMNA_NOMBRES);
+        this.nombresColumnas.add(COLUMNA_DNI);
+        this.nombresColumnas.add(COLUMNA_CX);
         IGestorPersonas gp = GestorPersonas.instanciar();        
         this.alumnos = gp.buscarAlumnos(apellidos);
     }    

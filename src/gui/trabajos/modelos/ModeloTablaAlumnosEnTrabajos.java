@@ -14,6 +14,14 @@ import javax.swing.table.AbstractTableModel;
  * Clase para mostrar en una tabla los alumnos que participan del trabajo
  */
 public class ModeloTablaAlumnosEnTrabajos extends AbstractTableModel {
+    public static final String COLUMNA_APELLIDOS = "Apellidos";
+    public static final String COLUMNA_NOMBRES = "Nombres";
+    public static final String COLUMNA_CX = "CX";
+    public static final String COLUMNA_DESDE = "Desde";
+    public static final String COLUMNA_HASTA = "Hasta";
+    public static final String COLUMNA_RAZON = "Razón";
+    //constantes para los nombres de las columnas
+    
     private List<AlumnoEnTrabajo> aet = new ArrayList<>();
     //los datos los saca del trabajo
     private List<String> nombresColumnas = new ArrayList<>();        
@@ -24,12 +32,12 @@ public class ModeloTablaAlumnosEnTrabajos extends AbstractTableModel {
     * @param trabajo trabajo al cual se le muestran los alumnos
     */                                                        
     public ModeloTablaAlumnosEnTrabajos(Trabajo trabajo) {
-        this.nombresColumnas.add("Apellidos");
-        this.nombresColumnas.add("Nombres");
-        this.nombresColumnas.add("CX");
-        this.nombresColumnas.add("Desde");
-        this.nombresColumnas.add("Hasta");
-        this.nombresColumnas.add("Razón"); 
+        this.nombresColumnas.add(COLUMNA_APELLIDOS);
+        this.nombresColumnas.add(COLUMNA_NOMBRES);
+        this.nombresColumnas.add(COLUMNA_CX);
+        this.nombresColumnas.add(COLUMNA_DESDE);
+        this.nombresColumnas.add(COLUMNA_HASTA);
+        this.nombresColumnas.add(COLUMNA_RAZON);
                 
         if (trabajo != null)
             this.aet = trabajo.verAlumnos();

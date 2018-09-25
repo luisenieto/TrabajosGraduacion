@@ -151,6 +151,18 @@ public class GestorAreas implements IGestorAreas {
     public void cancelar() {
         this.ultimaArea = -1;
     }
+    
+    /**
+     * Devuelve el orden que ocupa el área en todo el conjunto de áreas
+     * Si no existe el área especificada, devuelve -1
+     * Este método es necesario para poder seleccionar las áreas a las que pertenece el trabajo en una JList
+     * @param area área al cual se le determina el orden
+     * @return int  - orden que ocupa el área
+     */
+    @Override
+    public int ordenArea(Area area) {
+        return this.areas.indexOf(area);
+    }
             
     /**
      * Lee del archivo de texto y carga el ArrayList empleando un try con recursos

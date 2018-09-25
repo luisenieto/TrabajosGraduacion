@@ -59,9 +59,30 @@ public class ControladorTrabajos implements IControladorTrabajos {
         ModeloTablaRolesEnTrabajos mtret = new ModeloTablaRolesEnTrabajos(trabajo);
         tablaProfesores.setModel(mtret);
         
-        if (this.profesorSeleccionado == -1) //no hay seleccionado un profesor
-            this.profesorSeleccionado = 0;
-        tablaProfesores.setRowSelectionInterval(this.profesorSeleccionado, this.profesorSeleccionado);         
+        if (trabajo != null) { //hay seleccionado un trabajo
+            if (this.profesorSeleccionado == -1) { //no hay seleccionado un profesor
+                if (mtret.getRowCount() > 0) //hay filas para seleccionar
+                    this.profesorSeleccionado = 0;
+            }
+
+            if (this.profesorSeleccionado != -1) { //se puede seleccionar un profesor
+                tablaProfesores.setRowSelectionInterval(this.profesorSeleccionado, this.profesorSeleccionado);         
+            }            
+        }
+        
+        
+        
+        
+        
+//        if (this.profesorSeleccionado == -1) { //no hay seleccionado un profesor
+//            if (mtret.getRowCount() > 0) //hay filas para seleccionar
+//                this.profesorSeleccionado = 0;
+//        }
+//        
+//        if (this.profesorSeleccionado != -1) { //se puede seleccionar un profesor
+//            System.out.println(this.profesorSeleccionado);
+//            tablaProfesores.setRowSelectionInterval(this.profesorSeleccionado, this.profesorSeleccionado);         
+//        }
     }        
         
     
@@ -74,9 +95,21 @@ public class ControladorTrabajos implements IControladorTrabajos {
         ModeloTablaAlumnosEnTrabajos mtaet = new ModeloTablaAlumnosEnTrabajos(trabajo);
         tablaAlumnos.setModel(mtaet);
         
-        if (this.alumnoSeleccionado == -1) //no hay seleccionado un alumno
-            this.alumnoSeleccionado = 0;
-        tablaAlumnos.setRowSelectionInterval(this.alumnoSeleccionado, this.alumnoSeleccionado);         
+        if (trabajo != null) { //hay seleccionado un trabajo
+            if (this.alumnoSeleccionado == -1) { //no hay seleccionado un alumno
+                if (mtaet.getRowCount() > 0) //hay filas para seleccionar
+                    this.alumnoSeleccionado = 0;
+            }
+            if (this.alumnoSeleccionado != -1) //se puede seleccionar un alumno  
+                tablaAlumnos.setRowSelectionInterval(this.alumnoSeleccionado, this.alumnoSeleccionado);                     
+            }
+        
+//        if (this.alumnoSeleccionado == -1) { //no hay seleccionado un alumno
+//            if (mtaet.getRowCount() > 0) //hay filas para seleccionar
+//                this.alumnoSeleccionado = 0;
+//        }
+//        if (this.alumnoSeleccionado != -1) //se puede seleccionar un alumno  
+//            tablaAlumnos.setRowSelectionInterval(this.alumnoSeleccionado, this.alumnoSeleccionado);         
     }        
     
     /**
@@ -207,12 +240,10 @@ public class ControladorTrabajos implements IControladorTrabajos {
         
             
         JTable tablaTrabajos = this.ventana.verTablaTrabajos();
-        if (tablaTrabajos.getModel() instanceof ModeloTablaTrabajos) {   //2, 3, 4 y 5: se vuelve de la ventana AMTrabajo, de borrar un trabajo o de la ventana de seminarios
+        if (tablaTrabajos.getModel() instanceof ModeloTablaTrabajos)    //2, 3, 4 y 5: se vuelve de la ventana AMTrabajo, de borrar un trabajo o de la ventana de seminarios
             this.seleccionarTrabajoEnTabla(tablaTrabajos);
-        }
-        else  {//1: se viene de la ventana principal
+        else  //1: se viene de la ventana principal
             this.inicializarTablaTrabajos(tablaTrabajos);
-        }
 
         this.operacion = OPERACION_NINGUNA;
     }
@@ -273,6 +304,11 @@ public class ControladorTrabajos implements IControladorTrabajos {
         ModeloTablaTrabajos mtt = new ModeloTablaTrabajos(); //todos los trabajos
         tablaTrabajos.setModel(mtt);
         
+        //Se agrega un listener para detectar cuando cambie la selección en la tabla
+        //Aquí sólo se está agregando el listener, y su código se ejecutará cuando cambie la selección en la tabla
+        //Es decir, al llamarse a inicializarTablaTrabajos se agrega el listener, pero mientras no cambie la selección no se ejecutará
+        //y por lo tanto, si inicialmente no hay trabajos, hay que llamar a mostrarTablaProfesores() y mostrarTablaAlumnos() 
+        //para inicializar  esas 2 tablas
         tablaTrabajos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -284,27 +320,31 @@ public class ControladorTrabajos implements IControladorTrabajos {
                     //Para evitar responder al evento cuando un elemento deja de estar seleccionado
                     //y luego cuando otro queda seleccionado, se comprueba que esta secuencia de eventos
                     //esté terminada mediante getValueIsAdjusting()
-                    
-                    Trabajo trabajoSeleccionado = obtenerTrabajoSeleccionado();
-                    mostrarTablaProfesores(trabajoSeleccionado);
-                    mostrarTablaAlumnos(trabajoSeleccionado);
+                    Trabajo trabajo = obtenerTrabajoSeleccionado();  
+                    mostrarTablaProfesores(trabajo);
+                    mostrarTablaAlumnos(trabajo);
                 }
             }            
-        });        
-        
-        tablaTrabajos.getColumn("Título").setPreferredWidth(200);      
-        tablaTrabajos.getColumn("Duración").setPreferredWidth(10);                    
-        tablaTrabajos.getColumn("Area").setPreferredWidth(20);                    
-        tablaTrabajos.getColumn("Presentación").setPreferredWidth(20);     
-        tablaTrabajos.getColumn("Aprobación").setPreferredWidth(15);     
-        tablaTrabajos.getColumn("Exposición").setPreferredWidth(15);                     
+        });  
+                
+        tablaTrabajos.getColumn(ModeloTablaTrabajos.COLUMNA_TITULO).setPreferredWidth(200);      
+        tablaTrabajos.getColumn(ModeloTablaTrabajos.COLUMNA_DURACION).setPreferredWidth(10);                    
+        tablaTrabajos.getColumn(ModeloTablaTrabajos.COLUMNA_AREAS).setPreferredWidth(20);                    
+        tablaTrabajos.getColumn(ModeloTablaTrabajos.COLUMNA_PRESENTACION).setPreferredWidth(20);     
+        tablaTrabajos.getColumn(ModeloTablaTrabajos.COLUMNA_APROBACION).setPreferredWidth(15);     
+        tablaTrabajos.getColumn(ModeloTablaTrabajos.COLUMNA_EXPOSICION).setPreferredWidth(15);                     
 
         if (mtt.getRowCount() > 0) { //si hay filas, se selecciona la primera
             this.trabajoSeleccionado = 0;
             tablaTrabajos.setRowSelectionInterval(this.trabajoSeleccionado, this.trabajoSeleccionado);                           
         }
-        else
+        else {
             this.trabajoSeleccionado = -1;
+            mostrarTablaProfesores(null);
+            mostrarTablaAlumnos(null);
+            //Por más que no haya trabajos, la llamada a estos 2 métodos permite inicializar
+            //las tablas de profesores y alumnos
+        }
     }    
 
     /**

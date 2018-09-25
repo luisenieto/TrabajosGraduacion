@@ -6,27 +6,40 @@
 package gui.trabajos.modelos;
 
 import gui.interfaces.IGestorTrabajos;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 public class ModeloTablaTrabajos extends AbstractTableModel {
+    public static final String COLUMNA_TITULO = "Título";
+    public static final String COLUMNA_DURACION = "Duración";
+    public static final String COLUMNA_AREAS = "Areas";
+    public static final String COLUMNA_PRESENTACION = "Presentación";
+    public static final String COLUMNA_APROBACION = "Aprobación";
+    public static final String COLUMNA_EXPOSICION = "Exposición";
+    //constantes para los nombres de las columnas        
+    
     private List<Trabajo> trabajos = new ArrayList<>();
     //los datos los saca de GestorTrabajos
     private List<String> nombresColumnas = new ArrayList<>();        
     //colección para guardar los nombres de las columnas
+    private final char SEPARADOR = ';'; 
+    //caracter usado como separador
+    private static final String FECHA_NULA = "-";
+    //caracter para cuando no hay fecha
     
     /**
     * Constructor
     */                                                        
     public ModeloTablaTrabajos() {
-        this.nombresColumnas.add("Título");
-        this.nombresColumnas.add("Duración");
-        this.nombresColumnas.add("Area");
-        this.nombresColumnas.add("Presentación");
-        this.nombresColumnas.add("Aprobación");
-        this.nombresColumnas.add("Exposición"); 
+        this.nombresColumnas.add(COLUMNA_TITULO);
+        this.nombresColumnas.add(COLUMNA_DURACION);
+        this.nombresColumnas.add(COLUMNA_AREAS);
+        this.nombresColumnas.add(COLUMNA_PRESENTACION);
+        this.nombresColumnas.add(COLUMNA_APROBACION);
+        this.nombresColumnas.add(COLUMNA_EXPOSICION); 
                 
         IGestorTrabajos gt = GestorTrabajos.instanciar();
         this.trabajos = gt.buscarTrabajos(null); //todos los trabajos
@@ -42,20 +55,44 @@ public class ModeloTablaTrabajos extends AbstractTableModel {
     @Override
     public Object getValueAt(int fila, int columna) {
         Trabajo trabajo = this.trabajos.get(fila);
-        String patron = "dd/MM/yyyy";
         switch (columna) {
             case 0: return trabajo.verTitulo();
             case 1: return trabajo.verDuracion();
-            case 2: return trabajo.verArea();
-            case 3: return trabajo.verFechaPresentacion().format(DateTimeFormatter.ofPattern(patron)); 
-            case 4: return trabajo.verFechaAprobacion().format(DateTimeFormatter.ofPattern(patron)); 
-            default:
-                if (trabajo.verFechaFinalizacion() != null)
-                    return trabajo.verFechaFinalizacion().format(DateTimeFormatter.ofPattern(patron));
-                else
-                    return "-";
-            
+            case 2: return this.transformarAreasEnCadena(trabajo);
+            case 3: return this.transformarFechaEnCadena(trabajo.verFechaPresentacion());
+            case 4: return this.transformarFechaEnCadena(trabajo.verFechaAprobacion());
+            default:return this.transformarFechaEnCadena(trabajo.verFechaFinalizacion());
         }
+    }
+    
+    /**
+     * Dada una fecha, devuelve una cadena de la forma dd/mm/aaaa
+     * Si la fecha es nula, devuelve el caracter usado para fechas nulas
+     * @param fecha fecha a transformar
+     * @return String  - cadena con la representación de la fecha
+     */
+    private String transformarFechaEnCadena(LocalDate fecha) {        
+        if (fecha != null) {
+            String patron = "dd/MM/yyyy";
+            return fecha.format(DateTimeFormatter.ofPattern(patron));
+        }
+        else
+            return FECHA_NULA;            
+    }
+    
+    /**
+     * Dadas las áreas de un trabajo, devuelve una cadena con las mismas separadas por algún caracter
+     * @param trabajo trabajo del cual se ven sus áreas
+     * @return String  - cadena con las áreas del trabajo
+     */
+    private String transformarAreasEnCadena(Trabajo trabajo) {
+        String cadena = "";
+        for(int i = 0; i < trabajo.verAreas().size() - 1; i++) {
+            cadena += trabajo.verAreas().get(i).toString() + SEPARADOR;
+        }
+        cadena += trabajo.verAreas().get(trabajo.verAreas().size() - 1).toString(); //última área
+                
+        return cadena;
     }
     
     /**

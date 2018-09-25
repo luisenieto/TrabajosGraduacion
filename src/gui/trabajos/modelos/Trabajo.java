@@ -20,7 +20,7 @@ import java.util.Objects;
 public class Trabajo implements Comparable<Trabajo> {                 
     private String titulo;
     private int duracion;
-    private Area area;
+    private List<Area> areas = new ArrayList<>();
     private LocalDate fechaPresentacion; //fecha en que se presenta el trabajo al encargado de recibirlo
     private LocalDate fechaAprobacion; //fecha en que se aprueba en comisión la propuesta de trabajo
     private LocalDate fechaFinalizacion; //fecha en la que finaliza el trabajo (los alumnos lo presentan)   
@@ -35,31 +35,31 @@ public class Trabajo implements Comparable<Trabajo> {
      * Constructor para crear un trabajo nuevo (sin fecha de exposición)
      * @param titulo título del trabajo
      * @param duracion duración del trabajo (en meses)
-     * @param area área del trabajo
+     * @param areas áreas del trabajo
      * @param fechaPresentacion fecha de presentación de la propuesta de trabajo
      * @param fechaAprobacion fecha en la que se aprobó la propuesta de trabajo
      * @param ret profesores que intervienen en el trabajo con sus respectivos roles (jurado, tutor y/o cotutor)
      * @param aet alumnos que participan en el trabajo
      */
-    public Trabajo(String titulo, int duracion, Area area, LocalDate fechaPresentacion, LocalDate fechaAprobacion, List<RolEnTrabajo> ret, List<AlumnoEnTrabajo> aet) {
-        this(titulo, duracion, area, fechaPresentacion, fechaAprobacion, null, ret, aet);
+    public Trabajo(String titulo, int duracion, List<Area> areas, LocalDate fechaPresentacion, LocalDate fechaAprobacion, List<RolEnTrabajo> ret, List<AlumnoEnTrabajo> aet) {
+        this(titulo, duracion, areas, fechaPresentacion, fechaAprobacion, null, ret, aet);
     }
     
     /**
      * Constructor para crear un trabajo nuevo
      * @param titulo título del trabajo
      * @param duracion duración del trabajo (en meses)
-     * @param area área del trabajo
+     * @param areas áreas del trabajo
      * @param fechaPresentacion fecha de presentación de la propuesta de trabajo
      * @param fechaAprobacion fecha en la que se aprobó la propuesta de trabajo
      * @param fechaFinalizacion fecha de finalización del trabajo
      * @param ret profesores que intervienen en el trabajo con sus respectivos roles (jurado, tutor y/o cotutor)
      * @param aet alumnos que participan en el trabajo
      */
-    public Trabajo(String titulo, int duracion, Area area, LocalDate fechaPresentacion, LocalDate fechaAprobacion, LocalDate fechaFinalizacion, List<RolEnTrabajo> ret, List<AlumnoEnTrabajo> aet) {
+    public Trabajo(String titulo, int duracion, List<Area> areas, LocalDate fechaPresentacion, LocalDate fechaAprobacion, LocalDate fechaFinalizacion, List<RolEnTrabajo> ret, List<AlumnoEnTrabajo> aet) {
         this.titulo = titulo;
         this.duracion = duracion;
-        this.area = area;
+        this.areas = areas;
         this.fechaPresentacion = fechaPresentacion;
         this.fechaAprobacion = fechaAprobacion;
         this.fechaFinalizacion = fechaFinalizacion;
@@ -84,11 +84,12 @@ public class Trabajo implements Comparable<Trabajo> {
     }
     
     /**
-     * Devuelve el área del trabajo
-     * @return Area  - área del trabajo
+     * Devuelve las áreas del trabajo
+     * @return List<Area>  - áreas del trabajo
      */            
-    public Area verArea() {
-        return this.area;
+    public List<Area> verAreas() {
+        Collections.sort(this.areas);
+        return this.areas;
     }    
 
     /**
@@ -414,7 +415,7 @@ public class Trabajo implements Comparable<Trabajo> {
     public void mostrar() {
         System.out.println("Título: " + this.titulo);
         System.out.println("Duración: " + this.duracion);
-        System.out.println("Área: " + this.area.verNombre());
+//        System.out.println("Área: " + this.area.verNombre());
         String patron = "dd/MM/yyyy";
         System.out.println("Fecha de presentación: " + this.fechaPresentacion.format(DateTimeFormatter.ofPattern(patron))); 
         System.out.println("Fecha de aprobación: " + this.fechaAprobacion.format(DateTimeFormatter.ofPattern(patron))); 

@@ -153,7 +153,7 @@ public class ControladorAMAlumno implements IControladorAMAlumno {
                 else //modificar alumno
                     this.modificarAlumno();
             }
-            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE))
+            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE) || (c != KeyEvent.VK_SPACE))
                 evt.consume();
         }
     }

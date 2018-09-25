@@ -74,21 +74,21 @@ public class GestorTrabajos implements IGestorTrabajos {
      * @param duracion duración del trabajo (en meses)
      * @param fechaPresentacion fecha en que se presenta el trabajo a la comisión académica para tratar su aprobación
      * @param fechaAprobacion fecha en que la comisión académica aprueba la propuesta de trabajo
-     * @param area área del trabajo
+     * @param areas áreas del trabajo
      * @param profesores lista con los profesores que actúan como tutor, cotutor (si hubiera) y jurado
      * @param aet alumnos que realizan el trabajo
      * @return String  - cadena con el resultado de la operación
     */                                                                    
     @Override
-    public String nuevoTrabajo(String titulo, int duracion, LocalDate fechaPresentacion, LocalDate fechaAprobacion, Area area, List<RolEnTrabajo> profesores, List<AlumnoEnTrabajo> aet) {
+    public String nuevoTrabajo(String titulo, int duracion, LocalDate fechaPresentacion, LocalDate fechaAprobacion, List<Area> areas, List<RolEnTrabajo> profesores, List<AlumnoEnTrabajo> aet) {
         this.ultimoTrabajo = - 1;
         if(this.validarTituloYDuracion(titulo, duracion)) {
-            if(this.validarArea(area)) {
+            if(this.validarAreas(areas)) {
                 if (this.validarFechas(fechaPresentacion, fechaAprobacion)) {
                     if (this.validarTutorYCotutor(profesores)) {
                         if (this.validarJurado(profesores)) {
                             if (this.validarAlumnos(aet)) {
-                                Trabajo trabajo = new Trabajo(titulo, duracion, area, fechaPresentacion, fechaAprobacion, profesores, aet);
+                                Trabajo trabajo = new Trabajo(titulo, duracion, areas, fechaPresentacion, fechaAprobacion, profesores, aet);
                                 this.trabajos.add(trabajo);
                                 Collections.sort(this.trabajos);                                
                                 String resultado = this.escribirArchivo();
@@ -136,12 +136,12 @@ public class GestorTrabajos implements IGestorTrabajos {
     }
     
     /**
-     * Valida que el área del trabajo sea correcta
-     * @param area área del trabajo
-     * @return boolean  - true si el área del trabajo es correcta, false en caso contrario
+     * Valida que el trabajo tenga áreas
+     * @param areas áreas del trabajo
+     * @return boolean  - true si el trabajo tiene áreas, false en caso contrario
      */
-    private boolean validarArea(Area area) {
-        return (area != null);
+    private boolean validarAreas(List<Area> areas) {
+        return (!areas.isEmpty());
     }    
     
     /**
@@ -552,9 +552,64 @@ public class GestorTrabajos implements IGestorTrabajos {
     /**
      * Lee del archivo de texto y carga el ArrayList empleando un try con recursos
      * https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-     * Formato del archivo (suponiendo que la coma sea el separador):
-     *  título 1,duración 1,área 1,fecha presentación 1,fecha aprobación 1,fecha exposición 1,cantTutores,cantCoTutores,cantJurados,cantAlumnos,cantSeminarios,dni tutor 1,dni cotutor 1,dni jurado 1,dni jurado2,dni jurado3,cx alumno1,cx alumno2 
-     *  título 2,duración 1,área 1,fecha presentación 1,fecha aprobación 1,fecha exposición 1,cantTutores,cantCoTutores,cantJurados,cantAlumnos,cantSeminarios,dni tutor 2,dni cotutor 2,dni jurado 1,dni jurado2,dni jurado3,cx alumno3
+     * Formato del archivo (lo pongo línea a línea porque se hace muy largo en un solo renglón):
+     *  título
+     *  duración
+     *  fecha presentación
+     *  fecha aprobación
+     *  fecha exposición
+     *  cantAreas
+     *  cantTutores
+     *  cantCoTutores
+     *  cantJurados
+     *  cantAlumnos
+     *  cantSeminarios
+     *  área 1
+     *  ...
+     *  área N
+     *  dni tutor 1
+     *  desde
+     *  hasta
+     *  razón
+     *  ...
+     *  dni tutor N
+     *  desde
+     *  hasta
+     *  razón
+     *  dni cotutor 1
+     *  desde
+     *  hasta
+     *  razón
+     *  ...
+     *  dni cotutor N
+     *  desde
+     *  hasta
+     *  razón
+     *  dni jurado 1
+     *  desde
+     *  hasta
+     *  razon
+     *  ...
+     *  dni jurado N
+     *  desde
+     *  hasta
+     *  razón
+     *  cx alumno 1
+     *  desde
+     *  hasta
+     *  razón
+     *  ...
+     *  cx alumno N
+     *  desde
+     *  hasta
+     *  razón
+     *  fecha exposición seminario 1
+     *  nota
+     *  observaciones
+     *  ...
+     *  fecha exposición seminario N
+     *  nota
+     *  observaciones
      * @return String  - cadena con el resultado de la operacion
      */
     private String leerArchivo() {
@@ -569,27 +624,30 @@ public class GestorTrabajos implements IGestorTrabajos {
                     String titulo = vector[0];
                     int duracion = Integer.parseInt(vector[1]);
                     
-                    String nombreArea = vector[2];                    
-                    Area area = ga.dameArea(nombreArea);
+//                    String nombreArea = vector[2];                    
+//                    Area area = ga.dameArea(nombreArea);
                     
-                    String fPresentacion = vector[3];
+                    String fPresentacion = vector[2];
                     LocalDate fechaPresentacion = this.transformarCadenaAFecha(fPresentacion);
                     
-                    String fAprobacion = vector[4];
+                    String fAprobacion = vector[3];
                     LocalDate fechaAprobacion = this.transformarCadenaAFecha(fAprobacion);
                     
-                    String fExposicion = vector[5];
+                    String fExposicion = vector[4];
                     LocalDate fechaExposicion = null;
                     if (!fExposicion.equals(VALORES_NULOS))
                         fechaExposicion = this.transformarCadenaAFecha(fExposicion);
                     
+                    int cantAreas = Integer.parseInt(vector[5]);
                     int cantTutores = Integer.parseInt(vector[6]);
                     int cantCoTutores = Integer.parseInt(vector[7]);
                     int cantJurados = Integer.parseInt(vector[8]);
                     int cantAlumnos = Integer.parseInt(vector[9]);
                     int cantSeminarios = Integer.parseInt(vector[10]);
 
-                    int dniPrimerTutor = 11;  //posición donde está el dni del primer tutor
+                    int primerArea = 11; //posición donde está la primer área
+                    int ultimaArea = primerArea + cantAreas - 1; //posición donde está la última área                    
+                    int dniPrimerTutor = ultimaArea + 1;  //posición donde está el dni del primer tutor
                     int razonUltimoTutor = (dniPrimerTutor + cantTutores * 4) - 1; //posición donde está la razón del último tutor
                     int dniPrimerCoTutor = razonUltimoTutor + 1; //posición donde está el dni del primer cotutor
                     int razonUltimoCoTutor = (dniPrimerCoTutor + cantCoTutores * 4) - 1; //posición donde está la razón del último cotutor
@@ -599,9 +657,14 @@ public class GestorTrabajos implements IGestorTrabajos {
                     int razonUltimoAlumno = (cxPrimerAlumno + cantAlumnos * 4) - 1; //posición donde está la razón del último alumno
                     int fechaPrimerSeminario = razonUltimoAlumno + 1; //posición donde está la fecha de presentación del primer seminario
                     int observacionesUltimoSeminario = (fechaPrimerSeminario + cantSeminarios * 3) - 1; //posición donde están las observaciones del último seminario
-                                                            
-                    List<RolEnTrabajo> ret = new ArrayList<>();
+
+                    List<Area> areas = new ArrayList<>();
+                    for(int i = primerArea; i <= ultimaArea; ) {
+                        String nombreArea = vector[i++];
+                        areas.add(ga.dameArea(nombreArea));
+                    }
                     
+                    List<RolEnTrabajo> ret = new ArrayList<>();                    
                     for(int i = dniPrimerTutor; i <= razonUltimoTutor; ) {  //se leen los tutores                  
                         int dniTutor = Integer.parseInt(vector[i++]);
                         Profesor tutor = gp.dameProfesor(dniTutor);
@@ -681,7 +744,7 @@ public class GestorTrabajos implements IGestorTrabajos {
                             seminario = new Seminario(fechaExp, notaAprobacion, observaciones);
                         seminarios.add(seminario);
                     }                                        
-                    Trabajo trabajo = new Trabajo(titulo, duracion, area, fechaPresentacion, fechaAprobacion, fechaExposicion, ret, aet);
+                    Trabajo trabajo = new Trabajo(titulo, duracion, areas, fechaPresentacion, fechaAprobacion, fechaExposicion, ret, aet);
                     trabajo.asignarSeminarios(seminarios);
                     this.trabajos.add(trabajo);
                 }
@@ -729,8 +792,10 @@ public class GestorTrabajos implements IGestorTrabajos {
     @Override
     public boolean hayTrabajosConEsteArea(Area area) {
         for(Trabajo trabajo : this.trabajos) {
-            if (trabajo.verArea().equals(area))
-                return true;
+            for(Area a : trabajo.verAreas()) {
+                if (a.equals(area))
+                    return true;
+            }
         }
         return false;
     }
@@ -831,9 +896,64 @@ public class GestorTrabajos implements IGestorTrabajos {
                     
     /**
      * Escribe en el archivo de texto el ArrayList
-     * Formato del archivo (suponiendo que la coma sea el separador):
-     *  título 1,duración 1,área 1,fecha presentación 1,fecha aprobación 1,fecha exposición 1,cantTutores,cantCoTutores,cantJurados,cantAlumnos,cantSeminarios,dni tutor 1,dni cotutor 1,dni jurado 1,dni jurado2,dni jurado3,cx alumno1,cx alumno2 
-     *  título 2,duración 1,área 1,fecha presentación 1,fecha aprobación 1,fecha exposición 1,cantTutores,cantCoTutores,cantJurados,cantAlumnos,cantSeminarios,dni tutor 2,dni cotutor 2,dni jurado 1,dni jurado2,dni jurado3,cx alumno3
+     * Formato del archivo (lo pongo línea a línea porque se hace muy largo en un solo renglón):
+     *  título
+     *  duración
+     *  fecha presentación
+     *  fecha aprobación
+     *  fecha exposición
+     *  cantAreas
+     *  cantTutores
+     *  cantCoTutores
+     *  cantJurados
+     *  cantAlumnos
+     *  cantSeminarios
+     *  área 1
+     *  ...
+     *  área N
+     *  dni tutor 1
+     *  desde
+     *  hasta
+     *  razón
+     *  ...
+     *  dni tutor N
+     *  desde
+     *  hasta
+     *  razón
+     *  dni cotutor 1
+     *  desde
+     *  hasta
+     *  razón
+     *  ...
+     *  dni cotutor N
+     *  desde
+     *  hasta
+     *  razón
+     *  dni jurado 1
+     *  desde
+     *  hasta
+     *  razon
+     *  ...
+     *  dni jurado N
+     *  desde
+     *  hasta
+     *  razón
+     *  cx alumno 1
+     *  desde
+     *  hasta
+     *  razón
+     *  ...
+     *  cx alumno N
+     *  desde
+     *  hasta
+     *  razón
+     *  fecha exposición seminario 1
+     *  nota
+     *  observaciones
+     *  ...
+     *  fecha exposición seminario N
+     *  nota
+     *  observaciones
      * @return String  - cadena con el resultado de la operacion
      */
     private String escribirArchivo() {
@@ -859,21 +979,26 @@ public class GestorTrabajos implements IGestorTrabajos {
                 
                 String cadena = trabajo.verTitulo();
                 cadena += SEPARADOR + Integer.toString(trabajo.verDuracion()) + SEPARADOR;
-                cadena += trabajo.verArea().verNombre() + SEPARADOR;
                 cadena += fechaPresentacion + SEPARADOR;
                 cadena += fechaAprobacion + SEPARADOR;
                 cadena += fechaExposicion;                
                 
+                int cantCareas = trabajo.verAreas().size();
                 int cantTutores = trabajo.cantidadProfesoresConRol(Rol.TUTOR);
                 int cantCoTutores = trabajo.cantidadProfesoresConRol(Rol.COTUTOR);
                 int cantJurados = trabajo.cantidadProfesoresConRol(Rol.JURADO);
                 int cantAlumnos = trabajo.cantidadAlumnos();
                 int cantSeminarios = trabajo.cantidadSeminarios();
+                cadena += SEPARADOR + Integer.toString(cantCareas);
                 cadena += SEPARADOR + Integer.toString(cantTutores);
                 cadena += SEPARADOR + Integer.toString(cantCoTutores);
                 cadena += SEPARADOR + Integer.toString(cantJurados);
                 cadena += SEPARADOR + Integer.toString(cantAlumnos);
                 cadena += SEPARADOR + Integer.toString(cantSeminarios);
+                
+                //todas las áreas del trabajo
+                for(Area area : trabajo.verAreas())
+                    cadena += SEPARADOR + area.toString();
                 
                 //todos los docentes que participan en el trabajo
                 for(RolEnTrabajo rolEnTrabajo : ret) {

@@ -14,6 +14,13 @@ import javax.swing.table.AbstractTableModel;
  * Clase para mostrar en una tabla los profesores y sus roles dentro de un trabajo
  */
 public class ModeloTablaRolesEnTrabajos extends AbstractTableModel {
+    public static final String COLUMNA_PROFESOR = "Profesor";
+    public static final String COLUMNA_ROL = "Rol";
+    public static final String COLUMNA_DESDE = "Desde";
+    public static final String COLUMNA_HASTA = "Hasta";
+    public static final String COLUMNA_RAZON = "Razón";
+    //constantes para los nombres de las columnas
+    
     private List<RolEnTrabajo> ret = new ArrayList<>();
     //los datos los saca del trabajo
     private List<String> nombresColumnas = new ArrayList<>();        
@@ -24,11 +31,11 @@ public class ModeloTablaRolesEnTrabajos extends AbstractTableModel {
     * @param trabajo trabajo al cual se le muestran los profesores
     */                                                        
     public ModeloTablaRolesEnTrabajos(Trabajo trabajo) {
-        this.nombresColumnas.add("Profesor");
-        this.nombresColumnas.add("Rol");
-        this.nombresColumnas.add("Desde");
-        this.nombresColumnas.add("Hasta");
-        this.nombresColumnas.add("Razón"); 
+        this.nombresColumnas.add(COLUMNA_PROFESOR);
+        this.nombresColumnas.add(COLUMNA_ROL);
+        this.nombresColumnas.add(COLUMNA_DESDE);
+        this.nombresColumnas.add(COLUMNA_HASTA);
+        this.nombresColumnas.add(COLUMNA_RAZON); 
 
         if(trabajo != null)
             this.ret = trabajo.verProfesoresConRoles();
