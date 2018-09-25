@@ -69,7 +69,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Nombre del nivel"/>
       </Properties>
       <Events>
-        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNombrePresionarTecla"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNombrePresionarTecla"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnGuardar">

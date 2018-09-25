@@ -53,7 +53,7 @@ public class VentanaAMArea extends JDialog {
 
         txtNombre.setToolTipText("Nombre del nivel");
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtNombrePresionarTecla(evt);
             }
         });

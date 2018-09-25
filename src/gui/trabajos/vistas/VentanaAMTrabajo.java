@@ -148,6 +148,12 @@ public class VentanaAMTrabajo extends JDialog {
 
         jLabel1.setText("Título:");
 
+        txtTitulo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTituloPresionarTecla(evt);
+            }
+        });
+
         jLabel2.setText("Duración:");
 
         txtDuracion.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -232,7 +238,7 @@ public class VentanaAMTrabajo extends JDialog {
             }
         });
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Areas"));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Areas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 15))); // NOI18N
 
         listaAreas.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -257,7 +263,7 @@ public class VentanaAMTrabajo extends JDialog {
                 .addContainerGap())
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Fechas"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Fechas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Ubuntu", 0, 15))); // NOI18N
 
         jLabel5.setText("Aprobación:");
 
@@ -320,9 +326,7 @@ public class VentanaAMTrabajo extends JDialog {
                                     .addGap(41, 41, 41)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 628, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(178, 178, 178)))
+                                        .addComponent(txtDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGap(9, 9, 9))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -390,6 +394,10 @@ public class VentanaAMTrabajo extends JDialog {
     private void txtDuracionPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDuracionPresionarTecla
         this.controlador.txtDuracionPresionarTecla(evt);
     }//GEN-LAST:event_txtDuracionPresionarTecla
+
+    private void txtTituloPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTituloPresionarTecla
+        this.controlador.txtTituloPresionarTecla(evt);
+    }//GEN-LAST:event_txtTituloPresionarTecla
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

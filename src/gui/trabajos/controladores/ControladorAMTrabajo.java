@@ -9,7 +9,6 @@ import com.toedter.calendar.JDateChooser;
 import gui.areas.modelos.Area;
 import gui.areas.modelos.GestorAreas;
 import gui.interfaces.IControladorAMTrabajo;
-import gui.areas.modelos.ModeloComboAreas;
 import gui.areas.modelos.ModeloListaAreas;
 import gui.interfaces.IControladorTrabajos;
 import gui.interfaces.IGestorAreas;
@@ -40,7 +39,6 @@ import javax.swing.JOptionPane;
 public class ControladorAMTrabajo implements IControladorAMTrabajo {    
     private VentanaAMTrabajo ventana;
     private Trabajo trabajo;
-    private IGestorTrabajos gt = GestorTrabajos.instanciar();
 
     /**
      * Constructor
@@ -104,15 +102,6 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
             this.ventana.verListaAreas().setEnabled(false);
             
         }
-        
-//        this.ventana.verComboArea().setModel(new ModeloComboAreas());
-//        
-//        if (this.trabajo != null) { //modificación de trabajo
-//            ((ModeloComboAreas)this.ventana.verComboArea().getModel()).seleccionarArea(this.trabajo.verArea());        
-//            this.ventana.verComboArea().setEnabled(false);
-//        }
-//        else
-//            ((ModeloComboAreas)this.ventana.verComboArea().getModel()).seleccionarArea(null);
     }    
     
     /**
@@ -250,10 +239,13 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
             RolEnTrabajo cotutorEnTrabajo = new RolEnTrabajo(cotutor, Rol.COTUTOR, fechaAprobacion);
             profesoresEnElTrabajo.add(cotutorEnTrabajo);
         }
-                      
-        String resultado = this.gt.nuevoTrabajo(titulo, duracion, fechaPresentacion, fechaAprobacion, areas, profesoresEnElTrabajo, aet);
-        if (!resultado.equals(IGestorTrabajos.EXITO))
+        
+        IGestorTrabajos gt = GestorTrabajos.instanciar();
+        String resultado = gt.nuevoTrabajo(titulo, duracion, fechaPresentacion, fechaAprobacion, areas, profesoresEnElTrabajo, aet);
+        if (!resultado.equals(IGestorTrabajos.EXITO)) {
+            gt.cancelar();
             JOptionPane.showMessageDialog(null, resultado, IControladorTrabajos.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();                                    
     }
@@ -293,10 +285,13 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
      */    
     private void modificarTrabajo() {
         LocalDate fechaExposicion = this.obtenerFechaDeJDateChooser(this.ventana.verFechaExposicion());
-                
-        String resultado = this.gt.modificarTrabajo(this.trabajo, fechaExposicion);
-        if (!resultado.equals(IGestorTrabajos.EXITO))
+        
+        IGestorTrabajos gt = GestorTrabajos.instanciar();
+        String resultado = gt.modificarTrabajo(this.trabajo, fechaExposicion);
+        if (!resultado.equals(IGestorTrabajos.EXITO)) {
+            gt.cancelar();
             JOptionPane.showMessageDialog(null, resultado, IControladorTrabajos.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();
     }    
@@ -328,18 +323,61 @@ public class ControladorAMTrabajo implements IControladorAMTrabajo {
      */                            
     @Override
     public void btnCancelarClic(ActionEvent evt) {
-        this.gt.cancelar();
+        IGestorTrabajos gt = GestorTrabajos.instanciar();
+        gt.cancelar();
         this.ventana.dispose();
     }
     
     /**
      * Acción a ejecutar cuando se presiona una tecla en el campo txtDuracion
+     * Sólo se permiten los dígitos del 0-9, Enter, Del y Backspace
      * @param evt evento
      */
     @Override
     public void txtDuracionPresionarTecla(KeyEvent evt) {
         char c = evt.getKeyChar();
-        if (!Character.isDigit(c)) //sólo se aceptan los dígitos del 0-9
-            evt.consume();
+        if (!Character.isDigit(c)) { //sólo se aceptan los dígitos del 0-9, Enter, Del y Backspace
+            switch(c) {
+                case KeyEvent.VK_ENTER: 
+                    if (this.trabajo == null) //nuevo trabajo
+                        this.nuevoTrabajo();
+                    else //modificar trabajo
+                        this.modificarTrabajo();
+                    break;
+                case KeyEvent.VK_BACK_SPACE:    
+                case KeyEvent.VK_DELETE:
+                    break;
+                default:
+                    evt.consume(); //consume el evento para que no sea procesado por la fuente
+            }
+        }  
     }
+
+    /**
+     * Acción a ejecutar cuando se presiona una tecla en el campo txtTitulo
+     * Sólo se permiten letras, Enter, Del, Backspace y espacio
+     * @param evt evento
+     */
+    @Override
+    public void txtTituloPresionarTecla(KeyEvent evt) {
+        char c = evt.getKeyChar();            
+        if (!Character.isLetter(c)) { //sólo se aceptan letras, Enter, Del, Backspace y espacio
+            switch(c) {
+                case KeyEvent.VK_ENTER: 
+                    if (this.trabajo == null) //nuevo trabajo
+                        this.nuevoTrabajo();
+                    else //modificar trabajo
+                        this.modificarTrabajo();
+                    break;
+                case KeyEvent.VK_BACK_SPACE:    
+                case KeyEvent.VK_DELETE:
+                case KeyEvent.VK_SPACE:
+                    break;
+                default:
+                    evt.consume(); //consume el evento para que no sea procesado por la fuente
+            }
+        }
+    }
+    
+    
 }

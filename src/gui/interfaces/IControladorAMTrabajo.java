@@ -27,4 +27,10 @@ public interface IControladorAMTrabajo {
      */
     public void txtDuracionPresionarTecla(KeyEvent evt);
     
+    /**
+     * Acción a ejecutar cuando se presiona una tecla en el campo txtTitulo
+     * @param evt evento
+     */
+    public void txtTituloPresionarTecla(KeyEvent evt);
+    
 }

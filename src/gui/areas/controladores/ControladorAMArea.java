@@ -68,12 +68,24 @@ public class ControladorAMArea implements IControladorAMArea {
 
     /**
      * Acción a ejecutar cuando se presiona una tecla en el campo txtNombre
+     * Sólo se permiten letras, Enter, Del, Backspace y espacio
      * @param evt evento
      */    
     @Override
     public void txtNombrePresionarTecla(KeyEvent evt) {
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            this.guardar(); 
+        char c = evt.getKeyChar();            
+        if (!Character.isLetter(c)) { //sólo se aceptan letras, Enter, Del, Backspace y espacio
+            switch(c) {
+                case KeyEvent.VK_ENTER: 
+                    this.guardar();
+                    break;
+                case KeyEvent.VK_BACK_SPACE:    
+                case KeyEvent.VK_DELETE:
+                case KeyEvent.VK_SPACE:
+                    break;
+                default:
+                    evt.consume(); //consume el evento para que no sea procesado por la fuente
+            }
         }
     }
 }

@@ -63,22 +63,27 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
      */                        
     @Override
     public void btnGuardarClic(ActionEvent evt) {
-        if (this.profesor == null) //nuevo profesor
-            this.nuevoProfesor();
-        else //modificar profesor
-            this.modificarProfesor();
-    }
-    
-    /**
-     * Se encarga de la creación de un profesor
-     */
-    private void nuevoProfesor() {
         String apellidos = this.ventana.verTxtApellidos().getText().trim();
         String nombres = this.ventana.verTxtNombres().getText().trim();
         int documento = 0;
         if (!this.ventana.verTxtDocumento().getText().trim().isEmpty())
             documento = Integer.parseInt(this.ventana.verTxtDocumento().getText().trim());
         Cargo cargo = ((ModeloComboCargos)this.ventana.verComboCargo().getModel()).obtenerCargo();
+        if (this.profesor == null) //nuevo profesor
+            this.nuevoProfesor(apellidos, nombres, documento, cargo);
+        else //modificar profesor
+            this.modificarProfesor(apellidos, nombres, cargo);
+    }
+    
+    /**
+     * Se encarga de la creación de un profesor
+     * @param apellidos apellidos del profesor
+     * @param nombres nombres del profesor
+     * @param documento documento del profesor
+     * @param cargo cargo del profesor
+     */
+    private void nuevoProfesor(String apellidos, String nombres, int documento, Cargo cargo) {
+        
         IGestorPersonas gp = GestorPersonas.instanciar();
         String resultado = gp.nuevoProfesor(apellidos, nombres, documento, cargo);
         if (!resultado.equals(IGestorPersonas.EXITO_PROFESORES)) {
@@ -91,11 +96,11 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
     
     /**
      * Se encarga de la modificación del profesor
+     * @param apellidos apellidos del profesor
+     * @param nombres nombres del profesor
+     * @param cargo cargo del profesor
      */    
-    private void modificarProfesor() {
-        String apellidos = this.ventana.verTxtApellidos().getText().trim();
-        String nombres = this.ventana.verTxtNombres().getText().trim();
-        Cargo cargo = ((ModeloComboCargos)this.ventana.verComboCargo().getModel()).obtenerCargo();
+    private void modificarProfesor(String apellidos, String nombres, Cargo cargo) {
         IGestorPersonas gp = GestorPersonas.instanciar();
         String resultado = gp.modificarProfesor(this.profesor, apellidos, nombres, cargo);
         if (!resultado.equals(IGestorPersonas.EXITO_PROFESORES)) {
@@ -119,20 +124,23 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
 
     /**
      * Acción a ejecutar cuando se presiona una tecla en el campo txtDocumento
+     * Sólo se permiten los dígitos del 0-9, Enter, Del y Backspace
      * @param evt evento
      */    
     @Override
     public void txtDocumentoPresionarTecla(KeyEvent evt) { 
         char c = evt.getKeyChar();
-        if (!Character.isDigit(c)) { //sólo se aceptan los dígitos del 0-9
-            if(c == KeyEvent.VK_ENTER) {
-                if (this.profesor == null) //nuevo profesor
-                    this.nuevoProfesor();
-                else //modificar profesor
-                    this.modificarProfesor();
+        if (!Character.isDigit(c)) { //sólo se aceptan los dígitos del 0-9, Enter, Del y Backspace
+            switch(c) {
+                case KeyEvent.VK_ENTER: 
+                    this.btnGuardarClic(null); //no importa el evento en este caso
+                    break;
+                case KeyEvent.VK_BACK_SPACE:    
+                case KeyEvent.VK_DELETE:
+                    break;
+                default:
+                    evt.consume(); //consume el evento para que no sea procesado por la fuente
             }
-            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE))
-                evt.consume();
         }        
     }
 
@@ -147,20 +155,24 @@ public class ControladorAMProfesor implements IControladorAMProfesor {
 
     /**
      * Acción a ejecutar cuando se presiona una tecla en el campo txtApellidos
+     * Sólo se permiten letras, Enter, Del, Backspace y espacio
      * @param evt evento
      */    
     @Override
     public void txtApellidosPresionarTecla(KeyEvent evt) {
         char c = evt.getKeyChar();
-        if (!Character.isLetter(c)) { //sólo se aceptan letras
-            if(c == KeyEvent.VK_ENTER) {
-                if (this.profesor == null) //nuevo profesor
-                    this.nuevoProfesor();
-                else //modificar profesor
-                    this.modificarProfesor();
+        if (!Character.isLetter(c)) { //sólo se aceptan letras, Enter, Del, Backspace y espacio
+            switch(c) {
+                case KeyEvent.VK_ENTER: 
+                    this.btnGuardarClic(null); //no importa el evento en este caso
+                    break;
+                case KeyEvent.VK_BACK_SPACE:    
+                case KeyEvent.VK_DELETE:
+                case KeyEvent.VK_SPACE:
+                    break;
+                default:
+                    evt.consume(); //consume el evento para que no sea procesado por la fuente
             }
-            else if ((c != KeyEvent.VK_BACK_SPACE) || (c != KeyEvent.VK_DELETE))
-                evt.consume();
         }
     }
 }
