@@ -78,20 +78,21 @@ public class VentanaAMSeminario extends JDialog {
         jLabel2.setText("Nota de aprobación:");
 
         comboNotaAprobacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboNotaAprobacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prueba(evt);
+            }
+        });
 
         jLabel3.setText("Observaciones:");
 
         areaObservaciones.setColumns(20);
         areaObservaciones.setRows(5);
-        areaObservaciones.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                areaObservacionesPresionarTecla(evt);
-            }
-        });
         jScrollPane1.setViewportView(areaObservaciones);
 
         btnCancelar.setMnemonic('C');
         btnCancelar.setText("Cancelar");
+        btnCancelar.setToolTipText("Cancela la operación");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarClic(evt);
@@ -100,6 +101,7 @@ public class VentanaAMSeminario extends JDialog {
 
         btnGuardar.setMnemonic('G');
         btnGuardar.setText("Guardar");
+        btnGuardar.setToolTipText("Guarda el seminario");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarClic(evt);
@@ -165,9 +167,9 @@ public class VentanaAMSeminario extends JDialog {
         this.controlador.btnCancelarClic(evt);
     }//GEN-LAST:event_btnCancelarClic
 
-    private void areaObservacionesPresionarTecla(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_areaObservacionesPresionarTecla
-        this.controlador.areaObservacionesPresionarTecla(evt);
-    }//GEN-LAST:event_areaObservacionesPresionarTecla
+    private void prueba(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prueba
+        this.controlador.comboNotaCambiarSeleccion(evt);
+    }//GEN-LAST:event_prueba
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

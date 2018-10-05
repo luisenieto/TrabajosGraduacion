@@ -266,7 +266,6 @@ public class ControladorTrabajos implements IControladorTrabajos {
             }
         }
         else if (this.operacion.equals(OPERACION_MODIFICACION)) { //se vuelve de la ventana AMTrabajo
-            mtt.fireTableDataChanged();
             tablaTrabajos.setRowSelectionInterval(this.trabajoSeleccionado, this.trabajoSeleccionado);               
         }
         else if (this.operacion.equals(OPERACION_BAJA)) { //se vuelve de borrar un trabajo
@@ -356,6 +355,7 @@ public class ControladorTrabajos implements IControladorTrabajos {
         JTable tablaTrabajos = this.ventana.verTablaTrabajos();
         Trabajo trabajo = this.obtenerTrabajoSeleccionado();
         if (trabajo != null) {
+            this.operacion = OPERACION_SEMINARIOS;
             IControladorSeminarios controlador = new ControladorSeminarios(this.ventana, trabajo);
         }
     }

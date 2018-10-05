@@ -6,7 +6,6 @@
 package gui.interfaces;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 public interface IControladorAMSeminario {
     /**
@@ -20,10 +19,10 @@ public interface IControladorAMSeminario {
      * @param evt evento
      */                        
     public void btnCancelarClic(ActionEvent evt);
-    
+        
     /**
-     * Acción a ejecutar cuando se presiona una tecla en el área areaObservaciones
+     * Acción a ejecutar cuando cambia la selección en el combo
      * @param evt evento
      */
-    public void areaObservacionesPresionarTecla(KeyEvent evt);
+    public void comboNotaCambiarSeleccion(ActionEvent evt);
 }

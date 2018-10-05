@@ -124,6 +124,7 @@ public class VentanaPersonas extends JDialog {
 
         btnBuscarProfesor.setMnemonic('U');
         btnBuscarProfesor.setText("Buscar");
+        btnBuscarProfesor.setToolTipText("Busca un profesor");
         btnBuscarProfesor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarProfesorClic(evt);
@@ -132,6 +133,7 @@ public class VentanaPersonas extends JDialog {
 
         btnBorrarProfesor.setMnemonic('B');
         btnBorrarProfesor.setText("Borrar");
+        btnBorrarProfesor.setToolTipText("Borra un profesor");
         btnBorrarProfesor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarProfesorClic(evt);
@@ -140,6 +142,7 @@ public class VentanaPersonas extends JDialog {
 
         btnModificarProfesor.setMnemonic('M');
         btnModificarProfesor.setText("Modificar");
+        btnModificarProfesor.setToolTipText("Modifica un profesor");
         btnModificarProfesor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarProfesorClic(evt);
@@ -148,6 +151,7 @@ public class VentanaPersonas extends JDialog {
 
         btnNuevoProfesor.setMnemonic('N');
         btnNuevoProfesor.setText("Nuevo");
+        btnNuevoProfesor.setToolTipText("Crea un profesor nuevo");
         btnNuevoProfesor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoProfesorClic(evt);
@@ -217,6 +221,7 @@ public class VentanaPersonas extends JDialog {
 
         btnBuscarAlumno.setMnemonic('S');
         btnBuscarAlumno.setText("Buscar");
+        btnBuscarAlumno.setToolTipText("Busca un alumno");
         btnBuscarAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarAlumnoClic(evt);
@@ -231,6 +236,7 @@ public class VentanaPersonas extends JDialog {
 
         btnBorrarAlumno.setMnemonic('R');
         btnBorrarAlumno.setText("Borrar");
+        btnBorrarAlumno.setToolTipText("Borra un alumno");
         btnBorrarAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarAlumnoClic(evt);
@@ -239,6 +245,7 @@ public class VentanaPersonas extends JDialog {
 
         btnModificarAlumno.setMnemonic('O');
         btnModificarAlumno.setText("Modificar");
+        btnModificarAlumno.setToolTipText("Modifica un alumno");
         btnModificarAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarAlumnoClic(evt);
@@ -247,6 +254,7 @@ public class VentanaPersonas extends JDialog {
 
         btnNuevoAlumno.setMnemonic('E');
         btnNuevoAlumno.setText("Nuevo");
+        btnNuevoAlumno.setToolTipText("Crea un alumno nuevo");
         btnNuevoAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoAlumnoClic(evt);
@@ -297,6 +305,7 @@ public class VentanaPersonas extends JDialog {
 
         btnVolver.setMnemonic('V');
         btnVolver.setText("Volver");
+        btnVolver.setToolTipText("Vuelve a la ventana anterior");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverClic(evt);

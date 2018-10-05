@@ -162,6 +162,25 @@ INSERT INTO Personas VALUES(36838523, 'Albornoz', 'Máximo Augusto');
 INSERT INTO Personas VALUES(36866011, 'Toledo', 'Pablo Gabriel');
 INSERT INTO Personas VALUES(35199972, 'Richard', 'Carlos Emiliano');
 INSERT INTO Personas VALUES(32116229, 'Barrionuevo', 'Luciana Maité');
+INSERT INTO Personas VALUES(37457654, 'Mohedano', 'Gerónimo');
+INSERT INTO Personas VALUES(37456511, 'Ruíz', 'Romina del Carmen');
+INSERT INTO Personas VALUES(35195431, 'Quiroga', 'Gonzalo Darío');
+INSERT INTO Personas VALUES(30766269, 'Rodulfo', 'Gonzalo Sergio');
+INSERT INTO Personas VALUES(35100297, 'Quiroga', 'Jésica Ruth');
+INSERT INTO Personas VALUES(36584129, 'Berettoni', 'Luciano Matías');
+INSERT INTO Personas VALUES(35484558, 'Alcorta', 'Pablo Antonio');
+INSERT INTO Personas VALUES(36224973, 'Neme', 'Pablo Adolfo');
+INSERT INTO Personas VALUES(32109937, 'Taboada', 'Leonardo Wilson');
+INSERT INTO Personas VALUES(34286757, 'Cascales', 'Mariana');
+INSERT INTO Personas VALUES(34910268, 'Raya de la Vega', 'Carlos Andrés');
+INSERT INTO Personas VALUES(31, 'Robles', 'Lucas Matías');
+INSERT INTO Personas VALUES(32, 'Ruíz Holgado', 'Matías');
+INSERT INTO Personas VALUES(33, 'Raimondo', 'Matías');
+INSERT INTO Personas VALUES(34, 'Nieves Mamaní', 'Arnildo');
+INSERT INTO Personas VALUES(35, 'Paz', 'Julio Sebastián');
+
+
+
 
 
 
@@ -304,6 +323,22 @@ INSERT INTO Alumnos VALUES(36838523, '1408532');
 INSERT INTO Alumnos VALUES(36866011, '1417221');
 INSERT INTO Alumnos VALUES(35199972, '1415527');
 INSERT INTO Alumnos VALUES(32116229, '1409282');
+INSERT INTO Alumnos VALUES(37457654, '1201665');
+INSERT INTO Alumnos VALUES(37456511, '1416221');
+INSERT INTO Alumnos VALUES(35195431, '1415303');
+INSERT INTO Alumnos VALUES(30766269, '1415886');
+INSERT INTO Alumnos VALUES(35100297, '1415319');
+INSERT INTO Alumnos VALUES(36584129, '1409452');
+INSERT INTO Alumnos VALUES(35484558, '1408555');
+INSERT INTO Alumnos VALUES(36224973, '1414367');
+INSERT INTO Alumnos VALUES(32109937, '1417083');
+INSERT INTO Alumnos VALUES(34286757, '1410105');
+INSERT INTO Alumnos VALUES(34910268, '1415456');
+INSERT INTO Alumnos VALUES(31, '1015236');
+INSERT INTO Alumnos VALUES(32, '1015339');
+INSERT INTO Alumnos VALUES(33, '1015203');
+INSERT INTO Alumnos VALUES(34, '1015068');
+INSERT INTO Alumnos VALUES(35, '1015118');
 
 -- delete from Alumnos where dni in (5, 6, 14, 32, 33);
 
@@ -364,9 +399,25 @@ INSERT INTO Trabajos VALUES(54, 'Sistema operativo de tiempo real con tareas din
 INSERT INTO Trabajos VALUES(55, 'Trabajos prácticos y laboratorios de concurrencia para Sistemas Operativos', 5, '2015-12-10', '2016-08-19', NULL); 
 INSERT INTO Trabajos VALUES(56, 'Desarrollo y análisis comparativo de medidores de energía monofásicos', 6, '2015-12-04', '2015-12-04', NULL); 
 INSERT INTO Trabajos VALUES(57, 'Refactorización del modelo de presentación de una aplicación web de comercio electrónico', 6, '2015-12-14', '2015-12-14', NULL); 
+-- INSERT INTO Trabajos VALUES(58, 'Aplicación Web "OnBoard"', 6, '2018-08-20', '2015-12-14', NULL); --Mohedano-Ruiz
+-- INSERT INTO Trabajos VALUES(59, 'CacheSim 2.0', 4, '2018-10-02', '2015-12-14', NULL); --Quiroga-Rodulfo
+INSERT INTO Trabajos VALUES(60, 'Fotogrametría mediante drones y fotointerpretación en agricultura de precisión', 9, '2016-09-13', '2016-10-05', NULL); 
+INSERT INTO Trabajos VALUES(61, 'Monitoreo y firewall de red IPv6 de la Universidad Nacional de Tucumán', 6, '2016-12-02', '2016-12-06', NULL); 
+INSERT INTO Trabajos VALUES(62, 'Desarrollo de SECECICP (Sistema de e-commerce por encargo, control interno -del negocio o empresa que lo utilice- y con consultas particulares', 5, '2016-06-02', '2016-06-02', NULL); 
+INSERT INTO Trabajos VALUES(63, 'Sistema de gestión FABRICRUD', 3, '2015-09-01', '2015-10-27', NULL); 
+INSERT INTO Trabajos VALUES(64, 'Sistema integral de proyectos', 7, '2015-08-25', '2015-08-31', NULL); 
+INSERT INTO Trabajos VALUES(65, 'Sistema de gestión para engorde de ganado (FEEDLOT)', 6, '2014-08-15', '2014-08-15', NULL); 
+INSERT INTO Trabajos VALUES(66, 'Migración y actualización del sistema de egresados de la FACET', 6, '2011-08-23', '2011-08-23', NULL); 
 
--- UPDATE Trabajos SET fechaFinalizacion = '2018-07-26' WHERE idTrabajo = 24; -- Gutiérrez/Moreno
+-- UPDATE Trabajos SET fechaFinalizacion = '2018-10-24' WHERE idTrabajo = 4; -- Bono-Uezen
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-08-18' WHERE idTrabajo = 13; -- Dip
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-04-28' WHERE idTrabajo = 14; -- González/Medina
 -- UPDATE Trabajos SET fechaFinalizacion = '2018-08-03' WHERE idTrabajo = 10; -- Anzorena Ostengo/Ruíz
+-- UPDATE Trabajos SET fechaFinalizacion = '2018-06-12' WHERE idTrabajo = 20; -- García/Guerra
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-05-30' WHERE idTrabajo = 23; -- Alvarez
+-- UPDATE Trabajos SET fechaFinalizacion = '2018-07-26' WHERE idTrabajo = 24; -- Gutiérrez/Moreno
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-04-27' WHERE idTrabajo = 36; -- Caro/Fernández
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-08-24' WHERE idTrabajo = 38; -- De la Fuente
 -- UPDATE Trabajos SET fechaFinalizacion = '2018-03-22' WHERE idTrabajo = 39; -- Cuevas
 -- UPDATE Trabajos SET fechaFinalizacion = '2017-09-14' WHERE idTrabajo = 40; -- Rosino
 -- UPDATE Trabajos SET fechaFinalizacion = '2017-09-06' WHERE idTrabajo = 41; -- Quinteros
@@ -385,6 +436,12 @@ INSERT INTO Trabajos VALUES(57, 'Refactorización del modelo de presentación de
 -- UPDATE Trabajos SET fechaFinalizacion = '2017-03-27' WHERE idTrabajo = 55; -- Benicio
 -- UPDATE Trabajos SET fechaFinalizacion = '2017-04-17' WHERE idTrabajo = 56; -- Albornoz/Richard/Toledo
 -- UPDATE Trabajos SET fechaFinalizacion = '2017-04-19' WHERE idTrabajo = 57; -- Barrionuevo
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-12-14' WHERE idTrabajo = 61; -- Berettoni
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-12-01' WHERE idTrabajo = 62; -- Alcorta-Neme
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-12-12' WHERE idTrabajo = 63; -- Taboada
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-10-19' WHERE idTrabajo = 64; -- Cascales-Raya
+-- UPDATE Trabajos SET fechaFinalizacion = '2017-12-01' WHERE idTrabajo = 65; -- Raimondo-Robles-Ruíz Holgado
+-- UPDATE Trabajos SET fechaFinalizacion = '' WHERE idTrabajo = 66; -- Nieves Mamaní/Paz
 
 INSERT INTO AreasDeTrabajos VALUES(3, 1);
 INSERT INTO AreasDeTrabajos VALUES(2, 2);
@@ -461,6 +518,19 @@ INSERT INTO AreasDeTrabajos VALUES(3, 54);
 INSERT INTO AreasDeTrabajos VALUES(3, 55);
 INSERT INTO AreasDeTrabajos VALUES(1, 56);
 INSERT INTO AreasDeTrabajos VALUES(3, 57);
+-- INSERT INTO AreasDeTrabajos VALUES(3, 58); --Mohedano-Ruiz
+-- INSERT INTO AreasDeTrabajos VALUES(1, 59); --Quiroga-Rodulfo
+-- INSERT INTO AreasDeTrabajos VALUES(3, 59); --Quiroga-Rodulfo
+INSERT INTO AreasDeTrabajos VALUES(1, 60);
+INSERT INTO AreasDeTrabajos VALUES(3, 60);
+INSERT INTO AreasDeTrabajos VALUES(2, 61);
+INSERT INTO AreasDeTrabajos VALUES(2, 62);
+INSERT INTO AreasDeTrabajos VALUES(3, 62);
+INSERT INTO AreasDeTrabajos VALUES(3, 63);
+INSERT INTO AreasDeTrabajos VALUES(3, 64);
+INSERT INTO AreasDeTrabajos VALUES(1, 65);
+INSERT INTO AreasDeTrabajos VALUES(3, 65);
+INSERT INTO AreasDeTrabajos VALUES(3, 66);
 
 
 INSERT INTO RolesEnTrabajos VALUES(1, 23662807, 'Tutor', '2018-05-24', NULL, NULL);
@@ -782,6 +852,60 @@ INSERT INTO RolesEnTrabajos VALUES(57, 23518045, 'Jurado', '2015-12-14', NULL, N
 INSERT INTO RolesEnTrabajos VALUES(57, 29878607, 'Jurado', '2015-12-14', NULL, NULL);
 INSERT INTO RolesEnTrabajos VALUES(57, 26923992, 'Jurado', '2015-12-14', NULL, NULL);
 
+-- INSERT INTO RolesEnTrabajos VALUES(58, 27650932, 'Tutor', '', NULL, NULL); --Mohedano-Ruiz
+-- INSERT INTO RolesEnTrabajos VALUES(58, 23662807, 'Cotutor', '', NULL, NULL); --Mohedano-Ruiz
+-- INSERT INTO RolesEnTrabajos VALUES(58, , 'Jurado', '', NULL, NULL); --Mohedano-Ruiz
+-- INSERT INTO RolesEnTrabajos VALUES(58, , 'Jurado', '', NULL, NULL); --Mohedano-Ruiz
+-- INSERT INTO RolesEnTrabajos VALUES(58, , 'Jurado', '', NULL, NULL); --Mohedano-Ruiz
+
+-- INSERT INTO RolesEnTrabajos VALUES(59, 27365680, 'Tutor', '', NULL, NULL); --Quiroga-Rodulfo
+-- INSERT INTO RolesEnTrabajos VALUES(59, , 'Jurado', '', NULL, NULL); --Quiroga-Rodulfo
+-- INSERT INTO RolesEnTrabajos VALUES(59, , 'Jurado', '', NULL, NULL); --Quiroga-Rodulfo
+-- INSERT INTO RolesEnTrabajos VALUES(59, , 'Jurado', '', NULL, NULL); --Quiroga-Rodulfo
+
+INSERT INTO RolesEnTrabajos VALUES(60, 20433775, 'Tutor', '2016-10-05', '2017-11-29', 'Razones personales'); 
+INSERT INTO RolesEnTrabajos VALUES(60, 29878607, 'Cotutor', '2016-10-05', '2017-11-29', 'Razones personales');
+INSERT INTO RolesEnTrabajos VALUES(60, 23518045, 'Jurado', '2016-10-05', '2017-11-29', 'Razones personales'); 
+INSERT INTO RolesEnTrabajos VALUES(60, 23517968, 'Jurado', '2016-10-05', '2017-11-29', 'Razones personales'); 
+INSERT INTO RolesEnTrabajos VALUES(60, 28883519, 'Jurado', '2016-10-05', '2017-11-29', 'Razones personales'); 
+
+INSERT INTO RolesEnTrabajos VALUES(61, 24340992, 'Tutor', '2016-12-06', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(61, 23930075, 'Cotutor', '2016-12-06', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(61, 16039418, 'Jurado', '2016-12-06', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(61, 30117830, 'Jurado', '2016-12-06', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(61, 23239465, 'Jurado', '2016-12-06', NULL, NULL); 
+
+INSERT INTO RolesEnTrabajos VALUES(62, 20433775, 'Tutor', '2016-06-02', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(62, 23518045, 'Jurado', '2016-06-02', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(62, 26923992, 'Jurado', '2016-06-02', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(62, 12598702, 'Jurado', '2016-06-02', NULL, NULL); 
+
+INSERT INTO RolesEnTrabajos VALUES(63, 23518045, 'Tutor', '2015-10-27', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(63, 20433775, 'Jurado', '2015-10-27', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(63, 23517082, 'Jurado', '2015-10-27', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(63, 29878607, 'Jurado', '2015-10-27', NULL, NULL); 
+
+INSERT INTO RolesEnTrabajos VALUES(64, 12622784, 'Tutor', '2015-08-31', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(64, 23518045, 'Cotutor', '2015-08-31', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(64, 20433775, 'Jurado', '2015-08-31', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(64, 29878607, 'Jurado', '2015-08-31', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(64, 30117830, 'Jurado', '2015-08-31', NULL, NULL); 
+
+INSERT INTO RolesEnTrabajos VALUES(65, 20433775, 'Tutor', '2014-08-15', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(65, 29997715, 'Cotutor', '2014-08-15', NULL, NULL);
+INSERT INTO RolesEnTrabajos VALUES(65, 23518045, 'Jurado', '2014-08-15', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(65, 10013664, 'Jurado', '2014-08-15', NULL, NULL); 
+INSERT INTO RolesEnTrabajos VALUES(65, 23517968, 'Jurado', '2014-08-15', NULL, NULL); 
+
+-- No sé al final quién fue tutor y cotutor de este trabajo
+-- INSERT INTO RolesEnTrabajos VALUES(66, , 'Tutor', '2011-08-23', NULL, NULL); -- Nieves Mamaní/Paz
+-- INSERT INTO RolesEnTrabajos VALUES(66, , 'Cotutor', '2011-08-23', NULL, NULL); -- Nieves Mamaní/Paz
+-- INSERT INTO RolesEnTrabajos VALUES(66, , 'Jurado', '2011-08-23', NULL, NULL); -- Nieves Mamaní/Paz
+-- INSERT INTO RolesEnTrabajos VALUES(66, , 'Jurado', '2011-08-23', NULL, NULL); -- Nieves Mamaní/Paz
+-- INSERT INTO RolesEnTrabajos VALUES(66, , 'Jurado', '2011-08-23', NULL, NULL); -- Nieves Mamaní/Paz
+
+
+
 INSERT INTO AlumnosEnTrabajos VALUES(1, 37497717, '2018-05-24', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(1, 37312195, '2018-05-24', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(2, 32408625, '2018-05-24', NULL, NULL);
@@ -872,5 +996,25 @@ INSERT INTO AlumnosEnTrabajos VALUES(56, 36838523, '2015-12-04', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(56, 36866011, '2015-12-04', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(56, 35199972, '2015-12-04', NULL, NULL);
 INSERT INTO AlumnosEnTrabajos VALUES(57, 32116229, '2015-12-14', NULL, NULL);
+
+-- INSERT INTO AlumnosEnTrabajos VALUES(58, 37457654, '', NULL, NULL); --Mohedano-Ruiz
+-- INSERT INTO AlumnosEnTrabajos VALUES(58, 37456511, '', NULL, NULL); --Mohedano-Ruiz
+
+-- INSERT INTO AlumnosEnTrabajos VALUES(59, 35195431, '', NULL, NULL); --Quiroga-Rodulfo
+-- INSERT INTO AlumnosEnTrabajos VALUES(59, 30766269, '', NULL, NULL); --Quiroga-Rodulfo
+
+INSERT INTO AlumnosEnTrabajos VALUES(60, 35822926, '2016-10-05', '2017-11-29', 'Razones personales');
+INSERT INTO AlumnosEnTrabajos VALUES(60, 35100297, '2016-10-05', '2017-11-29', 'Razones personales');
+INSERT INTO AlumnosEnTrabajos VALUES(61, 36584129, '2016-12-06', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(62, 35484558, '2016-06-02', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(62, 36224973, '2016-06-02', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(63, 32109937, '2015-10-27', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(64, 34286757, '2015-08-31', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(64, 34910268, '2015-08-31', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(65, 31, '2014-08-15', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(65, 32, '2014-08-15', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(65, 33, '2014-08-15', NULL, NULL);
+INSERT INTO AlumnosEnTrabajos VALUES(66, 34, '2011-08-23', NULL, NULL); -- Nieves Mamaní/Paz
+INSERT INTO AlumnosEnTrabajos VALUES(66, 35, '2011-08-23', NULL, NULL); -- Nieves Mamaní/Paz
 
 -- delete from AlumnosEnTrabajos where dni in (5, 6, 14, 32, 33)

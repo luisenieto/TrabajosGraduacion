@@ -8,8 +8,6 @@ package gui.interfaces;
 import gui.areas.modelos.Area;
 import gui.personas.modelos.Alumno;
 import gui.personas.modelos.Profesor;
-import gui.seminarios.modelos.NotaAprobacion;
-import gui.seminarios.modelos.Seminario;
 import gui.trabajos.modelos.AlumnoEnTrabajo;
 import gui.trabajos.modelos.RolEnTrabajo;
 import gui.trabajos.modelos.Trabajo;
@@ -157,29 +155,7 @@ public interface IGestorTrabajos {
      * @return String  - cadena con el resultado de la operación
      */
     public String finalizarAlumno(Trabajo trabajo, Alumno alumno, LocalDate fechaHasta, String razon);    
-    
-    /**
-     * Agrega un seminario al trabajo especificado siempre y cuando no haya otro con la misma fecha
-     * Si el seminario está aprobado con observaciones, o desaprobado, se deben especificar las observaciones
-     * @param trabajo trabajo al cual se le agrega un nuevo seminario
-     * @param fechaExposicion fecha de exposición del seminario
-     * @param notaAprobacion nota de aprobación del seminario
-     * @param observaciones observaciones del seminario
-     * @return String  - cadena con el resultado de la operación
-     */
-    public String nuevoSeminario(Trabajo trabajo, LocalDate fechaExposicion, NotaAprobacion notaAprobacion, String observaciones);
-    
-    /**
-     * Modifica un seminario siempre y cuando no haya otro con la misma fecha
-     * Si el seminario está aprobado con observaciones, o desaprobado, se deben especificar las observaciones
-     * @param trabajo trabajo al cual se le modifica un seminario
-     * @param seminario seminario a modificar
-     * @param notaAprobacion nota de aprobación del seminario
-     * @param observaciones observaciones del seminario
-     * @return String  - cadena con el resultado de la operación
-     */
-    public String modificarSeminario(Trabajo trabajo, Seminario seminario, NotaAprobacion notaAprobacion, String observaciones);    
-    
+        
     /**
      * Devuelve la posición del último trabajo agregado/modificado
      * Sirve para manejar la tabla tablaTrabajos
@@ -188,19 +164,10 @@ public interface IGestorTrabajos {
      * @return int  - posición del último trabajo agregado/modificado
      */
     public int verUltimoTrabajo();
-    
+       
     /**
-     * Devuelve la posición del último seminario agregado/modificado
-     * Sirve para manejar la tabla tablaSeminarios
-     * Si cuando se agrega/modifica un seminario se cancela la operación, devuelve - 1
-     * Cada vez que se agrega/modifica un seminario, este valor toma la posición del seminario agregado/modificado en el ArrayList
-     * @return int  - posición del último seminario agregado/modificado
-     */
-    public int verUltimoSeminario();
-    
-    /**
-     * Asigna en -1 las variables que controlan el último trabajo y último seminario agregado/modificado
-     * Sirve para manejar las tablas tablaSeminario y tablaTrabajos
+     * Asigna en -1 la variable que controla el último trabajo agregado/modificado
+     * Sirve para manejar la tabla tablaTrabajos
      */
     public void cancelar();
 }

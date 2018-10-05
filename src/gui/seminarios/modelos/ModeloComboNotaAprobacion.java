@@ -27,7 +27,10 @@ public class ModeloComboNotaAprobacion extends DefaultComboBoxModel {
      * @return NotaAprobacion  - nota de aprobación seleccionada
      */
     public NotaAprobacion obtenerNotaAprobacion() { 
-        return (NotaAprobacion)this.getSelectedItem();
+        if (this.getSelectedItem() != null)
+            return (NotaAprobacion)this.getSelectedItem();
+        else
+            return null; //puede no haber
     }
         
     /**

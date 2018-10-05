@@ -6,7 +6,6 @@
 package gui.interfaces;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 
 
@@ -14,6 +13,12 @@ public interface IControladorSeminarios {
     public static final String NUEVO = "Seminarios - Nuevo";
     public static final String MODIFICAR = "Seminarios - Modificar";
     public static final String TITULO = "Seminarios";
+    
+    //Constantes para manejar la tabla de seminarios
+    public static final String OPERACION_ALTA = "Alta"; 
+    public static final String OPERACION_MODIFICACION = "Modificación"; 
+    public static final String OPERACION_NINGUNA = "Ninguna"; 
+    
     
     /**
      * Acción a ejecutar cuando se selecciona el botón Nuevo Seminario

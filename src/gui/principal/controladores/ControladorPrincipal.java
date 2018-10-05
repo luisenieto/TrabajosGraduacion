@@ -12,11 +12,11 @@ import gui.interfaces.IControladorPrincipal;
 import gui.interfaces.IControladorTrabajos;
 import gui.personas.controladores.ControladorPersonas;
 import gui.principal.vistas.VentanaPrincipal;
+import gui.seminarios.modelos.NotaAprobacion;
+import gui.seminarios.modelos.Seminario;
 import gui.trabajos.controladores.ControladorTrabajos;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
 public class ControladorPrincipal implements IControladorPrincipal {
@@ -74,12 +74,6 @@ public class ControladorPrincipal implements IControladorPrincipal {
         
     public static void main(String[] args) {
         IControladorPrincipal controladorPrincipal = new ControladorPrincipal();
-//        List<Rol1> roles = new ArrayList<>();
-//        roles.add(Rol1.COTUTOR);
-//        roles.add(Rol1.JURADO);
-//        roles.add(Rol1.TUTOR);
-//        Collections.sort(roles);
-//        for(Rol1 rol1 : roles)
-//            System.out.println(rol1);
+        
     }    
 }

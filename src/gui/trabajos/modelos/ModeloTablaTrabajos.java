@@ -26,7 +26,7 @@ public class ModeloTablaTrabajos extends AbstractTableModel {
     private List<String> nombresColumnas = new ArrayList<>();        
     //colección para guardar los nombres de las columnas
     private final char SEPARADOR = ';'; 
-    //caracter usado como separador
+    //caracter usado como separador de áreas
     private static final String FECHA_NULA = "-";
     //caracter para cuando no hay fecha
     

@@ -104,6 +104,7 @@ public class VentanaModificarAlumno extends JDialog {
 
         btnCancelar.setMnemonic('C');
         btnCancelar.setText("Cancelar");
+        btnCancelar.setToolTipText("Cancela la operación");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarClic(evt);
@@ -112,6 +113,7 @@ public class VentanaModificarAlumno extends JDialog {
 
         btnAceptar.setMnemonic('A');
         btnAceptar.setText("Aceptar");
+        btnAceptar.setToolTipText("Modifica el alumno");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarClicTecla(evt);

@@ -8,12 +8,13 @@ package gui.seminarios.controladores;
 import com.toedter.calendar.JDateChooser;
 import gui.interfaces.IControladorAMSeminario;
 import gui.interfaces.IControladorSeminarios;
+import gui.interfaces.IGestorSeminarios;
 import gui.interfaces.IGestorTrabajos;
+import gui.seminarios.modelos.GestorSeminarios;
 import gui.seminarios.modelos.ModeloComboNotaAprobacion;
 import gui.seminarios.modelos.NotaAprobacion;
 import gui.seminarios.modelos.Seminario;
 import gui.seminarios.vistas.VentanaAMSeminario;
-import gui.trabajos.modelos.GestorTrabajos;
 import gui.trabajos.modelos.Trabajo;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
@@ -22,13 +23,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class ControladorAMSeminario implements IControladorAMSeminario {
     private VentanaAMSeminario ventana;
     private Trabajo trabajo;
     private Seminario seminario;
-    private IGestorTrabajos gt = GestorTrabajos.instanciar();
     
     /**
      * Constructor
@@ -59,6 +60,7 @@ public class ControladorAMSeminario implements IControladorAMSeminario {
             LocalDate fActual = LocalDate.now();
             GregorianCalendar fechaActual = GregorianCalendar.from(fActual.atStartOfDay(ZoneId.systemDefault()));
             this.ventana.verFechaExposicion().setCalendar(fechaActual); 
+            ((ModeloComboNotaAprobacion)this.ventana.verComboNotaAprobacion().getModel()).seleccionarNotaAprobacion(null);
         }
         else { //modificación de seminario
             GregorianCalendar fExposicion = GregorianCalendar.from(this.seminario.verFechaExposicion().atStartOfDay(ZoneId.systemDefault()));
@@ -76,22 +78,27 @@ public class ControladorAMSeminario implements IControladorAMSeminario {
      */                            
     @Override
     public void btnGuardarClic(ActionEvent evt) {
+        LocalDate fechaExposicion = this.obtenerFechaDeJDateChooser(this.ventana.verFechaExposicion());
+        NotaAprobacion notaAprobacion = ((ModeloComboNotaAprobacion)this.ventana.verComboNotaAprobacion().getModel()).obtenerNotaAprobacion();
+        String observaciones = null;
+        if (!this.ventana.verAreaObservaciones().getText().trim().isEmpty())
+            observaciones = this.ventana.verAreaObservaciones().getText().trim();
+        
         if (this.seminario == null) //nuevo seminario
-            this.nuevoSeminario();
+            this.nuevoSeminario(fechaExposicion, notaAprobacion, observaciones);
         else //modificar seminario
-            this.modificarSeminario();
+            this.modificarSeminario(notaAprobacion, observaciones);
     }
     
     /**
      * Se encarga de la creación de un seminario
      */
-    private void nuevoSeminario() {
-        LocalDate fechaExposicion = this.obtenerFechaDeJDateChooser(this.ventana.verFechaExposicion());
-        NotaAprobacion notaAprobacion = ((ModeloComboNotaAprobacion)this.ventana.verComboNotaAprobacion().getModel()).obtenerNotaAprobacion();
-        String observaciones = this.ventana.verAreaObservaciones().getText().trim();        
-        String resultado = this.gt.nuevoSeminario(this.trabajo, fechaExposicion, notaAprobacion, observaciones);
-        if (!resultado.equals(IGestorTrabajos.EXITO))
+    private void nuevoSeminario(LocalDate fechaExposicion, NotaAprobacion notaAprobacion, String observaciones) {        
+        String resultado = this.trabajo.nuevoSeminario(fechaExposicion, notaAprobacion, observaciones);
+        if (!resultado.equals(IGestorSeminarios.EXITO)) {
+            this.trabajo.cancelar();
             JOptionPane.showMessageDialog(null, resultado, IControladorSeminarios.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();                                    
     }   
@@ -99,12 +106,12 @@ public class ControladorAMSeminario implements IControladorAMSeminario {
     /**
      * Se encarga de la modificación del seminario
      */    
-    private void modificarSeminario() {
-        NotaAprobacion notaAprobacion = ((ModeloComboNotaAprobacion)this.ventana.verComboNotaAprobacion().getModel()).obtenerNotaAprobacion();
-        String observaciones = this.ventana.verAreaObservaciones().getText().trim();        
-        String resultado = this.gt.modificarSeminario(this.trabajo, this.seminario, notaAprobacion, observaciones);
-        if (!resultado.equals(IGestorTrabajos.EXITO))
+    private void modificarSeminario(NotaAprobacion notaAprobacion, String observaciones) {
+        String resultado = this.trabajo.modificarSeminario(this.seminario, notaAprobacion, observaciones);
+        if (!resultado.equals(IGestorSeminarios.EXITO)) {
+            this.trabajo.cancelar();
             JOptionPane.showMessageDialog(null, resultado, IControladorSeminarios.TITULO, JOptionPane.ERROR_MESSAGE);
+        }
         else
             this.ventana.dispose();                                            
     }    
@@ -131,21 +138,35 @@ public class ControladorAMSeminario implements IControladorAMSeminario {
      */                            
     @Override
     public void btnCancelarClic(ActionEvent evt) {
-        this.gt.cancelar();
+        this.trabajo.cancelar();
         this.ventana.dispose();
     }
 
     /**
-     * Acción a ejecutar cuando se presiona una tecla en el área areaObservaciones
+     * Acción a ejecutar cuando cambia la selección en el combo
      * @param evt evento
      */
     @Override
-    public void areaObservacionesPresionarTecla(KeyEvent evt) {
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (this.seminario == null) //nuevo seminario
-                this.nuevoSeminario();
-            else //modificar seminario
-                this.modificarSeminario();
+    public void comboNotaCambiarSeleccion(ActionEvent evt) {
+        JComboBox comboNota = this.ventana.verComboNotaAprobacion();
+        ModeloComboNotaAprobacion mcna = (ModeloComboNotaAprobacion)comboNota.getModel();
+        NotaAprobacion nota = mcna.obtenerNotaAprobacion();
+        if (nota != null) {
+            switch(nota) {
+                case APROBADO_SO:   this.ventana.verAreaObservaciones().setText(null); //se borra el texto
+                                    this.ventana.verAreaObservaciones().setEnabled(false);
+                                    break;
+                case APROBADO_CO:
+                case DESAPROBADO:   this.ventana.verAreaObservaciones().setEnabled(true);
+                                    this.ventana.verAreaObservaciones().selectAll();
+                                    this.ventana.verAreaObservaciones().requestFocus();
+                                    break;
+            }
+        } 
+        else {
+            this.ventana.verAreaObservaciones().setEnabled(false);
         }
-    }            
+    }
+    
+    
 }

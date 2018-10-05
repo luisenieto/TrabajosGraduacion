@@ -90,6 +90,7 @@ public class VentanaSeminarios extends JDialog {
 
         btnModificar.setMnemonic('M');
         btnModificar.setText("Modificar");
+        btnModificar.setToolTipText("Modifica un seminario");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnModificarClic(evt);
@@ -98,6 +99,7 @@ public class VentanaSeminarios extends JDialog {
 
         btnNuevo.setMnemonic('N');
         btnNuevo.setText("Nuevo");
+        btnNuevo.setToolTipText("Crea un nuevo seminario");
         btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoClic(evt);
@@ -133,6 +135,7 @@ public class VentanaSeminarios extends JDialog {
 
         btnVolver.setMnemonic('V');
         btnVolver.setText("Volver");
+        btnVolver.setToolTipText("Vuelve a la ventana anterior");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverClic(evt);

@@ -84,6 +84,7 @@ public class VentanaAreas extends JDialog {
 
         btnBuscar.setMnemonic('U');
         btnBuscar.setText("Buscar");
+        btnBuscar.setToolTipText("Busca un área");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarClic(evt);
@@ -132,6 +133,7 @@ public class VentanaAreas extends JDialog {
 
         btnNueva.setMnemonic('N');
         btnNueva.setText("Nueva");
+        btnNueva.setToolTipText("Crea un área nueva");
         btnNueva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevaClic(evt);
@@ -140,6 +142,7 @@ public class VentanaAreas extends JDialog {
 
         btnBorrar.setMnemonic('B');
         btnBorrar.setText("Borrar");
+        btnBorrar.setToolTipText("Borra un área");
         btnBorrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBorrarClic(evt);
@@ -176,6 +179,7 @@ public class VentanaAreas extends JDialog {
 
         btnVolver.setMnemonic('V');
         btnVolver.setText("Volver");
+        btnVolver.setToolTipText("Vuelve a la ventana anterior");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVolverClic(evt);

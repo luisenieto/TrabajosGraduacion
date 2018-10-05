@@ -6,6 +6,7 @@
 package gui.seminarios.modelos;
 
 import gui.trabajos.modelos.Trabajo;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,22 +16,31 @@ import javax.swing.table.AbstractTableModel;
  * Clase para mostrar los seminarios en una tabla
  */
 public class ModeloTablaSeminarios extends AbstractTableModel {
-    private List<Seminario> seminarios;
+    public static final String COLUMNA_FECHA = "Fecha";
+    public static final String COLUMNA_NOTA = "Nota";
+    public static final String COLUMNA_OBSERVACIONES = "Observaciones";
+    //constantes para los nombres de las columnas 
+    
+    private List<Seminario> seminarios = new ArrayList<>();
     //los datos los saca del trabajo
     private List<String> nombresColumnas = new ArrayList<>();        
     //colección para guardar los nombres de las columnas
     private Trabajo trabajo;
+    private static final String OBSERVACION_NULA = "-";
+    //caracter para cuando no hay fecha
     
     /**
     * Constructor
     * @param trabajo trabajo del cual se obtienen los seminarios
     */                                                        
     public ModeloTablaSeminarios(Trabajo trabajo) {
-        this.nombresColumnas.add("Fecha");
-        this.nombresColumnas.add("Nota");
-        this.nombresColumnas.add("Observaciones");
+        this.nombresColumnas.add(COLUMNA_FECHA);
+        this.nombresColumnas.add(COLUMNA_NOTA);
+        this.nombresColumnas.add(COLUMNA_OBSERVACIONES);
         this.seminarios = trabajo.verSeminarios();
         this.trabajo = trabajo;
+        if (this.trabajo != null)
+            this.seminarios = this.trabajo.verSeminarios();
     }    
     
     
@@ -44,11 +54,23 @@ public class ModeloTablaSeminarios extends AbstractTableModel {
     public Object getValueAt(int fila, int columna) {
         Seminario seminario = this.seminarios.get(fila);
         switch (columna) {
-            case 0: String patron = "dd/MM/yyyy";
-                    return seminario.verFechaExposicion().format(DateTimeFormatter.ofPattern(patron)); 
+            case 0: return this.transformarFechaEnCadena(seminario.verFechaExposicion());
             case 1: return seminario.verNotaAprobacion();                      
-            default: return seminario.verObservaciones();
+            default: if (seminario.verObservaciones() == null)
+                        return OBSERVACION_NULA;
+                     else
+                        return seminario.verObservaciones();
         }
+    }
+    
+    /**
+     * Dada una fecha, devuelve una cadena de la forma dd/mm/aaaa
+     * @param fecha fecha a transformar
+     * @return String  - cadena con la representación de la fecha
+     */
+    private String transformarFechaEnCadena(LocalDate fecha) {        
+        String patron = "dd/MM/yyyy";
+        return fecha.format(DateTimeFormatter.ofPattern(patron));
     }
     
     /**

@@ -6,6 +6,7 @@
 package gui.seminarios.modelos;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Seminario implements Comparable<Seminario> {
@@ -24,6 +25,15 @@ public class Seminario implements Comparable<Seminario> {
         this.notaAprobacion = notaAprobacion;
         this.observaciones = observaciones;
     }
+    
+//    /**
+//     * Constructor
+//     * @param fechaExposicion fecha de exposición del seminario
+//     * @param notaAprobacion condición del seminario (aprobado, desaprobado, etc)
+//     */
+//    public Seminario(LocalDate fechaExposicion, NotaAprobacion notaAprobacion) {
+//        this(fechaExposicion, notaAprobacion, null);
+//    }
     
     /**
      * Devuelve la fecha de exposición del seminario
@@ -108,5 +118,10 @@ public class Seminario implements Comparable<Seminario> {
     @Override
     public int compareTo(Seminario o) {
         return this.fechaExposicion.compareTo(o.fechaExposicion);
-    }                
+    }        
+    
+    public void mostrar() {
+        String patron = "dd/MM/yyyy";
+        System.out.println(this.fechaExposicion.format(DateTimeFormatter.ofPattern(patron)) + " - " + this.notaAprobacion.toString() + " - " + this.observaciones);
+    }
 }

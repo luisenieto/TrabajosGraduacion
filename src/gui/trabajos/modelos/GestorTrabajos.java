@@ -41,9 +41,6 @@ public class GestorTrabajos implements IGestorTrabajos {
     private int ultimoTrabajo;
     //sirve para manejar la tabla tablaTrabajos
     
-    private int ultimoSeminario = - 1;
-    //sirve para manejar la tabla tablaSeminarios
-    
     /**
      * Constructor
     */                                            
@@ -53,7 +50,7 @@ public class GestorTrabajos implements IGestorTrabajos {
     
     /**
      * Método estático que permite crear una única instancia de GestorTrabajos
-     * @return GestorMaterias
+     * @return GestorTrabajos
     */                                                            
     public static GestorTrabajos instanciar() {
         if (gestor == null) 
@@ -563,7 +560,6 @@ public class GestorTrabajos implements IGestorTrabajos {
      *  cantCoTutores
      *  cantJurados
      *  cantAlumnos
-     *  cantSeminarios
      *  área 1
      *  ...
      *  área N
@@ -603,13 +599,6 @@ public class GestorTrabajos implements IGestorTrabajos {
      *  desde
      *  hasta
      *  razón
-     *  fecha exposición seminario 1
-     *  nota
-     *  observaciones
-     *  ...
-     *  fecha exposición seminario N
-     *  nota
-     *  observaciones
      * @return String  - cadena con el resultado de la operacion
      */
     private String leerArchivo() {
@@ -623,10 +612,7 @@ public class GestorTrabajos implements IGestorTrabajos {
                     String[] vector = cadena.split(Character.toString(SEPARADOR));
                     String titulo = vector[0];
                     int duracion = Integer.parseInt(vector[1]);
-                    
-//                    String nombreArea = vector[2];                    
-//                    Area area = ga.dameArea(nombreArea);
-                    
+                                       
                     String fPresentacion = vector[2];
                     LocalDate fechaPresentacion = this.transformarCadenaAFecha(fPresentacion);
                     
@@ -643,9 +629,8 @@ public class GestorTrabajos implements IGestorTrabajos {
                     int cantCoTutores = Integer.parseInt(vector[7]);
                     int cantJurados = Integer.parseInt(vector[8]);
                     int cantAlumnos = Integer.parseInt(vector[9]);
-                    int cantSeminarios = Integer.parseInt(vector[10]);
 
-                    int primerArea = 11; //posición donde está la primer área
+                    int primerArea = 10; //posición donde está la primer área
                     int ultimaArea = primerArea + cantAreas - 1; //posición donde está la última área                    
                     int dniPrimerTutor = ultimaArea + 1;  //posición donde está el dni del primer tutor
                     int razonUltimoTutor = (dniPrimerTutor + cantTutores * 4) - 1; //posición donde está la razón del último tutor
@@ -655,8 +640,6 @@ public class GestorTrabajos implements IGestorTrabajos {
                     int razonUltimoJurado = (dniPrimerJurado + cantJurados * 4) - 1; //posición donde está la razón del último jurado
                     int cxPrimerAlumno = razonUltimoJurado + 1; //posición donde está el cx del primer alumno
                     int razonUltimoAlumno = (cxPrimerAlumno + cantAlumnos * 4) - 1; //posición donde está la razón del último alumno
-                    int fechaPrimerSeminario = razonUltimoAlumno + 1; //posición donde está la fecha de presentación del primer seminario
-                    int observacionesUltimoSeminario = (fechaPrimerSeminario + cantSeminarios * 3) - 1; //posición donde están las observaciones del último seminario
 
                     List<Area> areas = new ArrayList<>();
                     for(int i = primerArea; i <= ultimaArea; ) {
@@ -730,22 +713,7 @@ public class GestorTrabajos implements IGestorTrabajos {
                         aet.add(new AlumnoEnTrabajo(alumno, fechaDesde, fechaHasta, razon));                        
                     }
                     
-                    List<Seminario> seminarios = new ArrayList<>();
-                    for(int i = fechaPrimerSeminario; i <= observacionesUltimoSeminario; ) { //se leen los seminarios
-                        String fExp = vector[i++];
-                        LocalDate fechaExp = this.transformarCadenaAFecha(fExp);
-                        
-                        NotaAprobacion notaAprobacion = this.transFormarCadenaANotaAprobacion(vector[i++]);
-                        String observaciones = vector[i++];
-                        Seminario seminario;
-                        if (observaciones.equals(VALORES_NULOS))
-                            seminario = new Seminario(fechaExp, notaAprobacion, null);
-                        else
-                            seminario = new Seminario(fechaExp, notaAprobacion, observaciones);
-                        seminarios.add(seminario);
-                    }                                        
                     Trabajo trabajo = new Trabajo(titulo, duracion, areas, fechaPresentacion, fechaAprobacion, fechaExposicion, ret, aet);
-                    trabajo.asignarSeminarios(seminarios);
                     this.trabajos.add(trabajo);
                 }
                 return LECTURA_OK;
@@ -801,66 +769,6 @@ public class GestorTrabajos implements IGestorTrabajos {
     }
 
     /**
-     * Agrega un seminario al trabajo especificado siempre y cuando no haya otro con la misma fecha
-     * Si el seminario está aprobado con observaciones, o desaprobado, se deben especificar las observaciones
-     * @param trabajo trabajo al cual se le agrega un nuevo seminario
-     * @param fechaExposicion fecha de exposición del seminario
-     * @param notaAprobacion nota de aprobación del seminario
-     * @param observaciones observaciones del seminario
-     * @return String  - cadena con el resultado de la operación
-     */
-    @Override
-    public String nuevoSeminario(Trabajo trabajo, LocalDate fechaExposicion, NotaAprobacion notaAprobacion, String observaciones) {
-        this.ultimoSeminario = - 1;
-        if (trabajo != null) { //se especificó un trabajo
-            String resultadoSeminario = trabajo.nuevoSeminario(fechaExposicion, notaAprobacion, observaciones);
-            if (resultadoSeminario.equals(SEMINARIO_EXITO)) {                
-                String resultado = this.escribirArchivo();
-                if (resultado.equals(ESCRITURA_OK)) {
-                    this.ultimoSeminario = trabajo.verUltimoSeminario();
-                    return EXITO;  
-                }
-                else
-                    return ESCRITURA_ERROR;
-            }
-            else
-                return resultadoSeminario;
-        }
-        else //no se especificó un trabajo
-            return TRABAJO_INEXISTENTE;
-    }
-    
-    /**
-     * Modifica un seminario siempre y cuando no haya otro con la misma fecha
-     * Si el seminario está aprobado con observaciones, o desaprobado, se deben especificar las observaciones
-     * @param trabajo trabajo al cual se le modifica un seminario
-     * @param seminario seminario a modificar
-     * @param notaAprobacion nota de aprobación del seminario
-     * @param observaciones observaciones del seminario
-     * @return String  - cadena con el resultado de la operación
-     */    
-    @Override
-    public String modificarSeminario(Trabajo trabajo, Seminario seminario, NotaAprobacion notaAprobacion, String observaciones) {
-        this.ultimoSeminario = - 1;
-        if (trabajo != null) { //se especificó un trabajo
-            String resultadoSeminario = trabajo.modificarSeminario(seminario, notaAprobacion, observaciones);
-            if (resultadoSeminario.equals(SEMINARIO_EXITO)) {                
-                String resultado = this.escribirArchivo();
-                if (resultado.equals(ESCRITURA_OK)) {
-                    this.ultimoSeminario = trabajo.verUltimoSeminario();
-                    return EXITO;  
-                }
-                else
-                    return ESCRITURA_ERROR;
-            }
-            else
-                return resultadoSeminario;            
-        }
-        else //no se especificó un trabajo
-            return TRABAJO_INEXISTENTE;        
-    }
-
-    /**
      * Devuelve la posición del último trabajo agregado/modificado
      * Sirve para manejar la tabla tablaTrabajos
      * Si cuando se agrega/modifica un trabajo se cancela la operación, devuelve - 1
@@ -873,25 +781,12 @@ public class GestorTrabajos implements IGestorTrabajos {
     }
         
     /**
-     * Devuelve la posición del último seminario agregado/modificado
-     * Sirve para manejar la tabla tablaSeminarios
-     * Si cuando se agrega/modifica un seminario se cancela la operación, devuelve - 1
-     * Cada vez que se agrega/modifica un seminario, este valor toma la posición del seminario agregado/modificado en el ArrayList
-     * @return int  - posición del último seminario agregado/modificado
+     * Asigna en -1 la variable que controla el último trabajo agregado/modificado
+     * Sirve para manejar la tabla tablaTrabajos
      */
-    @Override
-    public int verUltimoSeminario() {
-        return this.ultimoSeminario;
-    }
-
-    /**
-     * Asigna en -1 las variables que controlan el último trabajo y último seminario agregado/modificado
-     * Sirve para manejar las tablas tablaSeminario y tablaTrabajos
-     */    
     @Override
     public void cancelar() {
         this.ultimoTrabajo = -1;
-        this.ultimoSeminario = -1; 
     }
                     
     /**
@@ -907,7 +802,6 @@ public class GestorTrabajos implements IGestorTrabajos {
      *  cantCoTutores
      *  cantJurados
      *  cantAlumnos
-     *  cantSeminarios
      *  área 1
      *  ...
      *  área N
@@ -947,13 +841,6 @@ public class GestorTrabajos implements IGestorTrabajos {
      *  desde
      *  hasta
      *  razón
-     *  fecha exposición seminario 1
-     *  nota
-     *  observaciones
-     *  ...
-     *  fecha exposición seminario N
-     *  nota
-     *  observaciones
      * @return String  - cadena con el resultado de la operacion
      */
     private String escribirArchivo() {
@@ -988,13 +875,11 @@ public class GestorTrabajos implements IGestorTrabajos {
                 int cantCoTutores = trabajo.cantidadProfesoresConRol(Rol.COTUTOR);
                 int cantJurados = trabajo.cantidadProfesoresConRol(Rol.JURADO);
                 int cantAlumnos = trabajo.cantidadAlumnos();
-                int cantSeminarios = trabajo.cantidadSeminarios();
                 cadena += SEPARADOR + Integer.toString(cantCareas);
                 cadena += SEPARADOR + Integer.toString(cantTutores);
                 cadena += SEPARADOR + Integer.toString(cantCoTutores);
                 cadena += SEPARADOR + Integer.toString(cantJurados);
                 cadena += SEPARADOR + Integer.toString(cantAlumnos);
-                cadena += SEPARADOR + Integer.toString(cantSeminarios);
                 
                 //todas las áreas del trabajo
                 for(Area area : trabajo.verAreas())
@@ -1049,21 +934,6 @@ public class GestorTrabajos implements IGestorTrabajos {
                         razon = VALORES_NULOS;
                     cadena += razon;
                 }
-                
-                //todos los seminarios
-                for(Seminario seminario : trabajo.verSeminarios()) {
-                    LocalDate fExp = seminario.verFechaExposicion();
-                    String fechaExp = fExp.format(DateTimeFormatter.ofPattern(patron));
-                    cadena += SEPARADOR + fechaExp+ SEPARADOR;
-                    cadena += seminario.verNotaAprobacion().toString() + SEPARADOR;
-                    String observaciones;
-                    if (seminario.verObservaciones() != null)
-                        observaciones = seminario.verObservaciones();
-                    else
-                        observaciones = VALORES_NULOS;
-                    cadena += observaciones;
-                }
-                
                 
                 bw.write(cadena);
                 bw.newLine();

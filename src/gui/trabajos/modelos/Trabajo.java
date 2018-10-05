@@ -7,8 +7,9 @@ package gui.trabajos.modelos;
 
 import gui.seminarios.modelos.Seminario;
 import gui.areas.modelos.Area;
-import gui.interfaces.IGestorTrabajos;
+import gui.interfaces.IGestorSeminarios;
 import gui.personas.modelos.Profesor;
+import gui.seminarios.modelos.GestorSeminarios;
 import gui.seminarios.modelos.NotaAprobacion;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -123,15 +124,6 @@ public class Trabajo implements Comparable<Trabajo> {
     public void asignarFechaExposicion(LocalDate fechaFinalizacion) {
         this.fechaFinalizacion = fechaFinalizacion;
     }     
-
-    /**
-     * Asigna los seminarios especificados al trabajo
-     * A este método lo usa GestorTrabajos cuando lee del archivo
-     * @param seminarios seminarios a agregar
-     */
-    public void asignarSeminarios(List<Seminario> seminarios) {
-        this.seminarios = seminarios;
-    }
         
     /**
      * Devuelve el últmo profesor con el rol especificado (TUTOR | COTUTOR)
@@ -303,7 +295,76 @@ public class Trabajo implements Comparable<Trabajo> {
     }
     
     /**
-     * Agrega un seminario al trabajo especificado siempre y cuando no haya otro con la misma fecha
+     * Agrega un seminario al trabajo siempre y cuando no haya otro con la misma fecha
+     * Si el seminario está aprobado con observaciones, o desaprobado, se deben especificar las observaciones
+     * @param fechaExposicion fecha de exposición del seminario
+     * @param notaAprobacion nota de aprobación del seminario
+     * @param observaciones observaciones del seminario
+     * @return String  - cadena con el resultado de la operación
+     */
+//    @Override
+//    public String nuevoSeminario(LocalDate fechaExposicion, NotaAprobacion notaAprobacion, String observaciones) {
+//        this.ultimoSeminario = - 1;
+//        if ((fechaExposicion != null) && (notaAprobacion != null)) { //fecha y nota especificados
+//            if (notaAprobacion == NotaAprobacion.APROBADO_SO) { //seminario aprobado sin observaciones
+//                Seminario seminario = new Seminario(fechaExposicion, notaAprobacion, null);
+//                if (!this.seminarios.contains(seminario)) { //no existe un seminario con esta fecha
+//                    this.seminarios.add(seminario);
+//                    Collections.sort(this.seminarios);
+//                    this.ultimoSeminario = this.seminarios.indexOf(seminario);
+//                    return IGestorTrabajos.SEMINARIO_EXITO;
+//                }
+//                else  //ya hay un seminario con la fecha de exposición especificada
+//                    return IGestorTrabajos.SEMINARIO_DUPLICADO;                
+//            }
+//            else { //seminario aprobado con observaciones o desaprobado
+//                if (observaciones != null) { //se especificaron las observaciones
+//                    Seminario seminario = new Seminario(fechaExposicion, notaAprobacion, observaciones);
+//                    if (!this.seminarios.contains(seminario)) {
+//                        this.seminarios.add(seminario);
+//                        Collections.sort(this.seminarios);
+//                        this.ultimoSeminario = this.seminarios.indexOf(seminario);
+//                        return IGestorTrabajos.SEMINARIO_EXITO;
+//                    }
+//                    else //ya hay un seminario con la fecha de exposición especificada
+//                        return IGestorTrabajos.SEMINARIO_DUPLICADO;
+//                }
+//                else //no se especificaron las observaciones
+//                    return IGestorTrabajos.SEMINARIO_ERROR_OBSERVACIONES;
+//            }
+//        }
+//        else  //fecha y nota sin especificar
+//            return IGestorTrabajos.SEMINARIO_ERROR;
+//    }
+        
+    /**
+     * Agrega el seminario especificado siempre y cuando no exista otro en la misma fecha
+     * Y que la fecha de exposición del seminario sea posterior a la de aprobación del trabajo
+     * Este método se usa cuando se leen los seminarios del archivo
+     * @param seminario seminario a agregar
+     * @return String  - cadena con el resultado de la operación
+     */
+    public String agregarSeminario(Seminario seminario) {
+        if (seminario != null) {
+            if (!this.seminarios.contains(seminario)) {
+                if (seminario.verFechaExposicion().isAfter(this.verFechaAprobacion())) {
+                    this.seminarios.add(seminario);
+                    Collections.sort(this.seminarios);
+                    return IGestorSeminarios.EXITO;
+                }
+                else
+                    return IGestorSeminarios.ERROR_FECHA_EXPOSICION;
+            }
+            else
+                return IGestorSeminarios.DUPLICADOS;
+        }
+        else
+            return IGestorSeminarios.SEMINARIO_INEXISTENTE;
+    }
+    
+    /**
+     * Crea un seminario siempre y cuando no haya otro con la misma fecha
+     * Y que la fecha de exposición del seminario sea posterior a la de aprobación del trabajo
      * Si el seminario está aprobado con observaciones, o desaprobado, se deben especificar las observaciones
      * @param fechaExposicion fecha de exposición del seminario
      * @param notaAprobacion nota de aprobación del seminario
@@ -311,37 +372,12 @@ public class Trabajo implements Comparable<Trabajo> {
      * @return String  - cadena con el resultado de la operación
      */
     public String nuevoSeminario(LocalDate fechaExposicion, NotaAprobacion notaAprobacion, String observaciones) {
-        this.ultimoSeminario = - 1;
-        if ((fechaExposicion != null) && (notaAprobacion != null)) { //fecha y nota especificados
-            if (notaAprobacion == NotaAprobacion.APROBADO_SO) { //seminario aprobado sin observaciones
-                Seminario seminario = new Seminario(fechaExposicion, notaAprobacion, null);
-                if (!this.seminarios.contains(seminario)) { //no existe un seminario con esta fecha
-                    this.seminarios.add(seminario);
-                    Collections.sort(this.seminarios);
-                    this.ultimoSeminario = this.seminarios.indexOf(seminario);
-                    return IGestorTrabajos.SEMINARIO_EXITO;
-                }
-                else  //ya hay un seminario con la fecha de exposición especificada
-                    return IGestorTrabajos.SEMINARIO_DUPLICADO;                
-            }
-            else { //seminario aprobado con observaciones o desaprobado
-                if (observaciones != null) { //se especificaron las observaciones
-                    Seminario seminario = new Seminario(fechaExposicion, notaAprobacion, observaciones);
-                    if (!this.seminarios.contains(seminario)) {
-                        this.seminarios.add(seminario);
-                        Collections.sort(this.seminarios);
-                        this.ultimoSeminario = this.seminarios.indexOf(seminario);
-                        return IGestorTrabajos.SEMINARIO_EXITO;
-                    }
-                    else //ya hay un seminario con la fecha de exposición especificada
-                        return IGestorTrabajos.SEMINARIO_DUPLICADO;
-                }
-                else //no se especificaron las observaciones
-                    return IGestorTrabajos.SEMINARIO_ERROR_OBSERVACIONES;
-            }
-        }
-        else  //fecha y nota sin especificar
-            return IGestorTrabajos.SEMINARIO_ERROR;
+        this.ultimoSeminario = -1;
+        IGestorSeminarios gs = GestorSeminarios.instanciar();
+        String resultado = gs.nuevoSeminario(this, fechaExposicion, notaAprobacion, observaciones);
+        if (resultado.equals(IGestorSeminarios.EXITO))
+            this.ultimoSeminario = this.seminarios.size() - 1;
+        return resultado;
     }
     
     /**
@@ -353,31 +389,12 @@ public class Trabajo implements Comparable<Trabajo> {
      * @return String  - cadena con el resultado de la operación
      */    
     public String modificarSeminario(Seminario seminario, NotaAprobacion notaAprobacion, String observaciones) {
-        this.ultimoSeminario = - 1;
-        if (seminario != null) { //se especificó un seminario
-            if (notaAprobacion != null) { //nota especificada
-                if (notaAprobacion == NotaAprobacion.APROBADO_SO) { //seminario aprobado sin observaciones
-                    seminario.asignarNotaAprobacion(notaAprobacion);
-                    seminario.asignarObservaciones(null);
-                    this.ultimoSeminario = this.seminarios.indexOf(seminario);
-                    return IGestorTrabajos.SEMINARIO_EXITO;
-                }
-                else { //seminario aprobado con observaciones o desaprobado
-                    if (observaciones != null) { //se especificaron las observaciones
-                        seminario.asignarNotaAprobacion(notaAprobacion);
-                        seminario.asignarObservaciones(observaciones);
-                        this.ultimoSeminario = this.seminarios.indexOf(seminario);
-                        return IGestorTrabajos.SEMINARIO_EXITO;
-                    }
-                    else //no se especificaron las observaciones
-                        return IGestorTrabajos.SEMINARIO_ERROR_OBSERVACIONES;
-                }
-            }
-            else  //nota sin especificar
-                return IGestorTrabajos.SEMINARIO_ERROR;
-        }
-        else //no se especificó un seminario
-            return IGestorTrabajos.SEMINARIO_INEXISTENTE;        
+        this.ultimoSeminario = -1;
+        IGestorSeminarios gs = GestorSeminarios.instanciar();
+        String resultado = gs.modificarSeminario(this, seminario, notaAprobacion, observaciones);
+        if (resultado.equals(IGestorSeminarios.EXITO))
+            this.ultimoSeminario = this.seminarios.indexOf(seminario);
+        return resultado;
     }
 
     
@@ -410,12 +427,19 @@ public class Trabajo implements Comparable<Trabajo> {
         return o.fechaAprobacion.compareTo(this.fechaAprobacion);
     }
     
+    /**
+     * Asigna en -1 la variable que controla el último seminario agregado/modificado
+     * Sirve para manejar la tabla tablaSeminarios
+     */
+    public void cancelar() {
+        this.ultimoSeminario = -1; 
+    }    
+    
     
     
     public void mostrar() {
         System.out.println("Título: " + this.titulo);
         System.out.println("Duración: " + this.duracion);
-//        System.out.println("Área: " + this.area.verNombre());
         String patron = "dd/MM/yyyy";
         System.out.println("Fecha de presentación: " + this.fechaPresentacion.format(DateTimeFormatter.ofPattern(patron))); 
         System.out.println("Fecha de aprobación: " + this.fechaAprobacion.format(DateTimeFormatter.ofPattern(patron))); 
@@ -423,10 +447,12 @@ public class Trabajo implements Comparable<Trabajo> {
             System.out.println("Fecha de exposición: " + this.fechaFinalizacion.format(DateTimeFormatter.ofPattern(patron))); 
         else
             System.out.println("Fecha de exposición: -"); 
-        for(RolEnTrabajo rolEnTrabajo : this.ret)
-            rolEnTrabajo.mostrar();
-        for(AlumnoEnTrabajo alumnoEnTrabajo : this.aet)
-            alumnoEnTrabajo.mostrar();
+//        for(RolEnTrabajo rolEnTrabajo : this.ret)
+//            rolEnTrabajo.mostrar();
+//        for(AlumnoEnTrabajo alumnoEnTrabajo : this.aet)
+//            alumnoEnTrabajo.mostrar();
+        for(Seminario s : this.seminarios)
+            s.mostrar();
     }
     
 }
