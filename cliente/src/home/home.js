@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Card } from '@mui/material';
 // import { CardContent } from '@mui/material';
 // import { CardMedia } from '@mui/material';
@@ -8,23 +8,19 @@ import Tema from '../tema';
 import GraficoTrabajos from './graficoTrabajos';
 import useStyles from './useStyles';
 
-import { ProviderContext } from '../provider';
-
-
 const Home = () => {    
-    const { trabajos, areas } = useContext(ProviderContext);
     const classes = useStyles(Tema);
 
-    console.log(areas);
+    //console.log(areas);
     return (
         <Card className={classes.card}>
             <Typography variant="h6" className={classes.title}>
                 Resumen de trabajos
                 
             </Typography>
-            {/* <div style = {{height: 500}}>            
+            <div style = {{height: 500}}>            
                 <GraficoTrabajos />
-            </div> */}
+            </div>
         </Card>
     )
 

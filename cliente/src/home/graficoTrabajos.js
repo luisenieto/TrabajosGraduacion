@@ -29,8 +29,7 @@ const GraficoTrabajos = () => {
             </text>
         )
     }
-
-    console.log(trabajos);
+    
     return (
         <>
             {                
