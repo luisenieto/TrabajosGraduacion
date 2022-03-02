@@ -26,20 +26,7 @@ const Provider = ({children}) => {
     //todas las áreas
 
     const [totalesTrabajos, setearTotalesTrabajos] = useState([]);
-    //array con los totales de trabajos discriminados por áreas
-
-    const [usuarios, setearUsuarios] = useState([]);
-    useEffect(() => {
-        if (usuarios.length === 0) 
-            obtenerUuarios();
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps    
-    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
-    const obtenerUuarios = () => {
-        const ruta = '/api/usuarios/listar';
-        axios.get(ruta).then(response => {           
-            setearUsuarios(response.data);
-        });
-    }
+    //array con los totales de trabajos discriminados por áreas    
 
     useEffect(() => {
         if (profesores.length === 0) 
@@ -195,8 +182,7 @@ const Provider = ({children}) => {
             areas, 
             setearAreas,
             totalesTrabajos, 
-            setearTotalesTrabajos,
-            usuarios
+            setearTotalesTrabajos
         }}>
             {children}
         </ProviderContext.Provider>
