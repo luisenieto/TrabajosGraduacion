@@ -77,10 +77,11 @@ const constantesTrabajos = {
     ALUMNO_EN_OTRO_TRABAJO : 'Uno o más alumnos ya están en otro trabajo',
     OK : 'OK',
     DADO_DE_BAJA : 'Dado de baja',
-    MENSAJE_CONFIRMAR_BORRADO: '¿Confirma el borrado del trabajo: ',
-    MENSAJE_CONFIRMAR_FINALIZACION: '¿Confirma la finalización del trabajo: ',
-    MENSAJE_CONFIRMAR_MODIFICACION: '¿Confirma la modificación del trabajo: ',
-    MENSAJE_CONFIRMAR_BAJA: '¿Confirma la baja del trabajo: '
+    MENSAJE_CONFIRMAR_BORRADO : '¿Confirma el borrado del trabajo: ',
+    MENSAJE_CONFIRMAR_FINALIZACION : '¿Confirma la finalización del trabajo: ',
+    MENSAJE_CONFIRMAR_MODIFICACION : '¿Confirma la modificación del trabajo: ',
+    MENSAJE_CONFIRMAR_BAJA : '¿Confirma la baja del trabajo: ',
+    ANIO_PRIMER_TRABAJO : 2013
 }
 
 const constantesAlumnos = {

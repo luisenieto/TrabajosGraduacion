@@ -1,6 +1,14 @@
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(tema => ({
+    pageContent : {
+
+        padding : tema.spacing(1)
+    },
+    autoComplete : {
+        marginTop: tema.spacing(1),
+        
+    },
     card : {
         
         margin : 'auto',

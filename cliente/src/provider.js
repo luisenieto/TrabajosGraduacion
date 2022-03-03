@@ -1,5 +1,6 @@
 import React, {createContext, useState, useEffect} from 'react';
 import axios from 'axios';
+import { constantesTrabajos } from './config/constantes';
 
 export const ProviderContext = createContext();
 
@@ -26,7 +27,18 @@ const Provider = ({children}) => {
     //todas las áreas
 
     const [totalesTrabajos, setearTotalesTrabajos] = useState([]);
-    //array con los totales de trabajos discriminados por áreas    
+    //array con los totales de trabajos discriminados por áreas 
+    
+    const [desdeAnio, setearDesdeAnio] = useState(constantesTrabajos.ANIO_PRIMER_TRABAJO); //2013
+    //año a partir del cual hacer los cálculos de los totales (el trabajo más viejo es del 2013)
+
+    const [hastaAnio, setearHastaAnio] = useState(new Date().getFullYear());
+    //año hasta el cual hacer los cálculos de los totales (año actual)
+
+    const [cantidadTrabajosParaGrafico, setearCantidadTrabajosParaGrafico] = useState(0);
+    //tiene la cantidad total de trabajos que muestra el gráfico
+    //se actualiza cada vez que se ejecuta el efecto que calcula los totales
+    //no uso trabajos.length porque el gráfico puede estar filtrando trabajos por un rango menor de fechas
 
     useEffect(() => {
         if (profesores.length === 0) 
@@ -60,9 +72,10 @@ const Provider = ({children}) => {
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
 
-    //Obtiene todos los trabajos 
+    //Obtiene todos los trabajos para el rango de fechas dado por desdeAnio y hastaAnio
     const obtenerTrabajos = () => {
-        const ruta = '/api/trabajos/listar';
+        //const ruta = '/api/trabajos/listar';
+        const ruta = '/api/trabajos/listarrango?desde=' + desdeAnio.toString() + '&hasta=' + hastaAnio.toString();
         axios.get(ruta).then(response => {  
             setearTrabajos(response.data);
         });
@@ -86,10 +99,10 @@ const Provider = ({children}) => {
     useEffect(() => {
         if (trabajos.length > 0)
             obtenerTotales();
-    }, [trabajos]); //eslint-disable-line react-hooks/exhaustive-deps 
+    }, [trabajos, desdeAnio, hastaAnio]); //eslint-disable-line react-hooks/exhaustive-deps 
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
     
-    //obtiene los tales de trabajos discriminados por áreas
+    //obtiene los tales de trabajos, discriminados por áreas, entre el rango de fechas dado por desdeAnio y hastaAnio
     const obtenerTotales = () => {
         let datosTrabajosUpdate = [];
 
@@ -100,23 +113,27 @@ const Provider = ({children}) => {
         let cantidadHardwareSoftware = 0;
         let cantidadRedesSoftware = 0;
         let cantidadHardwareRedesSoftware = 0;
+        let cantTrabajosParaGrafico = 0;
 
-        for(let i in trabajos) {
-            switch(trabajos[i].areas) {                             
-                case '1' : cantidadHardware++;
-                    break;
-                case '2' : cantidadRedes++;
-                    break;
-                case '3' : cantidadSoftware++;
-                    break;  
-                case '1,2' : cantidadHardwareRedes++;
-                    break; 
-                case '1,3' : cantidadHardwareSoftware++;
-                    break;
-                case '2,3' : cantidadRedesSoftware++;
-                    break;
-                default: cantidadHardwareRedesSoftware++;
-                    break;
+        for(let i in trabajos) {            
+            if (parseInt(trabajos[i].fechaAprobacion.substring(0, 4)) >= desdeAnio && parseInt(trabajos[i].fechaAprobacion.substring(0, 4)) <= hastaAnio) {
+                cantTrabajosParaGrafico++;
+                switch(trabajos[i].areas) {                             
+                    case '1' : cantidadHardware++;
+                        break;
+                    case '2' : cantidadRedes++;
+                        break;
+                    case '3' : cantidadSoftware++;
+                        break;  
+                    case '1,2' : cantidadHardwareRedes++;
+                        break; 
+                    case '1,3' : cantidadHardwareSoftware++;
+                        break;
+                    case '2,3' : cantidadRedesSoftware++;
+                        break;
+                    default: cantidadHardwareRedesSoftware++;
+                        break;
+                }
             }
         }
 
@@ -163,6 +180,7 @@ const Provider = ({children}) => {
         });
 
         setearTotalesTrabajos(datosTrabajosUpdate);
+        setearCantidadTrabajosParaGrafico(cantTrabajosParaGrafico);
     }
 
     return (
@@ -182,7 +200,11 @@ const Provider = ({children}) => {
             areas, 
             setearAreas,
             totalesTrabajos, 
-            setearTotalesTrabajos
+            desdeAnio, 
+            setearDesdeAnio,
+            hastaAnio, 
+            setearHastaAnio,
+            cantidadTrabajosParaGrafico
         }}>
             {children}
         </ProviderContext.Provider>

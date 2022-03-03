@@ -13,6 +13,20 @@ router.get('/trabajos/listar', (request, response) => {
     });
 });
 
+//ruta para listar todos los trabajos dentro de un rango de años (los lista ordenados por fecha de aprobación en orden cronológico inverso)
+router.get('/trabajos/listarrango', (request, response) => {
+    //http://localhost:3001/api/trabajos/listarrango?desde=2015&hasta=2018
+    let desde = request.query.desde;
+    let hasta = request.query.hasta;
+    const fechaDesde = desde.toString() + '-01-01T00:00:02Z';
+    const fechaHasta = hasta.toString() + '-12-31T23:59:59Z';
+    Trabajo.find({ fechaAprobacion : { $gte :  fechaDesde, $lte : fechaHasta}}).sort({fechaAprobacion:'desc'}).exec((error, documento) => {
+        if(error)
+            return response.status(400).send(error);
+        response.status(200).send(documento);
+    });
+});
+
 //ruta para mostrar un determinado trabajo
 router.get('/trabajos', (request, response) => {
     //http://localhost:3001/api/trabajos?id=61a566fcdd054f01d126dc78
