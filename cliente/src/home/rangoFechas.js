@@ -7,6 +7,7 @@ import useStyles from './useStyles';
 import Tema from '../tema';
 import { constantesTrabajos } from '../config/constantes';
 
+//Componente que muestra los 2 autocomplete para elegir el rango de fechas para mostrar el gráfico de totales de trabajos
 const RangoFechas = () => {
     const classes = useStyles(Tema);
     const { desdeAnio, setearDesdeAnio, hastaAnio, setearHastaAnio } = useContext(ProviderContext);

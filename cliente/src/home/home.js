@@ -1,7 +1,4 @@
 import React from 'react';
-//import { Card } from '@mui/material';
-// import { CardContent } from '@mui/material';
-// import { CardMedia } from '@mui/material';
 //import { Typography } from '@mui/material';
 // import ingComp from '../images/ingcomp.jpeg';
 import Tema from '../tema';
