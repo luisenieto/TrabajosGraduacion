@@ -47,6 +47,9 @@ const GraficoTrabajos = () => {
                                 ]
                             }}
                             arcLinkLabelsSkipAngle = {10}
+                            arcLinkLabelsDiagonalLength = {5}
+                            arcLinkLabelsStraightLength = {10}
+                            arcLinkLabelsTextOffset = {3}
                             arcLinkLabelsTextColor = "#000000"
                             arcLinkLabelsThickness = {2}
                             arcLinkLabelsColor = {{ from : 'color' }}
