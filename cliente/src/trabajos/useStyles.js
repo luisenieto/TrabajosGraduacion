@@ -53,9 +53,10 @@ const useStyles = makeStyles(tema => ({
         width : '100%'
     },        
     botonFinal : {
-        margin : tema.spacing(1),
-        width : '99%'
-    }  
+        marginTop : tema.spacing(1),
+        marginRight: tema.spacing(1),
+        width : '100%'
+    } 
 }));
 
 export default useStyles;

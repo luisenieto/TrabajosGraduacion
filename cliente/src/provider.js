@@ -40,6 +40,12 @@ const Provider = ({children}) => {
     //se actualiza cada vez que se ejecuta el efecto que calcula los totales
     //no uso trabajos.length porque el gráfico puede estar filtrando trabajos por un rango menor de fechas
 
+    const [cantidadTrabajosPorEstado, setearCantidadTrabajosPorEstado] = useState({});
+    //tiene la cantidad de trabajos, discriminando:
+    //los que están sin terminar (sin fechaFinalizacion)
+    //los que estén finalizados (con fechaFinalizacion y al menos 1 jurado cuya razón sea "Finalización" (ver en las constantes))
+    //los que estén cancelados (con fechaFinalizacion y al menos 1 jurado cuya razón sea "Dado de baja" (ver en las constantes))
+
     useEffect(() => {
         if (profesores.length === 0) 
              obtenerProfesores();
@@ -80,8 +86,7 @@ const Provider = ({children}) => {
             setearTrabajos(response.data);
         });
     } 
-    
-    
+        
     useEffect(() => {
         if (areas.length === 0) 
              obtenerAreas();
@@ -98,12 +103,12 @@ const Provider = ({children}) => {
 
     useEffect(() => {
         if (trabajos.length > 0)
-            obtenerTotales();
+            obtenerTotalesPorArea();
     }, [trabajos, desdeAnio, hastaAnio]); //eslint-disable-line react-hooks/exhaustive-deps 
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
     
-    //obtiene los tales de trabajos, discriminados por áreas, entre el rango de fechas dado por desdeAnio y hastaAnio
-    const obtenerTotales = () => {
+    //obtiene los totales de trabajos, discriminados por áreas, entre el rango de fechas dado por desdeAnio y hastaAnio
+    const obtenerTotalesPorArea = () => {
         let datosTrabajosUpdate = [];
 
         let cantidadHardware = 0;
@@ -183,6 +188,50 @@ const Provider = ({children}) => {
         setearCantidadTrabajosParaGrafico(cantTrabajosParaGrafico);
     }
 
+    useEffect(() => {
+        if (trabajos.length > 0)
+            obtenerTotalesPorEstado();
+    }, [trabajos]); //eslint-disable-line react-hooks/exhaustive-deps 
+    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
+
+    //obtiene la cantidad de trabajos, discriminando los que están sin terminar, finalizados o cancelados
+    const obtenerTotalesPorEstado = () => {
+        let datosTrabajosUpdate = {};
+
+        let cantidadSinTerminar = 0;
+        let cantidadFinalizados = 0;
+        let cantidadCancelados = 0;
+        let cantidadTrabajos = 0;
+
+        for(let i in trabajos) { 
+            cantidadTrabajos++;
+            if(trabajos[i].fechaFinalizacion) {
+                const jurado = trabajos[i].jurado;
+                for(let j in jurado) {
+                    if (jurado[j].razon === constantesTrabajos.FINALIZACION) {
+                        cantidadFinalizados++;
+                        break;
+                    }
+                    if (jurado[j].razon === constantesTrabajos.DADO_DE_BAJA) {
+                        cantidadCancelados++;
+                        break;
+                    }
+                }
+            }
+            else
+                cantidadSinTerminar++;
+        }
+
+        datosTrabajosUpdate = {
+            'cantidadTrabajos' : cantidadTrabajos,
+            'cantidadFinalizados' : cantidadFinalizados,
+            'cantidadCancelados' : cantidadCancelados,
+            'cantidadSinTerminar' : cantidadSinTerminar
+        }
+
+        setearCantidadTrabajosPorEstado(datosTrabajosUpdate);
+    }
+
     return (
         <ProviderContext.Provider value = {{
             trabajos,
@@ -204,7 +253,8 @@ const Provider = ({children}) => {
             setearDesdeAnio,
             hastaAnio, 
             setearHastaAnio,
-            cantidadTrabajosParaGrafico
+            cantidadTrabajosParaGrafico,
+            cantidadTrabajosPorEstado
         }}>
             {children}
         </ProviderContext.Provider>

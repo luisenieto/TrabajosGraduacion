@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {TableContainer} from '@mui/material';
 import {Paper} from '@mui/material';
 import { Table } from '@mui/material';
@@ -6,14 +6,19 @@ import { Box } from '@mui/material';
 import CabeceraTabla from './cabeceraTabla';
 import CuerpoTabla from './cuerpoTabla';
 import PaginacionTabla from './paginacionTabla';
+import { ProviderContext } from '../provider';
 import { Button } from '@mui/material';
 import { Grid } from '@mui/material';
 import useStyles from './useStyles';
 import Popup from './popup';
 import { constantesTrabajos } from '../config/constantes';
+import { Chip } from '@mui/material';
+import { Stack } from '@mui/material';
 
 //Componente que muestra todo el listado de trabajos
-const Trabajos = (props) => {    
+const Trabajos = (props) => {   
+    const { cantidadTrabajosPorEstado } = useContext(ProviderContext);
+
     const [ordenarPor, setearOrdenarPor] = useState('titulo');
     //Se pueden ordenar los trabajos por título o fecha de aprobación
 
@@ -81,9 +86,15 @@ const Trabajos = (props) => {
                         >
                             Nuevo Trabajo
                         </Button>
-                    </Grid>                
-                </Grid>                                        
-                
+                    </Grid>
+                    <Grid item xs = {12}>
+                        <Stack alignItems = 'center'>
+                        <Chip label = {`Total: ${cantidadTrabajosPorEstado.cantidadTrabajos}    -   Finalizados: ${cantidadTrabajosPorEstado.cantidadFinalizados}   -   Cancelados: ${cantidadTrabajosPorEstado.cantidadCancelados} -   Sin terminar: ${cantidadTrabajosPorEstado.cantidadSinTerminar}`} variant="outlined" />
+                        </Stack>
+                    </Grid>
+                    <Grid item xs = {12}>
+                    </Grid>                 
+                </Grid>                                                        
             </Paper>            
         </Box>
     )

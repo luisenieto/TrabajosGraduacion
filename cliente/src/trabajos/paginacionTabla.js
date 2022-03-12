@@ -25,7 +25,9 @@ const PaginacionTabla = ({filasPorPagina, setearFilasPorPagina, pagina, setearPa
             labelRowsPerPage = 'Filas por página'
             labelDisplayedRows = {function defaultLabelDisplayedRows({ from, to, count }) { 
                 return `${from}-${to} de ${count !== -1 ? count : `more than ${to}`}`; 
-            }}
+            }}            
+            showFirstButton = {true}
+            showLastButton = {true}
             onPageChange = {handleChangePage}
             onRowsPerPageChange = {handleChangeRowsPerPage}
         >
