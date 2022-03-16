@@ -3,6 +3,7 @@ import {TableContainer} from '@mui/material';
 import {Paper} from '@mui/material';
 import { Table } from '@mui/material';
 import { Box } from '@mui/material';
+import { TextField } from '@mui/material';
 import CabeceraTabla from './cabeceraTabla';
 import CuerpoTabla from './cuerpoTabla';
 import PaginacionTabla from './paginacionTabla';
@@ -14,10 +15,12 @@ import Popup from './popup';
 import { constantesTrabajos } from '../config/constantes';
 import { Chip } from '@mui/material';
 import { Stack } from '@mui/material';
+import { BsSearch } from 'react-icons/bs';
+import { InputAdornment } from '@mui/material';
 
 //Componente que muestra todo el listado de trabajos
 const Trabajos = (props) => {   
-    const { cantidadTrabajosPorEstado } = useContext(ProviderContext);
+    const { cantidadTrabajosPorEstado, setFuncionFiltradoTrabajos } = useContext(ProviderContext);
 
     const [ordenarPor, setearOrdenarPor] = useState('titulo');
     //Se pueden ordenar los trabajos por título o fecha de aprobación
@@ -44,10 +47,38 @@ const Trabajos = (props) => {
         setearOrdenarPor(propiedad);
     }
 
+    const buscarOnChange = evento => {
+        let valor = evento.target.value;
+        setFuncionFiltradoTrabajos({
+            funcion : items => {
+                if (valor === '')
+                    return items;
+                else
+                    return items.filter(x => x.titulo.toLowerCase().includes(valor.toLowerCase()));
+            }
+        });
+    }
+
     return (
         <Box sx = {{marginTop : 3, width : '100%'}}>                                
             <Paper sx = {{width : '100%', marginBottom : 2}} elevation = {3}>
                 <Grid container spacing = {1}>
+                    <Grid item xs = {12}>
+                        <TextField 
+                            id = "buscar-por-titulo"
+                            label = "Buscar por título"
+                            name = "buscar-por-titulo"
+                            autoFocus
+                            InputProps = {{
+                                startAdornment : (
+                                    <InputAdornment position="start">
+                                        <BsSearch />
+                                    </InputAdornment>
+                                )
+                            }}
+                            className = {clases.campoBuscar}
+                            onChange = {evento => buscarOnChange(evento)}/>
+                    </Grid>                    
                     <Grid item xs = {12}>
                         <TableContainer sx = {{ maxHeight: 400 }}>
                             <Table stickyHeader sx = {{minWidth : 750}} aria-labelledby = 'tableTitle' size = 'medium'>

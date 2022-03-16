@@ -5,6 +5,9 @@ const useStyles = makeStyles(tema => ({
         margin : tema.spacing(1),
         padding : tema.spacing(1)
     }, 
+    campoBuscar : {
+        marginLeft: tema.spacing(1)
+    },
     campoApellidos : {
         marginTop: tema.spacing(1),
         marginRight: tema.spacing(1),

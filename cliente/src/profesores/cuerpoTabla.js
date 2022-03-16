@@ -8,7 +8,7 @@ import { ProviderContext } from '../provider';
 //Componente que muestra el cuerpo de la tabla donde se listan todos los profesores
 //Cada fila del cuerpo de la tabla se muestra mediante el componente Fila
 const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup}) => {
-    const {profesores} = useContext(ProviderContext);
+    const {profesores, funcionFiltradoProfesores} = useContext(ProviderContext);
 
     //Permite ordenar en orden ascendente o descendente
     function comparadorDescendente(a, b, ordenarPor) {
@@ -39,7 +39,7 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
     return (
         <TableBody>
             {
-                profesores.slice().sort(obtenerComparador(orden, ordenarPor))
+                funcionFiltradoProfesores.funcion(profesores).slice().sort(obtenerComparador(orden, ordenarPor))
                 .slice(pagina * filasPorPagina, pagina * filasPorPagina + filasPorPagina)
                 .map((profesor, i) => (
                     <Fila 

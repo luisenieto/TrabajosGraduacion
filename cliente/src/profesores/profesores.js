@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {TableContainer} from '@mui/material';
 import {Paper} from '@mui/material';
 import { Table } from '@mui/material';
 import { Grid } from '@mui/material';
 import { Box } from '@mui/material';
+import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import CabeceraTabla from './cabeceraTabla';
 import PaginacionTabla from './paginacionTabla';
@@ -12,9 +13,14 @@ import useStyles from './useStyles';
 import { constantesTrabajos, constantesProfesores } from '../config/constantes';
 import Popup from './popup';
 import Alerta from './alerta';
+import { ProviderContext } from '../provider';
+import { BsSearch } from 'react-icons/bs';
+import { InputAdornment } from '@mui/material';
 
 //Componente que muestra todo el listado de profesores
 const Profesores = (props) => {
+    const {setFuncionFiltradoProfesores} = useContext(ProviderContext);
+
     const [ordenarPor, setearOrdenarPor] = useState('apellidos');
     //los profesores se pueden ordenar por apellido o cargo
 
@@ -45,6 +51,18 @@ const Profesores = (props) => {
         setearOrdenarPor(propiedad);
     }    
 
+    const buscarOnChange = evento => {
+        let valor = evento.target.value;
+        setFuncionFiltradoProfesores({
+            funcion : items => {
+                if (valor === '')
+                    return items;
+                else
+                    return items.filter(x => x.apellidos.toLowerCase().includes(valor.toLowerCase()));
+            }
+        });
+    }
+
     const clases = useStyles(); 
 
     return (
@@ -55,6 +73,22 @@ const Profesores = (props) => {
                         estadoAlerta = {estadoAlerta}
                         setEstadoAlerta = {setEstadoAlerta}
                     />
+                    <Grid item xs = {12}>
+                        <TextField 
+                            id = "buscar-por-apellido"
+                            label = "Buscar por apellido"
+                            name = "buscar-por-apellido"
+                            autoFocus
+                            InputProps = {{
+                                startAdornment : (
+                                    <InputAdornment position="start">
+                                        <BsSearch />
+                                    </InputAdornment>
+                                )
+                            }}
+                            className = {clases.campoBuscar}
+                            onChange = {evento => buscarOnChange(evento)}/>
+                    </Grid>                    
                     <Grid item xs = {12}>
                         <TableContainer sx = {{ maxHeight: 440 }}>
                             <Table stickyHeader sx = {{minWidth : 750}} aria-label = 'tableTitle' size = 'medium'>

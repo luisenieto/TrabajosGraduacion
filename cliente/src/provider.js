@@ -46,6 +46,24 @@ const Provider = ({children}) => {
     //los que estén finalizados (con fechaFinalizacion y al menos 1 jurado cuya razón sea "Finalización" (ver en las constantes))
     //los que estén cancelados (con fechaFinalizacion y al menos 1 jurado cuya razón sea "Dado de baja" (ver en las constantes))
 
+    const [funcionFiltradoAlumnos, setFuncionFiltradoAlumnos] = useState({
+        funcion : items => { return items }
+    });
+    //permite filtrar los alumnos por apellido
+    //en funcionFiltradoAlumnos se quiere guardar una función que permita realizar el filtrado
+    //en el manejo de estado en React no se puede guardar una función, por lo que 
+    //en src/alumnos/alumnos.js el método setFuncionFiltradoAlumnos() guarda un objeto en lugar de una función
+    //el objeto que guarda setFuncionFiltradoAlumnos() tiene la definición de una función
+    const [funcionFiltradoProfesores, setFuncionFiltradoProfesores] = useState({
+        funcion : items => { return items }
+    });
+    //permite filtrar los profesores por apellido
+    
+    const [funcionFiltradoTrabajos, setFuncionFiltradoTrabajos] = useState({
+        funcion : items => { return items }
+    });
+    //permite filtrar los trabajos por título
+
     useEffect(() => {
         if (profesores.length === 0) 
              obtenerProfesores();
@@ -254,7 +272,13 @@ const Provider = ({children}) => {
             hastaAnio, 
             setearHastaAnio,
             cantidadTrabajosParaGrafico,
-            cantidadTrabajosPorEstado
+            cantidadTrabajosPorEstado,
+            funcionFiltradoAlumnos, 
+            setFuncionFiltradoAlumnos,  
+            funcionFiltradoProfesores, 
+            setFuncionFiltradoProfesores,
+            funcionFiltradoTrabajos, 
+            setFuncionFiltradoTrabajos
         }}>
             {children}
         </ProviderContext.Provider>
