@@ -120,15 +120,24 @@ const Profesores = (props) => {
                             setEstadoAlerta = {setEstadoAlerta}
                         />
                     </Grid>
-                    <Grid item xs = {12}>
+                    <Grid item xs = {6}>
                         <Button 
                             variant = 'contained' 
-                            className = {clases.botonFinal} 
+                            className = {clases.botonNuevo} 
                             onClick = {() => props.history.push('/profesor/nuevo')}
                         >
                             Nuevo Profesor
-                    </Button>
-                </Grid>
+                        </Button>
+                    </Grid>
+                    <Grid item xs = {6}>
+                        <Button 
+                            variant = 'contained' 
+                            className = {clases.botonEstadisticas} 
+                            onClick = {() => props.history.push('/profesor/estadisticas')}
+                        >
+                            Estadísticas
+                        </Button>
+                    </Grid>
                 </Grid>
             </Paper>
         </Box>

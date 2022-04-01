@@ -13,6 +13,7 @@ import ModificarAlumno from './alumnos/modificarAlumno/modificarAlumno';
 import NuevoAlumno from './alumnos/nuevoAlumno/nuevoAlumno';
 import ModificarProfesor from './profesores/modificarProfesor/modificarProfesor';
 import NuevoProfesor from './profesores/nuevoProfesor/nuevoProfesor';
+import Estadisticas from './profesores/estadisticas/estadisticas';
 
 const Rutas = () => {
     return(
@@ -30,6 +31,7 @@ const Rutas = () => {
                 <Route path="/alumno/nuevo" exact component = {() => Validar(NuevoAlumno)}/>
                 <Route path="/profesores/:id" exact component = {(props) => Validar(ModificarProfesor, props)}/>
                 <Route path="/profesor/nuevo" exact component = {() => Validar(NuevoProfesor)}/>
+                <Route path="/profesor/estadisticas" exact component = {Estadisticas}/>
             </Switch>
         </div>
     );    

@@ -64,6 +64,12 @@ const Provider = ({children}) => {
     });
     //permite filtrar los trabajos por título
 
+    const [desdeAnioEstadisticas, setearDesdeAnioEstadisticas] = useState(constantesTrabajos.ANIO_PRIMER_TRABAJO); //2013
+    //año a partir del cual hacer los cálculos de las estadísticas de profesores (el trabajo más viejo es del 2013)
+
+    const [hastaAnioEstadisticas, setearHastaAnioEstadisticas] = useState(new Date().getFullYear());
+    //año hasta el cual hacer los cálculos de las estadísticas de profesores (año actual)
+
     useEffect(() => {
         if (profesores.length === 0) 
              obtenerProfesores();
@@ -278,7 +284,11 @@ const Provider = ({children}) => {
             funcionFiltradoProfesores, 
             setFuncionFiltradoProfesores,
             funcionFiltradoTrabajos, 
-            setFuncionFiltradoTrabajos
+            setFuncionFiltradoTrabajos,
+            desdeAnioEstadisticas, 
+            setearDesdeAnioEstadisticas,
+            hastaAnioEstadisticas, 
+            setearHastaAnioEstadisticas
         }}>
             {children}
         </ProviderContext.Provider>

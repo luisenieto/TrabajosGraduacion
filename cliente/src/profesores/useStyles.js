@@ -38,6 +38,14 @@ const useStyles = makeStyles(tema => ({
         marginRight: tema.spacing(1),
         width : '100%'
     },
+    botonNuevo : {
+        margin : tema.spacing(1),
+        width : '99%'
+    },
+    botonEstadisticas : {
+        marginTop : tema.spacing(1),
+        width : '99%'
+    },
     botonFinal : {
         margin : tema.spacing(1),
         width : '99%'

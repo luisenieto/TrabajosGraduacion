@@ -19,25 +19,29 @@ const RangoFechas = () => {
     }
 
     const autoCompleteOnChange = (valor, quien) => {
-        if (quien === 'Desde') {
-            if (parseInt(valor) <= hastaAnio) //para evitar que desde > hasta
-                setearDesdeAnio(parseInt(valor));
-        }
-        else { //hasta
-            if (parseInt(valor) >= desdeAnio) //para evitar que hasta < desde
-                setearHastaAnio(parseInt(valor));                
-        }
+        quien === constantesTrabajos.DESDE ? 
+            setearDesdeAnio(parseInt(valor))
+        :
+            setearHastaAnio(parseInt(valor));
     }
 
-    const defaultProps = {
+    const defaultPropsDesde = {
         options: rango(constantesTrabajos.ANIO_PRIMER_TRABAJO, new Date().getFullYear())
     };
+    //valores para mostrar en la lista 'Desde'
+
+    const defaultPropsHasta = {
+        options: rango(desdeAnio, new Date().getFullYear())
+    };
+    //valores para mostrar en la lista 'Hasta'
+    //arranca a partir del valor seleccionado en la lista 'Desde'
+    //para evitar que el año hasta sea menor que el desde
 
     return (
         <>
             <Grid item lg = {4} sm = {4} xs = {4}>
                 <Autocomplete 
-                    {...defaultProps}
+                    {...defaultPropsDesde}
                     isOptionEqualToValue = {(option, value) => option.value === value.value}
                     // disablePortal
                     disableClearable
@@ -47,12 +51,12 @@ const RangoFechas = () => {
                     onChange = {(evento, valor) => autoCompleteOnChange(valor, constantesTrabajos.DESDE)}
                     className = {classes.autoComplete}
                 />
-            </Grid>
+                </Grid>
             <Grid item lg = {4} sm = {4}  xs = {4}>
             </Grid>
             <Grid item lg = {4} sm = {4} xs = {4}>
                 <Autocomplete 
-                    {...defaultProps}
+                    {...defaultPropsHasta}
                     isOptionEqualToValue = {(option, value) => option.value === value.value}
                     // disablePortal
                     disableClearable
