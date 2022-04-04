@@ -26,14 +26,56 @@ const permitidosParaDNI = [8, 9, 16, 17, 20, 35, 36, 46,
 //48: 0, 49: 1, 57: 9
 //96: 0 (teclado numérico), 97: 1 (teclado numérico), 105: 9 (teclado numérico)
 
-const esCaracterValido = (caracter, vector) => {
-    for(let i = 0; i < vector.length; i++) {
-        if (caracter === vector[i])
-            return true;
+const esCaracterValido = (ctrlDown, charCode, vector) => {
+    if (ctrlDown) { //se presionó Ctrl
+        if ((charCode === 67) || (charCode === 86) || (charCode === 88))
+            return true
+        else
+            return false;
+    }
+    else { //no se presionó Ctrl
+        for(let i = 0; i < vector.length; i++) {
+            if (charCode === vector[i])
+                return true;
+        }
     }
     return false;
 }
 //determina si un determinado caracter es válido o no según el vector donde se haga la comparación
+
+const apellidoYNombreOnKeyDown = (evento) => {
+    var charCode = (evento.which) ? evento.which : evento.keyCode; 
+    const ctrlDown = evento.ctrlKey || evento.metaKey; //soporte para Mac    
+    if (!esCaracterValido(ctrlDown, charCode, permitidosParaApeYNom))
+        evento.preventDefault();
+}
+//Verifica que no se puedan ingresar otros caracteres que no sean los definidos como válidos
+
+const dniOnKeyDown = (evento) => {
+    var charCode = (evento.which) ? evento.which : evento.keyCode;
+    const ctrlDown = evento.ctrlKey || evento.metaKey; //soporte para Mac    
+    if (!esCaracterValido(ctrlDown, charCode, permitidosParaDNI))
+        evento.preventDefault();
+}
+//Verifica que no se puedan ingresar otros caracteres que no sean los definidos como válidos
+
+const regexApeYNom = /^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$/; 
+
+const apellidoYNombreOnPaste = (evento) => {
+    const textoCopiado = evento.clipboardData.getData('text');
+    if(!regexApeYNom.test(textoCopiado))
+        evento.preventDefault();
+}
+//evita que en los campos apellido o nombres se pueda pegar texto inválido
+
+const regexDni = /^\d+$/; 
+
+const dniOnPaste = (evento) => {
+    const textoCopiado = evento.clipboardData.getData('text');
+    if(!regexDni.test(textoCopiado))
+        evento.preventDefault();
+}
+//evita que en el campo dni se pueda pegar texto inválido
 
 const sePuedeBorrarElProfesor = (dni, trabajos) => {
     for(let i in trabajos) {
@@ -114,5 +156,9 @@ export {validarProfesorParaCreacion,
     permitidosParaApeYNom, 
     permitidosParaDNI, 
     esCaracterValido,
-    sePuedeBorrarElProfesor
+    sePuedeBorrarElProfesor,
+    apellidoYNombreOnKeyDown,
+    dniOnKeyDown,
+    apellidoYNombreOnPaste,
+    dniOnPaste
 }

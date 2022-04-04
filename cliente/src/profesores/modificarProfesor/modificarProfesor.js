@@ -10,7 +10,7 @@ import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import Alerta from '../alerta';
 import Popup from './popup';
-import { esCaracterValido, permitidosParaApeYNom, permitidosParaDNI } from '../validaciones';
+import { apellidoYNombreOnKeyDown, dniOnKeyDown, apellidoYNombreOnPaste, dniOnPaste } from '../validaciones';
 import { Autocomplete } from '@mui/material';
 
 //Componente que se encarga de mostrar el formulario para la modificación de profesores
@@ -56,20 +56,6 @@ const ModificarProfesor = (props) => {
         })
     }
 
-    const apellidoYNombreOnKeyDown = (evento) => {
-        var charCode = (evento.which) ? evento.which : evento.keyCode;
-        if (!esCaracterValido(charCode, permitidosParaApeYNom))
-            evento.preventDefault();
-    }
-    //Verifica que no se puedan ingresar otros caracteres que no sean los definidos como válidos
-
-    const dniOnKeyDown = (evento) => {
-        var charCode = (evento.which) ? evento.which : evento.keyCode;
-        if (!esCaracterValido(charCode, permitidosParaDNI))
-            evento.preventDefault();
-    }
-    //Verifica que no se puedan ingresar otros caracteres que no sean los definidos como válidos
-
     const autoCompleteOnChange = (valor) => {   
         for(let i in cargos) {
             if (valor === cargos[i].nombreCargo)
@@ -106,6 +92,7 @@ const ModificarProfesor = (props) => {
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
                                         onChange = {evento => setearProfesor({...profesor, 'apellidos' : evento.target.value})}
+                                        onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {12} xs = {12}>
@@ -118,6 +105,7 @@ const ModificarProfesor = (props) => {
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
                                         onChange = {evento => setearProfesor({...profesor, 'nombres' : evento.target.value})}
+                                        onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {12}>
@@ -131,6 +119,7 @@ const ModificarProfesor = (props) => {
                                             onKeyDown : (evento) => {dniOnKeyDown(evento)}
                                         }}
                                         onChange = {evento => setearProfesor({...profesor, 'dni' : evento.target.value})}
+                                        onPaste = {evento => dniOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {12}>

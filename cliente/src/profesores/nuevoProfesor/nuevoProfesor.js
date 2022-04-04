@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import { ProviderContext } from '../../provider';
 import useStyles from '../useStyles';
 import { useHistory } from "react-router-dom";
-import { esCaracterValido, permitidosParaApeYNom, permitidosParaDNI } from '../validaciones';
+import { apellidoYNombreOnKeyDown, dniOnKeyDown, apellidoYNombreOnPaste, dniOnPaste } from '../validaciones';
 import { Paper } from '@mui/material';
 import { Grid } from '@mui/material';
 import { TextField } from '@mui/material';
@@ -71,20 +71,6 @@ const NuevoProfesor = () => {
         });            
     }
 
-    const apellidoYNombreOnKeyDown = (evento) => {
-        var charCode = (evento.which) ? evento.which : evento.keyCode;   
-        if (!esCaracterValido(charCode, permitidosParaApeYNom))
-            evento.preventDefault();
-    }
-    //Verifica que no se puedan ingresar otros caracteres que no sean los definidos como válidos
-
-    const dniOnKeyDown = (evento) => {
-        var charCode = (evento.which) ? evento.which : evento.keyCode;
-        if (!esCaracterValido(charCode, permitidosParaDNI))
-            evento.preventDefault();
-    }
-    //Verifica que no se puedan ingresar otros caracteres que no sean los definidos como válidos
-
     const defaultProps = {
         options: cargos.map((cargo) => `${cargo.nombreCargo}`),
     };
@@ -121,6 +107,7 @@ const NuevoProfesor = () => {
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
                                         onChange = {evento => setearProfesor({...profesor, 'apellidos' : evento.target.value})}
+                                        onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {12} xs = {12}>
@@ -133,6 +120,7 @@ const NuevoProfesor = () => {
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
                                         onChange = {evento => setearProfesor({...profesor, 'nombres' : evento.target.value})}
+                                        onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {12}>
@@ -145,6 +133,7 @@ const NuevoProfesor = () => {
                                             onKeyDown : (evento) => {dniOnKeyDown(evento)}
                                         }}
                                         onChange = {evento => setearProfesor({...profesor, 'dni' : evento.target.value})}
+                                        onPaste = {evento => dniOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {12}>
