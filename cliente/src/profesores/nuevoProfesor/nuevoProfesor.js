@@ -64,8 +64,24 @@ const NuevoProfesor = () => {
                     texto : `${constantesProfesores.MENSAJE_NUEVO_PROFESOR} ${response.data.apellidos}, ${response.data.nombres}`,
                     mostrar : true
                 });
-                const profesoresUpdate = [...profesores];
+                let profesoresUpdate = [...profesores];
                 profesoresUpdate.push(profesor);
+                //se ordenan los profesores por apellido. Si hay 2 con el mismo por nombre
+                profesoresUpdate = profesoresUpdate.sort((a, b) => {
+                    if (a.apellidos < b.apellidos)
+                        return -1;
+                    if (a.apellidos > b.apellidos)
+                        return 1
+                    else {
+                        if (a.nombres < b.nombres) 
+                            return -1;
+                        if (a.nombres > b.nombres)
+                            return 1
+                        else
+                            return 0;
+                    }
+                    
+                });
                 setearProfesores(profesoresUpdate); 
             }
         });            

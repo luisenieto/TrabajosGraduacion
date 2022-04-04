@@ -49,7 +49,7 @@ const CabeceraTabla = ({orden, alQuererOrdenar}) => {
                                 color: 'white !important',
                             },
                         }}
-                        active = {true} 
+                        active = {false} 
                         direction = {orden} 
                         onClick = {(evento) => createSortHandler(evento, 'titulo')}
                     >
@@ -82,7 +82,7 @@ const CabeceraTabla = ({orden, alQuererOrdenar}) => {
                                 color: 'white !important',
                             },
                         }} 
-                        active = {false} 
+                        active = {true} 
                         direction = {orden} 
                         onClick = {(evento) => createSortHandler(evento, 'fechaAprobacion')}
                     >

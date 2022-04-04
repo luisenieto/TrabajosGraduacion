@@ -60,6 +60,15 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     if (trabajosUpdate[i]._id === response.data._id)
                         trabajosUpdate[i] = response.data;
                 }
+                //se ordenan los trabajos por fecha de aprobación en orden descendente
+                trabajosUpdate.sort((a, b) => {
+                    if (a.fechaAprobacion < b.fechaAprobacion)
+                        return -1;
+                    if (a.fechaAprobacion > b.fechaAprobacion)
+                        return 1
+                    else    
+                        return 0;
+                });
                 setearTrabajos(trabajosUpdate); 
             }
         });

@@ -39,13 +39,29 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     texto : `${constantesProfesores.MENSAJE_MODIFICACION}`,
                     mostrar : true
                 });
-                const profesoresUpdate = [...profesores];
+                let profesoresUpdate = [...profesores];
                 for(let i in profesoresUpdate) {
                     if (profesoresUpdate[i]._id === response.data._id) {
                         profesoresUpdate[i] = profesor;
                         break;
                     }
                 }
+                //se ordenan los profesores por apellido. Si hay 2 con el mismo por nombre
+                profesoresUpdate = profesoresUpdate.sort((a, b) => {
+                    if (a.apellidos < b.apellidos)
+                        return -1;
+                    if (a.apellidos > b.apellidos)
+                        return 1
+                    else {
+                        if (a.nombres < b.nombres) 
+                            return -1;
+                        if (a.nombres > b.nombres)
+                            return 1
+                        else
+                            return 0;
+                    }
+                    
+                });
                 setearProfesores(profesoresUpdate); 
             }
         });

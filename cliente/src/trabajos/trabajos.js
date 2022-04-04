@@ -22,7 +22,7 @@ import { InputAdornment } from '@mui/material';
 const Trabajos = (props) => {   
     const { cantidadTrabajosPorEstado, setFuncionFiltradoTrabajos } = useContext(ProviderContext);
 
-    const [ordenarPor, setearOrdenarPor] = useState('titulo');
+    const [ordenarPor, setearOrdenarPor] = useState('fechaAprobacion');
     //Se pueden ordenar los trabajos por título o fecha de aprobación
 
     const [orden, setearOrden] = useState('desc');

@@ -58,8 +58,24 @@ const NuevoAlumno = () => {
                     texto : `${constantesAlumnos.MENSAJE_NUEVO_ALUMNO} ${response.data.apellidos}, ${response.data.nombres}"`,
                     mostrar : true
                 });
-                const alumnosUpdate = [...alumnos];
+                let alumnosUpdate = [...alumnos];
                 alumnosUpdate.push(response.data);
+                //se ordenan los alumnos por apellido. Si hay 2 con el mismo por nombre
+                alumnosUpdate = alumnosUpdate.sort((a, b) => {
+                    if (a.apellidos < b.apellidos)
+                        return -1;
+                    if (a.apellidos > b.apellidos)
+                        return 1
+                    else {
+                        if (a.nombres < b.nombres) 
+                            return -1;
+                        if (a.nombres > b.nombres)
+                            return 1
+                        else
+                            return 0;
+                    }
+                    
+                });
                 setearAlumnos(alumnosUpdate); 
             }
         });            

@@ -71,6 +71,15 @@ const Botones = ({setEstadoAlerta}) => {
                 });
                 const trabajosUpdate = [...trabajos];
                 trabajosUpdate.push(response.data);
+                //se ordenan los trabajos por fecha de aprobación en orden descendente
+                trabajosUpdate.sort((a, b) => {
+                    if (a.fechaAprobacion < b.fechaAprobacion)
+                        return -1;
+                    if (a.fechaAprobacion > b.fechaAprobacion)
+                        return 1
+                    else    
+                        return 0;
+                });
                 setearTrabajos(trabajosUpdate); 
             }
         });        
