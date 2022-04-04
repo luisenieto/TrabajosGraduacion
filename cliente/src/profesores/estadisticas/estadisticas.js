@@ -275,18 +275,33 @@ const Estadisticas = () => {
 
         //se calculan las estadísticas parciales de cada profesor para los trabajos comprendidos en el rango
         for(let i in trabajosParaElRango) {
-            const anio = new Date(trabajosParaElRango[i].fechaAprobacion).getFullYear();            
+            //const anio = new Date(trabajosParaElRango[i].fechaAprobacion).getFullYear();            
             let tutores = trabajosParaElRango[i].tutores;
-            for(let j in tutores)
-                calcularEstadisticasParcialesDelProfesor(anio, tutores[j].dni, constantesTrabajos.TUTOR);
+            for(let j in tutores) {
+                const tutor = tutores[j];
+                const anio = new Date(tutor.desde).getFullYear();
+                //un trabajo puede haber empezado en el 2013, pero un tutor se suma después (2014, 2015, ...)
+                if ((anio >= desdeAnioEstadisticas) && (anio <= hastaAnioEstadisticas))
+                    calcularEstadisticasParcialesDelProfesor(anio, tutores[j].dni, constantesTrabajos.TUTOR);
+            }
             
             let cotutores = trabajosParaElRango[i].cotutores;
-            for(let j in cotutores)
-                calcularEstadisticasParcialesDelProfesor(anio, cotutores[j].dni, constantesTrabajos.COTUTOR);
+            for(let j in cotutores) {
+                const cotutor = cotutores[j];
+                const anio = new Date(cotutor.desde).getFullYear();
+                //un trabajo puede haber empezado en el 2013, pero un cotutor se suma después (2014, 2015, ...)
+                if ((anio >= desdeAnioEstadisticas) && (anio <= hastaAnioEstadisticas))
+                    calcularEstadisticasParcialesDelProfesor(anio, cotutores[j].dni, constantesTrabajos.COTUTOR);
+            }
 
             let jurado = trabajosParaElRango[i].jurado;
-            for(let j in jurado)
-                calcularEstadisticasParcialesDelProfesor(anio, jurado[j].dni, constantesTrabajos.JURADO);
+            for(let j in jurado) {
+                const profesorDelJurado = jurado[j];
+                const anio = new Date(profesorDelJurado.desde).getFullYear();
+                //un trabajo puede haber empezado en el 2013, pero un miembro del jurado se suma después (2014, 2015, ...)
+                if ((anio >= desdeAnioEstadisticas) && (anio <= hastaAnioEstadisticas))
+                    calcularEstadisticasParcialesDelProfesor(anio, jurado[j].dni, constantesTrabajos.JURADO);
+            }
         }
 
 

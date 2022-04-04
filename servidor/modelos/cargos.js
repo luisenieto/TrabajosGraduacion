@@ -1,5 +1,5 @@
 /*
-    Como sólo hay 5 cargos fijos, los mismos se definen en este vector
+    Como sólo hay 6 cargos fijos, los mismos se definen en este vector
 */
 
 const cargos = [
@@ -22,7 +22,11 @@ const cargos = [
     {
         "idCargo" : 5,
         "nombreCargo" : "ADG"
-    }        
+    },
+    {
+        "idCargo" : 6,
+        "nombreCargo" : "Externo"
+    }            
 ]
 
 module.exports = cargos;
