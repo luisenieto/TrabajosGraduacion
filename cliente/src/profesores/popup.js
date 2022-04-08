@@ -17,7 +17,7 @@ const Popup = ({titulo, texto, openPopup, setearOpenPopup, setEstadoAlerta}) => 
     const {profesor, profesores, setearProfesores, trabajos} = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
-        const ruta = '/api/profesores/borrar?id=';        
+        const ruta = '/api/profesores/borrar?id=';   
         if (!sePuedeBorrarElProfesor(profesor.dni, trabajos)) {
             setEstadoAlerta({
                 gravedad : 'error',
@@ -26,7 +26,7 @@ const Popup = ({titulo, texto, openPopup, setearOpenPopup, setEstadoAlerta}) => 
                 mostrar : true
             })
         }
-        else {          
+        else {         
             axios.delete(`${ruta}${profesor._id}`).then(response => {
                 if (response.data) {
                     const index = profesores.findIndex(p => p._id === response.data._id);
@@ -39,7 +39,6 @@ const Popup = ({titulo, texto, openPopup, setearOpenPopup, setEstadoAlerta}) => 
         setearOpenPopup(false);
     }
 
-    
     return (
         <Dialog open = {openPopup} onClose = {() => setearOpenPopup(false)}>
             <DialogTitle>{titulo}</DialogTitle>

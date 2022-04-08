@@ -71,7 +71,8 @@ router.delete('/profesores/borrar', authenticateJWT, (request, response) => {
     Profesor.findByIdAndRemove(id, (error, documento) => {
         if (error)
             return response.status(400).send(error);
-        response.json(true);
+        return response.json(documento);
+        //response.json(true);
     });
 });
 

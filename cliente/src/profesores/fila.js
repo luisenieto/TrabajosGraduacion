@@ -15,7 +15,7 @@ import { estaAutenticado } from '../auth/auth';
 import { ProviderContext } from '../provider';
 
 //Componente que muestra una fila del cuerpo de la tabla
-const Fila = ({profesor, setearOpenPopup}) => {
+const Fila = ({unProfesor, setearOpenPopup}) => {
     const {setearProfesor} = useContext(ProviderContext);
     const [abierto, setAbierto] = useState(false);       
     //maneja el botón flecha arriba/flecha abajo para mostrar los trabajos de un profesor 
@@ -24,12 +24,12 @@ const Fila = ({profesor, setearOpenPopup}) => {
     //tiene todos los trabajos de un profesor en particular
 
     const history = useHistory();
-    const {_id} = profesor;
+    const {_id} = unProfesor;
 
     //obtiene todos los trabajos de un profesor determinado
     const obtenerTrabajosDelProfesor = () => {
         if (!abierto) {
-            const ruta = `/api/trabajos/listarporprofesor?dni=${profesor.dni}`;
+            const ruta = `/api/trabajos/listarporprofesor?dni=${unProfesor.dni}`;
             axios.get(ruta).then(response => {                     
                 setearTrabajosDelProfesor(response.data);
             });                
@@ -48,12 +48,13 @@ const Fila = ({profesor, setearOpenPopup}) => {
         if (!estaAutenticado()) {
             history.push('/acceso'); 
         }
-        else {            
-            setearProfesor(profesor);
+        else {                      
+            //console.log(unProfesor);  
+            setearProfesor(unProfesor);
             setearOpenPopup(true);
         }
     }
-
+      
     return (
         <Fragment>
             <TableRow 
@@ -85,17 +86,17 @@ const Fila = ({profesor, setearOpenPopup}) => {
                         <GoTrashcan />
                     </IconButton>
                 </TableCell>
-                <TableCell align = 'left'>{profesor.apellidos}</TableCell>
-                <TableCell align = 'left'>{profesor.nombres}</TableCell>
-                <TableCell align = 'center'>{profesor.dni}</TableCell>
-                <TableCell align = 'center'>{profesor.nombreCargo}</TableCell>
+                <TableCell align = 'left'>{unProfesor.apellidos}</TableCell>
+                <TableCell align = 'left'>{unProfesor.nombres}</TableCell>
+                <TableCell align = 'center'>{unProfesor.dni}</TableCell>
+                <TableCell align = 'center'>{unProfesor.nombreCargo}</TableCell>
             </TableRow> 
             <TableRow>
                 <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {5}>
                     <Collapse in = {abierto} timeout = "auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <TrabajosDelProfesor 
-                                profesor = {profesor}
+                                profesor = {unProfesor}
                                 trabajosDelProfesor = {trabajosDelProfesor}
                             />
                         </Box>

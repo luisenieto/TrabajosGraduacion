@@ -35,7 +35,7 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
             Math.max(0, (1 + pagina) * filasPorPagina - profesores.length) 
         : 
             0;
-    
+
     return (
         <TableBody>
             {
@@ -43,7 +43,7 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
                 .slice(pagina * filasPorPagina, pagina * filasPorPagina + filasPorPagina)
                 .map((profesor, i) => (
                     <Fila 
-                        profesor = {profesor} 
+                        unProfesor = {profesor} 
                         setearOpenPopup = {setearOpenPopup}
                         key = {i} />    
                 ))

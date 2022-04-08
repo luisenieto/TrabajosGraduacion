@@ -65,7 +65,7 @@ const NuevoProfesor = () => {
                     mostrar : true
                 });
                 let profesoresUpdate = [...profesores];
-                profesoresUpdate.push(profesor);
+                profesoresUpdate.push(response.data);
                 //se ordenan los profesores por apellido. Si hay 2 con el mismo por nombre
                 profesoresUpdate = profesoresUpdate.sort((a, b) => {
                     if (a.apellidos < b.apellidos)

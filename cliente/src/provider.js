@@ -78,7 +78,7 @@ const Provider = ({children}) => {
 
     const obtenerProfesores = () => {
         const ruta = '/api/profesores/listar';
-        axios.get(ruta).then(response => {           
+        axios.get(ruta).then(response => {   
             setearProfesores(response.data);
         });
     }     
