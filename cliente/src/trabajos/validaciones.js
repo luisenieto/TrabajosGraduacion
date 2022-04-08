@@ -77,6 +77,7 @@ const validarAreas = (areas) => {
 //valida que el trabajo tenga al menos un área
 
 const validarFechas = (fechaPresentacion, fechaAprobacion, fechaFinalizacion) => {
+    //console.log(fechaFinalizacion)
     if (fechaPresentacion === null || fechaPresentacion === '')
         return constantesTrabajos.FECHA_PRESENTACION_INVALIDA;
     if (fechaAprobacion === null || fechaAprobacion === '')
@@ -84,7 +85,7 @@ const validarFechas = (fechaPresentacion, fechaAprobacion, fechaFinalizacion) =>
     if (fechaAprobacion.substring(0, 10) < fechaPresentacion.substring(0, 10))
         return constantesTrabajos.FECHA_APROBACION_ANTERIOR_FINALIZACION;
     //substring(0, 10): extrae sólo la fecha, para no tener en cuenta la hora        
-    if ((fechaFinalizacion !== null && fechaFinalizacion.substring(0, 10) <= fechaAprobacion.substring(0, 10)))    
+    if ((fechaFinalizacion !== null && fechaFinalizacion.trim() !== '' && fechaFinalizacion.substring(0, 10) <= fechaAprobacion.substring(0, 10)))    
         return constantesTrabajos.FECHA_FINALIZACION_ANTERIOR_APROBACION
     else
         return constantesTrabajos.OK
