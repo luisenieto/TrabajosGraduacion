@@ -97,6 +97,13 @@ const NuevoTrabajo = () => {
                 razon : null
             }]
         });
+
+        //el código a continuación se ejecuta cuando se desmonta el componente
+        //permite resetear los valores para un trabajo
+        return () => {
+            setearTrabajo(null);
+        }
+        
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
 

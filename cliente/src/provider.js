@@ -31,9 +31,11 @@ const Provider = ({children}) => {
     
     const [desdeAnio, setearDesdeAnio] = useState(constantesTrabajos.ANIO_PRIMER_TRABAJO); //2013
     //año a partir del cual hacer los cálculos de los totales (el trabajo más viejo es del 2013)
+    //año a partir del cual hacer los cálculos de las estadísticas de profesores (el trabajo más viejo es del 2013)
 
     const [hastaAnio, setearHastaAnio] = useState(new Date().getFullYear());
     //año hasta el cual hacer los cálculos de los totales (año actual)
+    //año hasta el cual hacer los cálculos de las estadísticas de profesores (año actual)    
 
     const [cantidadTrabajosParaGrafico, setearCantidadTrabajosParaGrafico] = useState(0);
     //tiene la cantidad total de trabajos que muestra el gráfico
@@ -63,12 +65,6 @@ const Provider = ({children}) => {
         funcion : items => { return items }
     });
     //permite filtrar los trabajos por título
-
-    const [desdeAnioEstadisticas, setearDesdeAnioEstadisticas] = useState(constantesTrabajos.ANIO_PRIMER_TRABAJO); //2013
-    //año a partir del cual hacer los cálculos de las estadísticas de profesores (el trabajo más viejo es del 2013)
-
-    const [hastaAnioEstadisticas, setearHastaAnioEstadisticas] = useState(new Date().getFullYear());
-    //año hasta el cual hacer los cálculos de las estadísticas de profesores (año actual)
 
     useEffect(() => {
         if (profesores.length === 0) 
@@ -284,11 +280,7 @@ const Provider = ({children}) => {
             funcionFiltradoProfesores, 
             setFuncionFiltradoProfesores,
             funcionFiltradoTrabajos, 
-            setFuncionFiltradoTrabajos,
-            desdeAnioEstadisticas, 
-            setearDesdeAnioEstadisticas,
-            hastaAnioEstadisticas, 
-            setearHastaAnioEstadisticas
+            setFuncionFiltradoTrabajos
         }}>
             {children}
         </ProviderContext.Provider>

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { Paper } from '@mui/material';
 import { Grid } from '@mui/material';
 import useStyles from '../useStyles';
@@ -22,7 +22,18 @@ const Estadisticas = () => {
     //el segundo true de arrayOpciones significa que de forma predeterminada se quiere calcular las estadísticas para el rol de cotutor
     //el tercer true de arrayOpciones significa que de forma predeterminada se quiere calcular las estadísticas para el rol de jurado
 
-    const { desdeAnioEstadisticas, setearDesdeAnioEstadisticas, hastaAnioEstadisticas, setearHastaAnioEstadisticas, profesores, trabajos } = useContext(ProviderContext);
+    const { desdeAnio, setearDesdeAnio, hastaAnio, setearHastaAnio, profesores, trabajos } = useContext(ProviderContext);
+
+    useEffect(() => {
+        //el código a continuación se ejecuta cuando se desmonta el componente
+        //permite resetear los valores para desde y hasta
+        return () => {
+            setearDesdeAnio(constantesTrabajos.ANIO_PRIMER_TRABAJO);
+            setearHastaAnio(new Date().getFullYear());
+        }
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps 
+    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío  
+
 
     const [datosParaGrafico, setDatosParaGrafico] = useState([]);
     //vector con los datos de cada profesor para el rango de fechas seleccionado
@@ -73,7 +84,7 @@ const Estadisticas = () => {
     //valores para mostrar en la lista 'Desde'
 
     const defaultPropsHasta = {
-        options: rango(desdeAnioEstadisticas, new Date().getFullYear())
+        options: rango(desdeAnio, new Date().getFullYear())
     };
     //valores para mostrar en la lista 'Hasta'
     //arranca a partir del valor seleccionado en la lista 'Desde'
@@ -101,10 +112,10 @@ const Estadisticas = () => {
     const calcularEstadisticas = () => {
         let profesoresConTotales = profesores.map(profesor => ({
             ...profesor,
-            totalesParciales : Array(hastaAnioEstadisticas - desdeAnioEstadisticas + 1).fill()
+            totalesParciales : Array(hastaAnio - desdeAnio + 1).fill()
                 .map((_, idx) => (
                     {
-                        anio : desdeAnioEstadisticas + idx,
+                        anio : desdeAnio + idx,
                         comoTutor : 0,
                         comoCotutor : 0,
                         comoJurado : 0,
@@ -124,7 +135,7 @@ const Estadisticas = () => {
         //(permite descartar profesores que en el rango especificado no participaron en trabajos)
 
         const trabajosParaElRango = trabajos.filter(trabajo => 
-            new Date(trabajo.fechaAprobacion).getFullYear() >= desdeAnioEstadisticas && new Date(trabajo.fechaAprobacion).getFullYear() <= hastaAnioEstadisticas);
+            new Date(trabajo.fechaAprobacion).getFullYear() >= desdeAnio && new Date(trabajo.fechaAprobacion).getFullYear() <= hastaAnio);
         //trabajosParaElRango tiene la lista de trabajos filtrada para un rango de fechas            
     
         //calcula las estadísticas de (parciales) de un profesor para un determinado año
@@ -187,21 +198,21 @@ const Estadisticas = () => {
         //Genera el vector con los datos de cada profesor para el rango de fechas seleccionado
         //para que pueda ser presentado en el gráfico
         const prepararDatosParaGrafico = () => {
-            const datosParaGraficoUpdate = Array(hastaAnioEstadisticas - desdeAnioEstadisticas + 1).fill()
+            const datosParaGraficoUpdate = Array(hastaAnio - desdeAnio + 1).fill()
                 .map((_, idx) => (
                     {
                         estadisticas : [{
-                            anio : hastaAnioEstadisticas - idx
+                            anio : hastaAnio - idx
                         }],
                         claves : []
                     }
                 ));
                 //está ordenado por año descendentemente
 
-            const profesoresOrdenados = Array(hastaAnioEstadisticas - desdeAnioEstadisticas + 1).fill()
+            const profesoresOrdenados = Array(hastaAnio - desdeAnio + 1).fill()
                 .map((_, idx) => (
                     {
-                        anio : hastaAnioEstadisticas - idx,
+                        anio : hastaAnio - idx,
                         profesores : [],
                         // keys : []
                     }
@@ -281,7 +292,7 @@ const Estadisticas = () => {
                 const tutor = tutores[j];
                 const anio = new Date(tutor.desde).getFullYear();
                 //un trabajo puede haber empezado en el 2013, pero un tutor se suma después (2014, 2015, ...)
-                if ((anio >= desdeAnioEstadisticas) && (anio <= hastaAnioEstadisticas))
+                if ((anio >= desdeAnio) && (anio <= hastaAnio))
                     calcularEstadisticasParcialesDelProfesor(anio, tutores[j].dni, constantesTrabajos.TUTOR);
             }
             
@@ -290,7 +301,7 @@ const Estadisticas = () => {
                 const cotutor = cotutores[j];
                 const anio = new Date(cotutor.desde).getFullYear();
                 //un trabajo puede haber empezado en el 2013, pero un cotutor se suma después (2014, 2015, ...)
-                if ((anio >= desdeAnioEstadisticas) && (anio <= hastaAnioEstadisticas))
+                if ((anio >= desdeAnio) && (anio <= hastaAnio))
                     calcularEstadisticasParcialesDelProfesor(anio, cotutores[j].dni, constantesTrabajos.COTUTOR);
             }
 
@@ -299,7 +310,7 @@ const Estadisticas = () => {
                 const profesorDelJurado = jurado[j];
                 const anio = new Date(profesorDelJurado.desde).getFullYear();
                 //un trabajo puede haber empezado en el 2013, pero un miembro del jurado se suma después (2014, 2015, ...)
-                if ((anio >= desdeAnioEstadisticas) && (anio <= hastaAnioEstadisticas))
+                if ((anio >= desdeAnio) && (anio <= hastaAnio))
                     calcularEstadisticasParcialesDelProfesor(anio, jurado[j].dni, constantesTrabajos.JURADO);
             }
         }
@@ -312,9 +323,9 @@ const Estadisticas = () => {
 
     const autoCompleteOnChange = (valor, quien) => {
         quien === constantesTrabajos.DESDE ? 
-            setearDesdeAnioEstadisticas(parseInt(valor))
+            setearDesdeAnio(parseInt(valor))
         :
-            setearHastaAnioEstadisticas(parseInt(valor));                
+            setearHastaAnio(parseInt(valor));                
     }
 
     return (
@@ -355,7 +366,7 @@ const Estadisticas = () => {
                         disableClearable
                         id = "combo-box-desde"
                         renderInput = {(params) => <TextField {...params} label = { constantesTrabajos.DESDE } />} 
-                        value = { desdeAnioEstadisticas.toString() }
+                        value = { desdeAnio.toString() }
                         onChange = {(evento, valor) => autoCompleteOnChange(valor, constantesTrabajos.DESDE)}
                         // className = {classes.autoComplete}
                     />
@@ -368,7 +379,7 @@ const Estadisticas = () => {
                         disableClearable
                         id = "combo-box-hasta"
                         renderInput = {(params) => <TextField {...params} label = { constantesTrabajos.HASTA } />} 
-                        value = { hastaAnioEstadisticas.toString() }
+                        value = { hastaAnio.toString() }
                         onChange = {(evento, valor) => autoCompleteOnChange(valor, constantesTrabajos.HASTA)}
                         // className = {classes.autoComplete}
                     />

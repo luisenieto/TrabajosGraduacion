@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import { Autocomplete } from '@mui/material';
 import { ProviderContext } from '../provider';
@@ -11,6 +11,17 @@ import { constantesTrabajos } from '../config/constantes';
 const RangoFechas = () => {
     const classes = useStyles(Tema);
     const { desdeAnio, setearDesdeAnio, hastaAnio, setearHastaAnio } = useContext(ProviderContext);
+
+    useEffect(() => {
+        //el código a continuación se ejecuta cuando se desmonta el componente
+        //permite resetear los valores para desde y hasta
+        return () => {
+            setearDesdeAnio(constantesTrabajos.ANIO_PRIMER_TRABAJO);
+            setearHastaAnio(new Date().getFullYear());
+        }
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps 
+    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
+
 
     //genera, para el AutoComplete, un vector con números consecutivos, comenzando en desde y terminando en hasta
     //AutoComplete no soporta números, por lo que se los convierte a cadena
