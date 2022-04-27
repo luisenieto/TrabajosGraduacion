@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, {createContext, useState, useEffect, useReducer} from 'react';
 import axios from 'axios';
 import { constantesTrabajos } from './config/constantes';
 
@@ -66,18 +66,96 @@ const Provider = ({children}) => {
     });
     //permite filtrar los trabajos por título
 
+    const estadoInicial = [
+        {
+            id : 1,
+            nombre : 'Profesores',
+            terminado : false
+        },
+        {
+            id : 2,
+            nombre : 'Alumnos',
+            terminado : false
+        },
+        {
+            id : 3,
+            nombre : 'Trabajos',
+            terminado : false
+        },
+        {
+            id : 4,
+            nombre : 'Areas',
+            terminado : false
+        },
+        {
+            id : 5,
+            nombre : 'TotalesTrabajos',
+            terminado : false
+        },
+        {
+            id : 6,
+            nombre : 'CantidadTrabajosParaGrafico',
+            terminado : false
+        },
+        {
+            id : 7,
+            nombre : 'CantidadTrabajosPorEstado',
+            terminado : false
+        }                                                
+    ]
+    //estado inicial que permite saber qué se va procesando
+    //es para manejar la ventana de splash
+
+    const reducer = (estado, accion) => {        
+        switch (accion.tipo) {
+            case 'TERMINADO' :
+                return estado.map(e => {
+                    if (e.id === accion.id) 
+                        return {...e, terminado : true};
+                    else
+                        return e;
+                });
+            default:
+                return estado;
+        }
+    }
+    //función que se encarga de actualizar el estado inicial
+
+    const [loQueSeVaProcesando, dispatch] = useReducer(reducer, estadoInicial);
+    //permite saber qué se va procesando
+
+    const [cargando, setearCargando] = useState(true);
+    //permite manejar la ventana de splash
+    //mientras cargando sea true, se muestra la ventana de splash
+    //cuando cargando sea false, se muestra el componente Home
+
     useEffect(() => {
         if (profesores.length === 0) 
-             obtenerProfesores();
+            obtenerProfesores();
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
 
     const obtenerProfesores = () => {
+        //console.log('obtenerProfesores');
         const ruta = '/api/profesores/listar';
         axios.get(ruta).then(response => {   
             setearProfesores(response.data);
         });
-    }     
+        dispatch({tipo : 'TERMINADO', id : 1});
+        //console.log(loQueSeVaProcesando);
+    }  
+    
+    useEffect(() => {
+        let seProcesoTodo = true;
+        for(let i in loQueSeVaProcesando) {
+            if (!loQueSeVaProcesando[i].terminado) {
+                seProcesoTodo = false;
+                break;
+            }
+        }
+        if(seProcesoTodo)
+            setearCargando(false);        
+    }, [loQueSeVaProcesando]);
     
     useEffect(() => {
         if (alumnos.length === 0) 
@@ -90,6 +168,8 @@ const Provider = ({children}) => {
         axios.get(ruta).then(response => {           
             setearAlumnos(response.data);
         });
+        dispatch({tipo : 'TERMINADO', id : 2});
+        //console.log(loQueSeVaProcesando);
     }
     
     useEffect(() => {
@@ -105,6 +185,7 @@ const Provider = ({children}) => {
         axios.get(ruta).then(response => {  
             setearTrabajos(response.data);
         });
+        dispatch({tipo : 'TERMINADO', id : 3});
     } 
         
     useEffect(() => {
@@ -119,6 +200,7 @@ const Provider = ({children}) => {
         axios.get(ruta).then(response => {  
             setearAreas(response.data);
         });
+        dispatch({tipo : 'TERMINADO', id : 4});
     } 
 
     useEffect(() => {
@@ -205,7 +287,9 @@ const Provider = ({children}) => {
         });
 
         setearTotalesTrabajos(datosTrabajosUpdate);
+        dispatch({tipo : 'TERMINADO', id : 5});
         setearCantidadTrabajosParaGrafico(cantTrabajosParaGrafico);
+        dispatch({tipo : 'TERMINADO', id : 6});
     }
 
     useEffect(() => {
@@ -250,6 +334,7 @@ const Provider = ({children}) => {
         }
 
         setearCantidadTrabajosPorEstado(datosTrabajosUpdate);
+        dispatch({tipo : 'TERMINADO', id : 7});
     }
 
     return (
@@ -280,7 +365,8 @@ const Provider = ({children}) => {
             funcionFiltradoProfesores, 
             setFuncionFiltradoProfesores,
             funcionFiltradoTrabajos, 
-            setFuncionFiltradoTrabajos
+            setFuncionFiltradoTrabajos,
+            cargando
         }}>
             {children}
         </ProviderContext.Provider>
