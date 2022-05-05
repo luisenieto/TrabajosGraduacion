@@ -7,10 +7,12 @@ import { Checkbox } from '@mui/material';
 import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import { Autocomplete } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { RiFileExcel2Line } from 'react-icons/ri';
 import { constantesTrabajos } from '../../config/constantes';
 import { ProviderContext } from '../../provider';
 import GraficoEstadisticas from './graficoEstadisticas';
-
+import ExportacionExcel from './exportacionExcel';
 
 const Estadisticas = () => {
     const clases = useStyles(); 
@@ -78,6 +80,15 @@ const Estadisticas = () => {
         return Array(hasta - desde + 1).fill().map((_, idx) => (desde + idx).toString());
     }
 
+    const [profesoresOrdenados, setProfesoresOrdenados] = useState([]);
+    //este vector sirve para tener ordenados, para cada año, los profesores según la cantidad de trabajos en forma descendente
+    //de este vector también se obtienen los datos para hacer la exportación a Excel
+    //Un elemento de este vector tendría la siguiente forma:
+    //anio : 2020
+    //profesores : [["Ape2, Nom2" : 8], ["Ape1, Nom1" : 6], ["Ape3, Nom3" : 2]]
+    //Cada elemento de profesores es un vector con 1 solo elemento
+    //Cada uno de estos elementos está ordenado descendentemente según la cantidad total de trabajos en los que participó en ese año el profesor
+
     const defaultPropsDesde = {
         options: rango(constantesTrabajos.ANIO_PRIMER_TRABAJO, new Date().getFullYear())
     };
@@ -89,7 +100,10 @@ const Estadisticas = () => {
     //valores para mostrar en la lista 'Hasta'
     //arranca a partir del valor seleccionado en la lista 'Desde'
     //para evitar que el año hasta sea menor que el desde
-   
+
+    const [datosVectorExcel, setDatosVectorExcel] = useState([]);
+    //vector con los datos para exportar a Excel
+
     //cada vez que se modifica una opción de los checkboxes, se actualiza el vector de opciones
     const checkBoxChange = (seleccionada, opcion) => {
         let opcionTutor = arrayOpciones[0];
@@ -209,7 +223,7 @@ const Estadisticas = () => {
                 ));
                 //está ordenado por año descendentemente
 
-            const profesoresOrdenados = Array(hastaAnio - desdeAnio + 1).fill()
+            const profesoresOrdenadosUpdate = Array(hastaAnio - desdeAnio + 1).fill()
                 .map((_, idx) => (
                     {
                         anio : hastaAnio - idx,
@@ -237,7 +251,7 @@ const Estadisticas = () => {
                             if (datosDeUnAnio.estadisticas[0].anio === totalParcial.anio) {  
                                 const claveProfesor = `${profesor.apellidos}, ${profesor.nombres}`;                              
                                 const claveColor = `${claveProfesor}Color`;
-                                profesoresOrdenados[k].profesores.push([claveProfesor, totalParcial.total]);
+                                profesoresOrdenadosUpdate[k].profesores.push([claveProfesor, totalParcial.total]);
                                 datosParaGraficoUpdate[k].estadisticas[0][claveColor] = color;
                                 break;
                             }
@@ -247,8 +261,8 @@ const Estadisticas = () => {
             }            
 
             //se ordenan los profesores
-            for(let i in profesoresOrdenados) {
-                profesoresOrdenados[i].profesores = profesoresOrdenados[i].profesores.sort((a, b) => { 
+            for(let i in profesoresOrdenadosUpdate) {
+                profesoresOrdenadosUpdate[i].profesores = profesoresOrdenadosUpdate[i].profesores.sort((a, b) => { 
                     //b[1] es el segundo elemento, es decir la cantidad total de trabajos
                     //b[0] es el primer elemento, es decir, apellido y nombre del profesor
                     //primero se ordena de forma descendente según la cantidad total de trabajos
@@ -267,11 +281,12 @@ const Estadisticas = () => {
                     }
                 });
             }
+            setProfesoresOrdenados(profesoresOrdenadosUpdate);
 
             //se termina de formar el elemento del vector para el gráfico
             //el vector de claves queda ordenado para que se muestren los profesores en orden descendente según la cantidad total de trabajos
-            for (let i in profesoresOrdenados) {
-                const profes = profesoresOrdenados[i].profesores;
+            for (let i in profesoresOrdenadosUpdate) {
+                const profes = profesoresOrdenadosUpdate[i].profesores;
                 for(let j in profes) {                    
                     const clave = profes[j][0];
                     const valor = profes[j][1];
@@ -279,7 +294,7 @@ const Estadisticas = () => {
                     datosParaGraficoUpdate[i].claves.push(clave);
                 }
             }
-
+            
             setDatosParaGrafico(datosParaGraficoUpdate);
         } //generarDatosEstadisticas
 
@@ -317,9 +332,46 @@ const Estadisticas = () => {
 
 
         calcularEstadisticasTotales();        
-    }
+    } //calcularEstadisticas
 
-    
+    //prepara los datos para exportar a Excel
+    const exportarExcel = () => {
+        const datosVectorExcelUpdate = [];
+        //los elementos de este vector tienen esta forma:
+        //{
+        //  anio : 2022,
+        //  profesor : 'Nieto, Luis',
+        //  total : 5                
+        //},
+        //{
+        //  anio : 2022, 
+        //  profesor : 'Gustavo Juárez',
+        //  total : 4            
+        //}            
+        //...
+
+        for(let i in profesoresOrdenados) {
+            const anio = profesoresOrdenados[i].anio;
+            const profesoresDelAnio = profesoresOrdenados[i].profesores;
+
+            for(let j in profesoresDelAnio) {
+                const nombre = profesoresDelAnio[j][0];
+                const total = profesoresDelAnio[j][1];
+                datosVectorExcelUpdate.push({
+                    'anio' : anio,
+                    'profesor' : nombre,
+                    'total' : total
+                });
+            }
+            datosVectorExcelUpdate.push({
+                'anio' : '',
+                'profesor' : '',
+                'total' : ''
+            }); //para dejar una fila en blanco en el Excel
+        }        
+
+        setDatosVectorExcel(datosVectorExcelUpdate);
+    }
 
     const autoCompleteOnChange = (valor, quien) => {
         quien === constantesTrabajos.DESDE ? 
@@ -329,88 +381,108 @@ const Estadisticas = () => {
     }
 
     return (
-        <Paper className = {clases.pageContent}>
-            <Grid container spacing = {1}>
-                <Grid item lg = {4} sm = {4} xs = {4}>
-                    <FormControlLabel
-                        control = {<Checkbox />}
-                        label = {constantesTrabajos.TUTOR}
-                        // className = {clases.checkBox}
-                        checked = {arrayOpciones[0]}
-                        onChange = {evento => checkBoxChange(evento.target.checked, 1)}
-                    />
+        <>
+            <Paper className = {clases.pageContent}>
+                <Grid container spacing = {1}>
+                    <Grid item lg = {4} sm = {4} xs = {4}>
+                        <FormControlLabel
+                            control = {<Checkbox />}
+                            label = {constantesTrabajos.TUTOR}
+                            // className = {clases.checkBox}
+                            checked = {arrayOpciones[0]}
+                            onChange = {evento => checkBoxChange(evento.target.checked, 1)}
+                        />
+                    </Grid>
+                    <Grid item lg = {4} sm = {4} xs = {4}>
+                        <FormControlLabel
+                            control = {<Checkbox />}
+                            label = {constantesTrabajos.COTUTOR}
+                            // className = {clases.checkBox}
+                            checked = {arrayOpciones[1]}
+                            onChange = {evento => checkBoxChange(evento.target.checked, 2)}
+                        />
+                    </Grid>
+                    <Grid item lg = {4} sm = {4} xs = {4}>
+                        <FormControlLabel
+                            control = {<Checkbox />}
+                            label = {constantesTrabajos.JURADO}
+                            // className = {clases.checkBox}
+                            checked = {arrayOpciones[2]}
+                            onChange = {evento => checkBoxChange(evento.target.checked, 3)}
+                        />
+                    </Grid>
+                    <Grid item lg = {4} sm = {4} xs = {4}>
+                        <Autocomplete 
+                            {...defaultPropsDesde}
+                            isOptionEqualToValue = {(option, value) => option.value === value.value}
+                            // disablePortal
+                            disableClearable
+                            id = "combo-box-desde"
+                            renderInput = {(params) => <TextField {...params} label = { constantesTrabajos.DESDE } />} 
+                            value = { desdeAnio.toString() }
+                            onChange = {(evento, valor) => autoCompleteOnChange(valor, constantesTrabajos.DESDE)}
+                            // className = {classes.autoComplete}
+                        />
+                    </Grid>
+                    <Grid item lg = {4} sm = {4} xs = {4}>
+                        <Autocomplete 
+                            {...defaultPropsHasta}
+                            isOptionEqualToValue = {(option, value) => option.value === value.value}
+                            // disablePortal
+                            disableClearable
+                            id = "combo-box-hasta"
+                            renderInput = {(params) => <TextField {...params} label = { constantesTrabajos.HASTA } />} 
+                            value = { hastaAnio.toString() }
+                            onChange = {(evento, valor) => autoCompleteOnChange(valor, constantesTrabajos.HASTA)}
+                            // className = {classes.autoComplete}
+                        />
+                    </Grid>
+                    <Grid item lg = {3} sm = {3} xs = {3}>
+                        <Button 
+                            variant = 'contained' 
+                            className = {clases.botonEstadisticas} 
+                            onClick = {() => calcularEstadisticas()}
+                        >
+                            Calcular
+                        </Button>
+                    </Grid>
+                    <Grid item lg = {1} sm = {1} xs = {1}>
+                        <IconButton 
+                            aria-label = "exportar a Excel"
+                            size = "medium"                        
+                            className = {clases.botonExcel}
+                            onClick = {() => exportarExcel()}
+                            disabled = {profesoresOrdenados.length === 0 ? true : false}
+                        >
+                            <RiFileExcel2Line />
+                        </IconButton>
+                    </Grid>
+                    {
+                        datosParaGrafico.map((dato, i) => (
+                            dato.claves.length > 0 
+                                ?
+                                    <Grid item lg = {12} sm = {12} xs = {12} key = {i}>
+                                        <div style = {{height: 600}}>
+                                            <GraficoEstadisticas                                             
+                                                datos = {dato.estadisticas} 
+                                                claves = {dato.claves}
+                                            />
+                                        </div>
+                                    </Grid>
+                                :
+                                    null
+                        ))
+                    }                
                 </Grid>
-                <Grid item lg = {4} sm = {4} xs = {4}>
-                    <FormControlLabel
-                        control = {<Checkbox />}
-                        label = {constantesTrabajos.COTUTOR}
-                        // className = {clases.checkBox}
-                        checked = {arrayOpciones[1]}
-                        onChange = {evento => checkBoxChange(evento.target.checked, 2)}
-                    />
-                </Grid>
-                <Grid item lg = {4} sm = {4} xs = {4}>
-                    <FormControlLabel
-                        control = {<Checkbox />}
-                        label = {constantesTrabajos.JURADO}
-                        // className = {clases.checkBox}
-                        checked = {arrayOpciones[2]}
-                        onChange = {evento => checkBoxChange(evento.target.checked, 3)}
-                    />
-                </Grid>
-                <Grid item lg = {4} sm = {4} xs = {4}>
-                    <Autocomplete 
-                        {...defaultPropsDesde}
-                        isOptionEqualToValue = {(option, value) => option.value === value.value}
-                        // disablePortal
-                        disableClearable
-                        id = "combo-box-desde"
-                        renderInput = {(params) => <TextField {...params} label = { constantesTrabajos.DESDE } />} 
-                        value = { desdeAnio.toString() }
-                        onChange = {(evento, valor) => autoCompleteOnChange(valor, constantesTrabajos.DESDE)}
-                        // className = {classes.autoComplete}
-                    />
-                </Grid>
-                <Grid item lg = {4} sm = {4} xs = {4}>
-                    <Autocomplete 
-                        {...defaultPropsHasta}
-                        isOptionEqualToValue = {(option, value) => option.value === value.value}
-                        // disablePortal
-                        disableClearable
-                        id = "combo-box-hasta"
-                        renderInput = {(params) => <TextField {...params} label = { constantesTrabajos.HASTA } />} 
-                        value = { hastaAnio.toString() }
-                        onChange = {(evento, valor) => autoCompleteOnChange(valor, constantesTrabajos.HASTA)}
-                        // className = {classes.autoComplete}
-                    />
-                </Grid>
-                <Grid item lg = {4} sm = {4} xs = {4}>
-                    <Button 
-                        variant = 'contained' 
-                        className = {clases.botonEstadisticas} 
-                        onClick = {() => calcularEstadisticas()}
-                    >
-                        Calcular
-                    </Button>
-                </Grid>
-                {
-                    datosParaGrafico.map((dato, i) => (
-                        dato.claves.length > 0 
-                            ?
-                                <Grid item lg = {12} sm = {12} xs = {12} key = {i}>
-                                    <div style = {{height: 600}}>
-                                        <GraficoEstadisticas                                             
-                                            datos = {dato.estadisticas} 
-                                            claves = {dato.claves}
-                                        />
-                                    </div>
-                                </Grid>
-                            :
-                                null
-                    ))
-                }
-            </Grid>
-        </Paper>
+            </Paper>
+            {
+                datosVectorExcel.length > 0 
+                ?                 
+                    <ExportacionExcel datosVectorExcel = {datosVectorExcel}/>
+                :
+                    null
+            } 
+        </>
     )
 }
 

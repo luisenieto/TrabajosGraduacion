@@ -7,7 +7,7 @@ import {ProviderContext} from './provider';
 import { Typography } from '@mui/material';
 import './splash-screen.css';
 
-function App() {    
+function App() {     
   const { cargando } = useContext(ProviderContext);
 
   const mensajeCargando = () => {

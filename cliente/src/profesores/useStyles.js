@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(tema => ({
     pageContent : {
-        margin : tema.spacing(1),
+        marginTop : tema.spacing(1),
         padding : tema.spacing(1)
     }, 
     campoBuscar : {
@@ -49,6 +49,9 @@ const useStyles = makeStyles(tema => ({
     botonFinal : {
         margin : tema.spacing(1),
         width : '99%'
+    },
+    botonExcel : {
+        marginTop : tema.spacing(1)
     }      
 }));
 
