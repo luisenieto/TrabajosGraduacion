@@ -12,10 +12,13 @@ import { RiFileExcel2Line } from 'react-icons/ri';
 import { constantesTrabajos } from '../../config/constantes';
 import { ProviderContext } from '../../provider';
 import GraficoEstadisticas from './graficoEstadisticas';
-import ExportacionExcel from './exportacionExcel';
+import ReactExport from "react-export-excel";
 
 const Estadisticas = () => {
     const clases = useStyles(); 
+    const ExcelFile = ReactExport.ExcelFile;
+    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
     const [arrayOpciones, setArrayOpciones] = useState([true, true, true]);
     //vector para saber si está seleccionada la opción para calcular
@@ -35,7 +38,6 @@ const Estadisticas = () => {
         }
     }, []); //eslint-disable-line react-hooks/exhaustive-deps 
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío  
-
 
     const [datosParaGrafico, setDatosParaGrafico] = useState([]);
     //vector con los datos de cada profesor para el rango de fechas seleccionado
@@ -80,7 +82,7 @@ const Estadisticas = () => {
         return Array(hasta - desde + 1).fill().map((_, idx) => (desde + idx).toString());
     }
 
-    const [profesoresOrdenados, setProfesoresOrdenados] = useState([]);
+    //const [profesoresOrdenados, setProfesoresOrdenados] = useState([]);
     //este vector sirve para tener ordenados, para cada año, los profesores según la cantidad de trabajos en forma descendente
     //de este vector también se obtienen los datos para hacer la exportación a Excel
     //Un elemento de este vector tendría la siguiente forma:
@@ -88,6 +90,24 @@ const Estadisticas = () => {
     //profesores : [["Ape2, Nom2" : 8], ["Ape1, Nom1" : 6], ["Ape3, Nom3" : 2]]
     //Cada elemento de profesores es un vector con 1 solo elemento
     //Cada uno de estos elementos está ordenado descendentemente según la cantidad total de trabajos en los que participó en ese año el profesor
+
+    //const [datosVectorExcel, setDatosVectorExcel] = useState([]);
+    //vector con los datos para exportar a Excel
+
+    const [datosEstadisticas, setDatosEstadisticas] = useState({
+        profesoresOrdenados : [],
+        datosExcel : []
+    });
+    //datosEstadisticas tiene 2 claves: profesoresOrdenados y datosExcel
+    //profesoresOrdenados sirve para tener ordenados, para cada año, los profesores según la cantidad de trabajos en forma descendente
+    //de este vector también se obtienen los datos para hacer la exportación a Excel
+    //Un elemento de este vector tendría la siguiente forma:
+    //anio : 2020
+    //profesores : [["Ape2, Nom2" : 8], ["Ape1, Nom1" : 6], ["Ape3, Nom3" : 2]]
+    //Cada elemento de profesores es un vector con 1 solo elemento
+    //Cada uno de estos elementos está ordenado descendentemente según la cantidad total de trabajos en los que participó en ese año el profesor
+    
+    //datosExcel es un vector con los datos para exportar a Excel
 
     const defaultPropsDesde = {
         options: rango(constantesTrabajos.ANIO_PRIMER_TRABAJO, new Date().getFullYear())
@@ -101,8 +121,6 @@ const Estadisticas = () => {
     //arranca a partir del valor seleccionado en la lista 'Desde'
     //para evitar que el año hasta sea menor que el desde
 
-    const [datosVectorExcel, setDatosVectorExcel] = useState([]);
-    //vector con los datos para exportar a Excel
 
     //cada vez que se modifica una opción de los checkboxes, se actualiza el vector de opciones
     const checkBoxChange = (seleccionada, opcion) => {
@@ -281,7 +299,46 @@ const Estadisticas = () => {
                     }
                 });
             }
-            setProfesoresOrdenados(profesoresOrdenadosUpdate);
+
+            const datosExcelUpdate = [];
+            //los elementos de este vector tienen esta forma:
+            //{
+            //  anio : 2022,
+            //  profesor : 'Nieto, Luis',
+            //  total : 5                
+            //},
+            //{
+            //  anio : 2022, 
+            //  profesor : 'Gustavo Juárez',
+            //  total : 4            
+            //}            
+            //...
+
+            for(let i in profesoresOrdenadosUpdate) {
+                const anio = profesoresOrdenadosUpdate[i].anio;            
+                const profesoresDelAnio = profesoresOrdenadosUpdate[i].profesores;
+    
+                for(let j in profesoresDelAnio) {
+                    const nombre = profesoresDelAnio[j][0];
+                    const total = profesoresDelAnio[j][1];
+                    datosExcelUpdate.push({
+                        'anio' : anio,
+                        'profesor' : nombre,
+                        'total' : total
+                    });
+                }
+                datosExcelUpdate.push({
+                    'anio' : '',
+                    'profesor' : '',
+                    'total' : ''
+                }); //para dejar una fila en blanco en el Excel
+            }
+
+            //setProfesoresOrdenados(profesoresOrdenadosUpdate);
+            setDatosEstadisticas({
+                profesoresOrdenados : profesoresOrdenadosUpdate,
+                datosExcel : datosExcelUpdate
+            })
 
             //se termina de formar el elemento del vector para el gráfico
             //el vector de claves queda ordenado para que se muestren los profesores en orden descendente según la cantidad total de trabajos
@@ -330,48 +387,8 @@ const Estadisticas = () => {
             }
         }
 
-
         calcularEstadisticasTotales();        
     } //calcularEstadisticas
-
-    //prepara los datos para exportar a Excel
-    const exportarExcel = () => {
-        const datosVectorExcelUpdate = [];
-        //los elementos de este vector tienen esta forma:
-        //{
-        //  anio : 2022,
-        //  profesor : 'Nieto, Luis',
-        //  total : 5                
-        //},
-        //{
-        //  anio : 2022, 
-        //  profesor : 'Gustavo Juárez',
-        //  total : 4            
-        //}            
-        //...
-
-        for(let i in profesoresOrdenados) {
-            const anio = profesoresOrdenados[i].anio;
-            const profesoresDelAnio = profesoresOrdenados[i].profesores;
-
-            for(let j in profesoresDelAnio) {
-                const nombre = profesoresDelAnio[j][0];
-                const total = profesoresDelAnio[j][1];
-                datosVectorExcelUpdate.push({
-                    'anio' : anio,
-                    'profesor' : nombre,
-                    'total' : total
-                });
-            }
-            datosVectorExcelUpdate.push({
-                'anio' : '',
-                'profesor' : '',
-                'total' : ''
-            }); //para dejar una fila en blanco en el Excel
-        }        
-
-        setDatosVectorExcel(datosVectorExcelUpdate);
-    }
 
     const autoCompleteOnChange = (valor, quien) => {
         quien === constantesTrabajos.DESDE ? 
@@ -447,15 +464,23 @@ const Estadisticas = () => {
                         </Button>
                     </Grid>
                     <Grid item lg = {1} sm = {1} xs = {1}>
-                        <IconButton 
-                            aria-label = "exportar a Excel"
-                            size = "medium"                        
-                            className = {clases.botonExcel}
-                            onClick = {() => exportarExcel()}
-                            disabled = {profesoresOrdenados.length === 0 ? true : false}
-                        >
-                            <RiFileExcel2Line />
-                        </IconButton>
+                        <ExcelFile filename = 'Estadisticas' element = {
+                            <IconButton 
+                                aria-label = "exportar a Excel"
+                                size = "medium"                        
+                                className = {clases.botonExcel}
+                                //onClick = {() => exportarExcel()}
+                                disabled = {datosEstadisticas.profesoresOrdenados.length === 0 ? true : false}
+                            >
+                                <RiFileExcel2Line />
+                            </IconButton>
+                        }>
+                            <ExcelSheet data = {datosEstadisticas.datosExcel} name = 'Detalle' >
+                                <ExcelColumn label = "Año" value = "anio" />
+                                <ExcelColumn label = "Apellido y nombre" value = "profesor" />
+                                <ExcelColumn label = "Total" value = "total" />
+                            </ExcelSheet>
+                        </ExcelFile>                    
                     </Grid>
                     {
                         datosParaGrafico.map((dato, i) => (
@@ -475,13 +500,6 @@ const Estadisticas = () => {
                     }                
                 </Grid>
             </Paper>
-            {
-                datosVectorExcel.length > 0 
-                ?                 
-                    <ExportacionExcel datosVectorExcel = {datosVectorExcel}/>
-                :
-                    null
-            } 
         </>
     )
 }
