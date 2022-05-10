@@ -22,7 +22,6 @@ const DatosAlumnos = ({alumnos, titulo}) => {
             <TableRow>
                 <TableCell>Apellido y nombre</TableCell>
                 <TableCell align = 'center'>DNI</TableCell>
-                <TableCell align = 'center'>CX</TableCell>
                 <TableCell align = 'center'>Desde</TableCell>
                 <TableCell align = 'center'>Hasta</TableCell>
                 <TableCell>Razón</TableCell>
@@ -51,7 +50,6 @@ const DatosAlumnos = ({alumnos, titulo}) => {
                     <TableRow key = {i}>
                         <TableCell>{`${alumno.apellidos}, ${alumno.nombres}`}</TableCell>
                         <TableCell align = 'center'>{alumno.dni}</TableCell>
-                        <TableCell align = 'center'>{alumno.cx ? alumno.cx : '-'}</TableCell>
                         <TableCell align = 'center'>{alumno.desde ? formatearFecha(alumno.desde) : '-'}</TableCell>
                         <TableCell align = 'center'>{alumno.hasta ? formatearFecha(alumno.hasta) : '-'}</TableCell>
                         <TableCell>{alumno.razon}</TableCell>

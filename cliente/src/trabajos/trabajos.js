@@ -38,7 +38,6 @@ const Trabajos = (props) => {
     //controla la visibilidad del popup (pregunta si se confirma el borrado del trabajo)
 
     const clases = useStyles(); 
-    //const {setearTrabajo} = useContext(ProviderContext);
     
     //configura el criterio de ordenamiento en asc o desc para ordenar los trabajos
     const tratarOrdenamiento = (evento, propiedad) => {

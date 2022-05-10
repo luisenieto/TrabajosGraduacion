@@ -87,7 +87,7 @@ const Fila = ({trabajo, setearOpenPopup}) => {
                 <TableCell align = 'center'>{fechaFinalizacion ? formatearFecha(fechaFinalizacion) : '-'}</TableCell>
             </TableRow> 
             <TableRow>
-                <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {5}>
+                <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {8}>
                     <Collapse in = {abierto} timeout = "auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <DatosProfesores 

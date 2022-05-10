@@ -90,7 +90,7 @@ const Profesores = (props) => {
                             onChange = {evento => buscarOnChange(evento)}/>
                     </Grid>                    
                     <Grid item xs = {12}>
-                        <TableContainer sx = {{ maxHeight: 440 }}>
+                        <TableContainer sx = {{ maxHeight: 400 }}>
                             <Table stickyHeader sx = {{minWidth : 750}} aria-label = 'tableTitle' size = 'medium'>
                                 <CabeceraTabla 
                                     orden = {orden}

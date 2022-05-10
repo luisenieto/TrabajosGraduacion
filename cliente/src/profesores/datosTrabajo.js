@@ -12,7 +12,7 @@ import moment from 'moment';
 const DatosTrabajo = ({titulo, presentacion, aprobacion, finalizacion}) => {
 
     const TituloTrabajo = ({titulo}) => (
-        <Typography variant="subtitle2" gutterBottom component="div">
+        <Typography variant="h6" gutterBottom component="div">
             {titulo}
         </Typography>
     )
@@ -20,7 +20,7 @@ const DatosTrabajo = ({titulo, presentacion, aprobacion, finalizacion}) => {
     const CabeceraTrabajo = () => (
         <TableHead>
             <TableRow>
-                <TableCell align = 'center'>Presentacion</TableCell>
+                <TableCell align = 'center'>Presentación</TableCell>
                 <TableCell align = 'center'>Aprobación</TableCell>
                 <TableCell align = 'center'>Finalización</TableCell>
             </TableRow>
@@ -47,7 +47,7 @@ const DatosTrabajo = ({titulo, presentacion, aprobacion, finalizacion}) => {
             <TituloTrabajo titulo = {titulo} />
             <TableContainer>
                 <Table>
-                    <CabeceraTrabajo />
+                    <CabeceraTrabajo/>
                     <CuerpoTrabajo 
                         presentacion = {presentacion}
                         aprobacion = {aprobacion}

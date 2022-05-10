@@ -56,7 +56,7 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
                             height: 53 * filasVacias
                         }}
                     >
-                        <TableCell colSpan = {4} />
+                        <TableCell colSpan = {7} />
                     </TableRow>
                 )
             }

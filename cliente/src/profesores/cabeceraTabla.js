@@ -34,7 +34,8 @@ const CabeceraTabla = (props) => {
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
-                <CeldaConEstilo sortDirection = {orden}>                    
+                <CeldaConEstilo sx = {{maxWidth : 5}} />
+                <CeldaConEstilo sortDirection = {orden} >                    
                     <TableSortLabel 
                         sx = {{
                             '&.MuiTableSortLabel-root': {

@@ -10,28 +10,181 @@ import { Box } from '@mui/material';
 import TrabajosDelProfesor from './trabajosDelProfesor';
 import {RiEditLine} from 'react-icons/ri';
 import {GoTrashcan} from 'react-icons/go';
+import { RiFileExcel2Line } from 'react-icons/ri';
 import { useHistory } from "react-router-dom";
 import { estaAutenticado } from '../auth/auth';
 import { ProviderContext } from '../provider';
+import moment from 'moment';
+import ReactExport from "react-export-excel";
 
 //Componente que muestra una fila del cuerpo de la tabla
 const Fila = ({unProfesor, setearOpenPopup}) => {
+    const ExcelFile = ReactExport.ExcelFile;
+    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+
     const {setearProfesor} = useContext(ProviderContext);
     const [abierto, setAbierto] = useState(false);       
     //maneja el botón flecha arriba/flecha abajo para mostrar los trabajos de un profesor 
 
-    const [trabajosDelProfesor, setearTrabajosDelProfesor] = useState([]);
-    //tiene todos los trabajos de un profesor en particular
+    const [trabajosDelProfesor, setearTrabajosDelProfesor] = useState({
+        'trabajosDelProfesor' : [],
+        'datosExcel' : []
+    });
+    //tiene todos los trabajos de un profesor en particular (clave trabajosDelProfesor)
+    //y los datos para exportar a Excel (clave datosExcel)
 
     const history = useHistory();
     const {_id} = unProfesor;
+    
+    //formatea la fecha en el formato DD/MM/YYYY
+    const formatearFecha = (fecha) => {
+        return fecha !== null 
+        ? 
+            moment(fecha).format('DD/MM/YYYY') 
+        : 
+            '-';
+    }
 
     //obtiene todos los trabajos de un profesor determinado
+    //también genera el vector con los datos para exportar los trabajos
     const obtenerTrabajosDelProfesor = () => {
+        let datosExcel = [];
         if (!abierto) {
             const ruta = `/api/trabajos/listarporprofesor?dni=${unProfesor.dni}`;
-            axios.get(ruta).then(response => {                     
-                setearTrabajosDelProfesor(response.data);
+            axios.get(ruta).then(response => { 
+
+                //arma el vector con los datos para exportar a Excel
+                for(let i in response.data) {
+                    datosExcel.push(
+                        {
+                            'columns' : ['Título'],
+                            'data' : [
+                                [response.data[i].titulo]
+                            ]
+                        }
+                    );                    
+                    datosExcel.push(
+                        {
+                            'columns' : ['Presentación', 'Aprobación', 'Finalización'],
+                            'data' : [
+                                [formatearFecha(response.data[i].fechaPresentacion), formatearFecha(response.data[i].fechaAprobacion), formatearFecha(response.data[i].fechaFinalizacion)]
+                            ]
+                        }
+                    );
+                    datosExcel.push(
+                        {
+                            'columns' : ['Tutores'],
+                            'data' : [
+                                []
+                            ]
+                        }
+                    );
+                    let tutores = [];
+                    for(let j in response.data[i].tutores) {
+                        let elementoVectorTutores = [];
+                        elementoVectorTutores.push(`${response.data[i].tutores[j].apellidos}, ${response.data[i].tutores[j].nombres}`)
+                        elementoVectorTutores.push(formatearFecha(response.data[i].tutores[j].desde));
+                        elementoVectorTutores.push(formatearFecha(response.data[i].tutores[j].hasta));
+                        elementoVectorTutores.push(response.data[i].tutores[j].razon !== null ? response.data[i].tutores[j].razon : '-');
+                        tutores.push(elementoVectorTutores);
+                    }
+                    datosExcel.push(
+                        {
+                            ySteps : -1,
+                            'columns' : ['Apellido y nombre', 'Desde', 'Hasta', 'Razón'],
+                            'data' : tutores
+                        }
+                    );                    
+                    let cotutores = [];
+                    for(let j in response.data[i].cotutores) {
+                        let elementoVectorCotutores = [];
+                        elementoVectorCotutores.push(`${response.data[i].cotutores[j].apellidos}, ${response.data[i].cotutores[j].nombres}`)
+                        elementoVectorCotutores.push(formatearFecha(response.data[i].cotutores[j].desde));
+                        elementoVectorCotutores.push(formatearFecha(response.data[i].cotutores[j].hasta));
+                        elementoVectorCotutores.push(response.data[i].cotutores[j].razon !== null ? response.data[i].cotutores[j].razon : '-');
+                        cotutores.push(elementoVectorCotutores);
+                    }
+                    if (cotutores.length > 0) { //tiene cotutores
+                        datosExcel.push(
+                            {
+                                'columns' : ['Cotutores'],
+                                'data' : [
+                                    []
+                                ]
+                            }
+                        );
+                        datosExcel.push(
+                            {
+                                ySteps : -1,
+                                'columns' : ['Apellido y nombre', 'Desde', 'Hasta', 'Razón'],
+                                'data' : cotutores
+                            }
+                        );
+                    }
+                    datosExcel.push(
+                        {
+                            'columns' : ['Jurado'],
+                            'data' : [
+                                []
+                            ]
+                        }
+                    );
+                    let jurado = [];
+                    for(let j in response.data[i].jurado) {
+                        let elementoVectorJurado = [];
+                        elementoVectorJurado.push(`${response.data[i].jurado[j].apellidos}, ${response.data[i].jurado[j].nombres}`)
+                        elementoVectorJurado.push(formatearFecha(response.data[i].jurado[j].desde));
+                        elementoVectorJurado.push(formatearFecha(response.data[i].jurado[j].hasta));
+                        elementoVectorJurado.push(response.data[i].jurado[j].razon !== null ? response.data[i].jurado[j].razon : '-');
+                        jurado.push(elementoVectorJurado);
+                    }
+                    datosExcel.push(
+                        {
+                            ySteps : -1,
+                            'columns' : ['Apellido y nombre', 'Desde', 'Hasta', 'Razón'],
+                            'data' : jurado
+                        }
+                    );
+                    datosExcel.push(
+                        {
+                            'columns' : ['Alumnos'],
+                            'data' : [
+                                []
+                            ]
+                        }
+                    );
+                    let alumnos = [];
+                    for(let j in response.data[i].alumnos) {
+                        let elementoVectorAlumnos = [];
+                        elementoVectorAlumnos.push(`${response.data[i].alumnos[j].apellidos}, ${response.data[i].alumnos[j].nombres}`);
+                        elementoVectorAlumnos.push(`${response.data[i].alumnos[j].dni}`);
+                        elementoVectorAlumnos.push(formatearFecha(response.data[i].alumnos[j].desde));
+                        elementoVectorAlumnos.push(formatearFecha(response.data[i].alumnos[j].hasta));
+                        elementoVectorAlumnos.push(response.data[i].alumnos[j].razon !== null ? response.data[i].alumnos[j].razon : '-');
+                        alumnos.push(elementoVectorAlumnos);
+                    }
+                    datosExcel.push(
+                        {
+                            ySteps : -1,
+                            'columns' : ['Apellido y nombre', 'DNI', 'Desde', 'Hasta', 'Razón'],
+                            'data' : alumnos
+                        }
+                    );
+
+                    //para dejar un espacio entre trabajo y trabajo
+                    datosExcel.push(
+                        {
+                            ySteps : 1,
+                            'columns' : [''],
+                            'data' : [['']]
+                        }
+                    ); 
+                }
+
+                setearTrabajosDelProfesor({
+                    'trabajosDelProfesor' : response.data,
+                    'datosExcel' : datosExcel
+                });
             });                
         }
         setAbierto(!abierto);            
@@ -49,12 +202,11 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
             history.push('/acceso'); 
         }
         else {                      
-            //console.log(unProfesor);  
             setearProfesor(unProfesor);
             setearOpenPopup(true);
         }
     }
-      
+
     return (
         <Fragment>
             <TableRow 
@@ -84,7 +236,20 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         onClick = {() => botonBorrarClic()}
                     >
                         <GoTrashcan />
-                    </IconButton>
+                    </IconButton>                    
+                </TableCell>
+                <TableCell>
+                    <ExcelFile filename = {`Estadisticas-${unProfesor.apellidos}-${unProfesor.nombres}`} element = {
+                        <IconButton 
+                            aria-label = "exportar a Excel"
+                            size = "small"                        
+                            disabled = {abierto ? false : true}
+                        >
+                            <RiFileExcel2Line />
+                        </IconButton>
+                    }>
+                        <ExcelSheet dataSet = {trabajosDelProfesor.datosExcel} name = 'Detalle' />
+                    </ExcelFile>
                 </TableCell>
                 <TableCell align = 'left'>{unProfesor.apellidos}</TableCell>
                 <TableCell align = 'left'>{unProfesor.nombres}</TableCell>
@@ -92,12 +257,12 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                 <TableCell align = 'center'>{unProfesor.nombreCargo}</TableCell>
             </TableRow> 
             <TableRow>
-                <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {5}>
+                <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {8}>
                     <Collapse in = {abierto} timeout = "auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <TrabajosDelProfesor 
                                 profesor = {unProfesor}
-                                trabajosDelProfesor = {trabajosDelProfesor}
+                                trabajosDelProfesor = {trabajosDelProfesor.trabajosDelProfesor}
                             />
                         </Box>
                     </Collapse>

@@ -91,7 +91,7 @@ const Fila = ({alumno, setearOpenPopup}) => {
                 <TableCell align = 'center'>{alumno.cx}</TableCell>                                           
             </TableRow>
             <TableRow>
-                <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {5}>
+                <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {7}>
                     <Collapse in = {abierto} timeout = "auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <TrabajosDelAlumno 
