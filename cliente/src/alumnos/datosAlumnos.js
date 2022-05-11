@@ -47,7 +47,13 @@ const DatosAlumnos = ({alumno, alumnos, titulo}) => {
         <TableBody>
             {
                 alumnos.sort((a, b) => comparador(a, b)).map((alum, i) => {
-                    if (alumno.dni !== alum.dni) {
+                    //Se comentó el if para mostrar todos los alumnos del trabajo
+                    //Si no se muestran todos, se puede dar el caso de Avalos y Albarracín,
+                    //que comenzaron juntas un trabajo, luego Avalos lo dejó y Albarracín lo terminó
+                    //Entonces, al mostrar los trabajos de Avalos, si no se la muestra a ella
+                    //aparece Albarracín con el trabajo terminado y confunde
+                    //porque pareciera que Avalos también lo terminó
+                    // if (alumno.dni !== alum.dni) {
                         return (
                             <TableRow key = {i}>
                                 <TableCell>{`${alum.apellidos}, ${alum.nombres}`}</TableCell>
@@ -57,9 +63,9 @@ const DatosAlumnos = ({alumno, alumnos, titulo}) => {
                                 <TableCell>{alum.razon}</TableCell>
                             </TableRow>
                         )
-                    }
-                    else
-                        return null;
+                    // }
+                    // else
+                    //     return null;
                 })
             }
         </TableBody>                

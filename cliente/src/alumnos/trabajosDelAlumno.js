@@ -41,7 +41,7 @@ const TrabajosDelAlumno = ({alumno, trabajosDelAlumno}) => {
                                     <DatosAlumnos 
                                         alumno = {alumno}
                                         alumnos = {trabajo.alumnos}
-                                        titulo = 'Junto con'
+                                        titulo = 'Alumnos'
                                     />
                                 :
                                     null
