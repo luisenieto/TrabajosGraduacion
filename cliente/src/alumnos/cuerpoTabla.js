@@ -43,7 +43,7 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
                 .slice(pagina * filasPorPagina, pagina * filasPorPagina + filasPorPagina)
                 .map((alumno, i) => (
                     <Fila 
-                        alumno = {alumno} 
+                        unAlumno = {alumno} 
                         setearOpenPopup = {setearOpenPopup}
                         key = {i} 
                     />
@@ -56,7 +56,7 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
                             height: 53 * filasVacias
                         }}
                     >
-                        <TableCell colSpan = {7} />
+                        <TableCell colSpan = {8} />
                     </TableRow>
                 )
             }

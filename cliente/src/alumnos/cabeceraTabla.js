@@ -33,6 +33,7 @@ const CabeceraTabla = ({orden, alQuererOrdenar}) => {
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
+                <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sortDirection = {orden}>
                     <TableSortLabel 
                         sx = {{

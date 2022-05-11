@@ -45,6 +45,15 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
             '-';
     }
 
+    //Permite ordenar alfabéticamente en orden ascendente o descendente
+    function comparador(a, b) {
+        if (a['apellidos'] < b['apellidos'])
+            return -1;
+        if (a['apellidos'] > b['apellidos'])
+            return 1;
+        return 0;
+    }
+
     //obtiene todos los trabajos de un profesor determinado
     //también genera el vector con los datos para exportar los trabajos
     const obtenerTrabajosDelProfesor = () => {
@@ -80,6 +89,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         }
                     );
                     let tutores = [];
+                    response.data[i].tutores.sort((a, b) => comparador(a, b));
                     for(let j in response.data[i].tutores) {
                         let elementoVectorTutores = [];
                         elementoVectorTutores.push(`${response.data[i].tutores[j].apellidos}, ${response.data[i].tutores[j].nombres}`)
@@ -96,6 +106,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         }
                     );                    
                     let cotutores = [];
+                    response.data[i].cotutores.sort((a, b) => comparador(a, b));
                     for(let j in response.data[i].cotutores) {
                         let elementoVectorCotutores = [];
                         elementoVectorCotutores.push(`${response.data[i].cotutores[j].apellidos}, ${response.data[i].cotutores[j].nombres}`)
@@ -130,6 +141,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         }
                     );
                     let jurado = [];
+                    response.data[i].jurado.sort((a, b) => comparador(a, b));
                     for(let j in response.data[i].jurado) {
                         let elementoVectorJurado = [];
                         elementoVectorJurado.push(`${response.data[i].jurado[j].apellidos}, ${response.data[i].jurado[j].nombres}`)
@@ -154,6 +166,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         }
                     );
                     let alumnos = [];
+                    response.data[i].alumnos.sort((a, b) => comparador(a, b));
                     for(let j in response.data[i].alumnos) {
                         let elementoVectorAlumnos = [];
                         elementoVectorAlumnos.push(`${response.data[i].alumnos[j].apellidos}, ${response.data[i].alumnos[j].nombres}`);

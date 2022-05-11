@@ -12,7 +12,7 @@ import moment from 'moment';
 const DatosTrabajo = ({titulo, presentacion, aprobacion, finalizacion}) => {
 
     const TituloTrabajo = ({titulo}) => (
-        <Typography variant="subtitle2" gutterBottom component="div">
+        <Typography variant="h6" gutterBottom component="div">
             {titulo}
         </Typography>
     )
