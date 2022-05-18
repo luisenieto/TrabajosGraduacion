@@ -235,7 +235,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         {abierto ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                     </IconButton>
                 </TableCell>
-                <TableCell>                        
+                <TableCell sx = {{maxWidth : 5}}>                        
                     <IconButton
                         size = 'small'
                         onClick = {() => botonEditarClic(_id)}
@@ -243,7 +243,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         <RiEditLine />
                     </IconButton>                        
                 </TableCell>  
-                <TableCell>
+                <TableCell sx = {{maxWidth : 5}}>
                     <IconButton
                         size = 'small'
                         onClick = {() => botonBorrarClic()}
@@ -251,7 +251,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         <GoTrashcan />
                     </IconButton>                    
                 </TableCell>
-                <TableCell>
+                <TableCell sx = {{maxWidth : 5}}>
                     <ExcelFile filename = {`Estadisticas-${unProfesor.apellidos}-${unProfesor.nombres}`} element = {
                         <IconButton 
                             aria-label = "exportar a Excel"
@@ -264,10 +264,10 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
                         <ExcelSheet dataSet = {trabajosDelProfesor.datosExcel} name = 'Detalle' />
                     </ExcelFile>
                 </TableCell>
-                <TableCell align = 'left'>{unProfesor.apellidos}</TableCell>
-                <TableCell align = 'left'>{unProfesor.nombres}</TableCell>
-                <TableCell align = 'center'>{unProfesor.dni}</TableCell>
-                <TableCell align = 'center'>{unProfesor.nombreCargo}</TableCell>
+                <TableCell align = 'left' sx = {{maxWidth : 60}}>{unProfesor.apellidos}</TableCell>
+                <TableCell align = 'left' sx = {{maxWidth : 60}}>{unProfesor.nombres}</TableCell>
+                <TableCell align = 'center' sx = {{maxWidth : 30}}>{unProfesor.dni}</TableCell>
+                <TableCell align = 'center' sx = {{maxWidth : 30}}>{unProfesor.nombreCargo}</TableCell>
             </TableRow> 
             <TableRow>
                 <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {8}>

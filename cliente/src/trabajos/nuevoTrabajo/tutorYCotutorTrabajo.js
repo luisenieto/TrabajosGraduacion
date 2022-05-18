@@ -53,7 +53,6 @@ const TutorYCotutor = () => {
     }
     //cada vez que se modifica un tutor/cotutor
     
-
     const defaultProps = {
         options: profesores.map((profesor) => `${profesor.apellidos}, ${profesor.nombres} (${profesor.dni})`),
     };

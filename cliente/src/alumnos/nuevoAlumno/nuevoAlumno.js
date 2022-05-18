@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { ProviderContext } from '../../provider';
 import { Paper } from '@mui/material';
 import { Grid } from '@mui/material';
@@ -26,13 +26,13 @@ const NuevoAlumno = () => {
     const clases = useStyles(); 
     const history = useHistory();
 
-    useEffect(() => {
+    useEffect(() => {        
         setearAlumno({
             apellidos : '',
             nombres : '',
             dni : '',
             cx : ''
-        })
+        });        
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
 
@@ -40,7 +40,7 @@ const NuevoAlumno = () => {
 
     const botonAceptar = () => {   
         let resultado;
-        if ((resultado = validarAlumnoParaCreacion(alumno, alumnos)) !== constantesAlumnos.OK) {
+        if ((resultado = validarAlumnoParaCreacion(alumno, alumnos)) !== constantesAlumnos.OK) {            
             setEstadoAlerta({
                 gravedad : 'error',
                 titulo : 'Error',
@@ -51,7 +51,7 @@ const NuevoAlumno = () => {
         }  
         const ruta = '/api/alumnos/crear';
         axios.post(ruta, alumno).then(response => {
-            if (response.status === 200) {
+            if (response.status === 200) {                
                 setEstadoAlerta({
                     gravedad : 'success',
                     titulo : `${constantesAlumnos.NUEVO_ALUMNO}`,

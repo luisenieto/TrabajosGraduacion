@@ -4,7 +4,7 @@ import { ProviderContext } from '../provider';
 
 //Componente que permite desplazarse página a página para ver todos los alumnos
 const PaginacionTabla = ({filasPorPagina, setearFilasPorPagina, pagina, setearPagina}) => {
-    const {alumnos} = useContext(ProviderContext);
+    const {alumnosFiltrados} = useContext(ProviderContext);
 
     const handleChangePage = (evento, nuevaPagina) => {
         setearPagina(nuevaPagina);
@@ -19,7 +19,7 @@ const PaginacionTabla = ({filasPorPagina, setearFilasPorPagina, pagina, setearPa
         <TablePagination
             rowsPerPageOptions = {[5, 10, 25]}
             component = "div"
-            count = {alumnos.length}
+            count = {alumnosFiltrados.length}
             rowsPerPage = {filasPorPagina}
             page = {pagina}
             labelRowsPerPage = 'Filas por página'

@@ -8,15 +8,21 @@ import { ProviderContext } from '../provider';
 //Componente que muestra el cuerpo de la tabla donde se listan todos los alumnos
 //Cada fila del cuerpo de la tabla se muestra mediante el componente Fila
 const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup}) => {
-    const {alumnos, funcionFiltradoAlumnos} = useContext(ProviderContext);
+    const {alumnosFiltrados, funcionFiltradoAlumnos} = useContext(ProviderContext);
 
-    //Permite ordenar alfabéticamente en orden ascendente o descendente
+    //Permite ordenar alfabéticamente en orden ascendente según apellido y nombre
     function comparadorDescendente(a, b, ordenarPor) {
         if (b[ordenarPor] < a[ordenarPor])
           return -1;
         if (b[ordenarPor] > a[ordenarPor])
           return 1;
-        return 0;
+        else {
+            if (b['nombres'] < a['nombres'])
+                return -1;
+            if (b['nombres'] > a['nombres'])
+                return 1;
+            return 0;
+        }
     }
 
     //Obtiene el comparador de la función anterior
@@ -32,14 +38,14 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
     // Para evitar que la última página haga un salto cuando haya filas vacías
     const filasVacias = pagina > 0 
         ? 
-            Math.max(0, (1 + pagina) * filasPorPagina - alumnos.length) 
+            Math.max(0, (1 + pagina) * filasPorPagina - alumnosFiltrados.length) 
         : 
-            0;
+            0;    
 
     return (
         <TableBody>
             {
-                funcionFiltradoAlumnos.funcion(alumnos).slice().sort(obtenerComparador(orden, ordenarPor))
+                funcionFiltradoAlumnos.funcion(alumnosFiltrados).slice().sort(obtenerComparador(orden, ordenarPor))
                 .slice(pagina * filasPorPagina, pagina * filasPorPagina + filasPorPagina)
                 .map((alumno, i) => (
                     <Fila 

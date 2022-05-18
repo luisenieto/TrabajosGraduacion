@@ -33,7 +33,7 @@ const CabeceraTabla = ({orden, alQuererOrdenar}) => {
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
-                <CeldaConEstilo sortDirection = {orden}>
+                <CeldaConEstilo sortDirection = {orden} sx = {{maxWidth : 200}}>
                     <TableSortLabel 
                         sx = {{
                             '&.MuiTableSortLabel-root': {
@@ -64,7 +64,7 @@ const CabeceraTabla = ({orden, alQuererOrdenar}) => {
                         </Box>                            
                     </TableSortLabel>
                 </CeldaConEstilo>
-                <CeldaConEstilo sx = {{maxWidth : 60}} align = 'center'>{constantesTrabajos.AREAS} </CeldaConEstilo>
+                <CeldaConEstilo sx = {{maxWidth : 20}} align = 'center'>{constantesTrabajos.AREAS} </CeldaConEstilo>
                 <CeldaConEstilo sx = {{maxWidth : 20}} align = 'center'>{constantesTrabajos.PRESENTACION} </CeldaConEstilo>                    
                 <CeldaConEstilo sortDirection = {orden} sx = {{maxWidth : 20}} align = 'center'>
                     <TableSortLabel

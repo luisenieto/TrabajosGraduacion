@@ -35,7 +35,7 @@ const CabeceraTabla = (props) => {
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
                 <CeldaConEstilo sx = {{maxWidth : 5}} />
-                <CeldaConEstilo sortDirection = {orden} >                    
+                <CeldaConEstilo sortDirection = {orden} sx = {{maxWidth : 60}}>                    
                     <TableSortLabel 
                         sx = {{
                             '&.MuiTableSortLabel-root': {
@@ -66,9 +66,9 @@ const CabeceraTabla = (props) => {
                         </Box>                            
                     </TableSortLabel>                   
                 </CeldaConEstilo>
-                <CeldaConEstilo>{constantesProfesores.NOMBRES}</CeldaConEstilo>                    
-                <CeldaConEstilo align = 'center'>{constantesProfesores.DNI}</CeldaConEstilo>                    
-                <CeldaConEstilo align = 'center'>
+                <CeldaConEstilo sx = {{maxWidth : 60}}>{constantesProfesores.NOMBRES}</CeldaConEstilo>                    
+                <CeldaConEstilo align = 'center' sx = {{maxWidth : 30}}>{constantesProfesores.DNI}</CeldaConEstilo>                    
+                <CeldaConEstilo align = 'center' sx = {{maxWidth : 30}}>
                     <TableSortLabel active = {false} direction = {orden} onClick = {(evento) => createSortHandler(evento, 'idCargo')}
                         sx = {{
                             '&.MuiTableSortLabel-root': {

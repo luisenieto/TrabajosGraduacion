@@ -58,7 +58,11 @@ const Fila = ({unAlumno, setearOpenPopup}) => {
     //obtiene todos los trabajos de un alumno determinado
     //también genera el vector con los datos para exportar los trabajos
     const obtenerTrabajosDelAlumno = () => {
-        let datosExcel = [];
+        let datosExcel = [{
+            'columns' : [],
+            'data' : [[]]
+        }];
+
         if (!abierto) {
             const ruta = `/api/trabajos/listarporalumno?dni=${unAlumno.dni}`;
             axios.get(ruta).then(response => {   
@@ -238,7 +242,7 @@ const Fila = ({unAlumno, setearOpenPopup}) => {
                         {abierto ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                     </IconButton>
                 </TableCell>
-                <TableCell>                        
+                <TableCell sx = {{maxWidth : 5}}>                        
                     <IconButton
                         size = 'small'
                         onClick = {() => botonEditarClic(_id)}
@@ -246,7 +250,7 @@ const Fila = ({unAlumno, setearOpenPopup}) => {
                         <RiEditLine />
                     </IconButton>                        
                 </TableCell>  
-                <TableCell>
+                <TableCell sx = {{maxWidth : 5}}>
                     <IconButton
                         size = 'small'
                         onClick = {() => botonBorrarClic()}
@@ -254,12 +258,12 @@ const Fila = ({unAlumno, setearOpenPopup}) => {
                         <GoTrashcan />
                     </IconButton>
                 </TableCell>   
-                <TableCell>
+                <TableCell sx = {{maxWidth : 5}}>
                     <ExcelFile filename = {`Estadisticas-${unAlumno.apellidos}-${unAlumno.nombres}`} element = {
                         <IconButton 
                             aria-label = "exportar a Excel"
                             size = "small"                        
-                            disabled = {abierto ? false : true}
+                            disabled = {(abierto && trabajosDelAlumno.trabajosDelAlumno.length > 0) ? false : true}
                         >
                             <RiFileExcel2Line />
                         </IconButton>
@@ -267,10 +271,10 @@ const Fila = ({unAlumno, setearOpenPopup}) => {
                         <ExcelSheet dataSet = {trabajosDelAlumno.datosExcel} name = 'Detalle' />
                     </ExcelFile>
                 </TableCell>                
-                <TableCell align = 'left'>{unAlumno.apellidos}</TableCell>
-                <TableCell align = 'left'>{unAlumno.nombres}</TableCell>
-                <TableCell align = 'center'>{unAlumno.dni}</TableCell>
-                <TableCell align = 'center'>{unAlumno.cx}</TableCell>                                           
+                <TableCell align = 'left' sx = {{maxWidth : 60}}>{unAlumno.apellidos}</TableCell>
+                <TableCell align = 'left' sx = {{maxWidth : 60}}>{unAlumno.nombres}</TableCell>
+                <TableCell align = 'center' sx = {{maxWidth : 30}}>{unAlumno.dni}</TableCell>
+                <TableCell align = 'center' sx = {{maxWidth : 30}}>{unAlumno.cx}</TableCell>                                           
             </TableRow>
             <TableRow>
                 <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {8}>

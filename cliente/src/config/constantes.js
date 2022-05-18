@@ -103,6 +103,10 @@ const constantesAlumnos = {
     OK : 'OK',
     MENSAJE_MODIFICACION : 'Alumno modificado con éxito',
     ERROR_BORRAR : 'No se puede borrar el alumno porque está en un trabajo',
+    FILTRAR_POR : 'Filtrar por',
+    FILTRAR_POR_TODOS : 'Todos los alumnos',
+    FILTRAR_POR_SIN_FINALIZAR : 'Trabajos sin finalizar',
+    FILTRAR_POR_FINALIZADOS : 'Trabajos finalizados'
 }
 
 const constantesProfesores = {

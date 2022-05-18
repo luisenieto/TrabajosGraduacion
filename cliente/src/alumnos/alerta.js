@@ -8,6 +8,7 @@ import { Grid } from '@mui/material';
 //Componente que muestra los mensajes de éxito/error
 const Alerta = ({estadoAlerta, setEstadoAlerta}) => {
     let history = useHistory();
+
     return (
         <Grid item lg = {12}>
             <Collapse in = {estadoAlerta.mostrar}>

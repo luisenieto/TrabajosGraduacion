@@ -62,6 +62,26 @@ router.get('/trabajos/listarporprofesor', (request, response) => {
     });
 });
 
+//ruta para listar todos los trabajos finalizados
+router.get('/trabajos/listarfinalizados', (request, response) => {
+    //http://localhost:3001/api/trabajos/listarfinalizados
+    Trabajo.find({'alumnos.razon' : 'Finalización'}).exec((error, documento) => {
+        if(error)
+            return response.status(400).send(error);
+        response.status(200).send(documento);
+    });
+});
+
+//ruta para listar todos los trabajos sin finalizar
+router.get('/trabajos/listarsinfinalizar', (request, response) => {
+    //http://localhost:3001/api/trabajos/listarsinfinalizar
+    Trabajo.find({'alumnos.razon' : null}).exec((error, documento) => {
+        if(error)
+            return response.status(400).send(error);
+        response.status(200).send(documento);
+    });
+});
+
 //ruta para borrar un trabajo
 router.delete('/trabajos/borrar', authenticateJWT, (request, response) => {
     //http://localhost:3001/api/trabajos/borrar?id=615f24395a137070e292dc59

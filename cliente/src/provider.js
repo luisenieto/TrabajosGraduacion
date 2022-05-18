@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect, useReducer} from 'react';
+import React, {createContext, useState, useEffect} from 'react';
 import axios from 'axios';
 import { constantesTrabajos } from './config/constantes';
 
@@ -56,6 +56,10 @@ const Provider = ({children}) => {
     //en el manejo de estado en React no se puede guardar una función, por lo que 
     //en src/alumnos/alumnos.js el método setFuncionFiltradoAlumnos() guarda un objeto en lugar de una función
     //el objeto que guarda setFuncionFiltradoAlumnos() tiene la definición de una función
+    
+    const [alumnosFiltrados, setAlumnosFiltrados] = useState([]);
+    //tiene todos los alumnos, o los alumnos que no finalizaron sus trabajos, o los alumnos que sí finalizaron sus trabajos
+
     const [funcionFiltradoProfesores, setFuncionFiltradoProfesores] = useState({
         funcion : items => { return items }
     });
@@ -65,69 +69,6 @@ const Provider = ({children}) => {
         funcion : items => { return items }
     });
     //permite filtrar los trabajos por título
-
-    const estadoInicial = [
-        {
-            id : 1,
-            nombre : 'Profesores',
-            terminado : false
-        },
-        {
-            id : 2,
-            nombre : 'Alumnos',
-            terminado : false
-        },
-        {
-            id : 3,
-            nombre : 'Trabajos',
-            terminado : false
-        },
-        {
-            id : 4,
-            nombre : 'Areas',
-            terminado : false
-        },
-        {
-            id : 5,
-            nombre : 'TotalesTrabajos',
-            terminado : false
-        },
-        {
-            id : 6,
-            nombre : 'CantidadTrabajosParaGrafico',
-            terminado : false
-        },
-        {
-            id : 7,
-            nombre : 'CantidadTrabajosPorEstado',
-            terminado : false
-        }                                                
-    ]
-    //estado inicial que permite saber qué se va procesando
-    //es para manejar la ventana de splash
-
-    const reducer = (estado, accion) => {        
-        switch (accion.tipo) {
-            case 'TERMINADO' :
-                return estado.map(e => {
-                    if (e.id === accion.id) 
-                        return {...e, terminado : true};
-                    else
-                        return e;
-                });
-            default:
-                return estado;
-        }
-    }
-    //función que se encarga de actualizar el estado inicial
-
-    const [loQueSeVaProcesando, dispatch] = useReducer(reducer, estadoInicial);
-    //permite saber qué se va procesando
-
-    const [cargando, setearCargando] = useState(true);
-    //permite manejar la ventana de splash
-    //mientras cargando sea true, se muestra la ventana de splash
-    //cuando cargando sea false, se muestra el componente Home
 
     useEffect(() => {
         if (profesores.length === 0) 
@@ -141,22 +82,8 @@ const Provider = ({children}) => {
         axios.get(ruta).then(response => {   
             setearProfesores(response.data);
         });
-        dispatch({tipo : 'TERMINADO', id : 1});
-        //console.log(loQueSeVaProcesando);
     }  
-    
-    useEffect(() => {
-        let seProcesoTodo = true;
-        for(let i in loQueSeVaProcesando) {
-            if (!loQueSeVaProcesando[i].terminado) {
-                seProcesoTodo = false;
-                break;
-            }
-        }
-        if(seProcesoTodo)
-            setearCargando(false);        
-    }, [loQueSeVaProcesando]);
-    
+       
     useEffect(() => {
         if (alumnos.length === 0) 
              obtenerAlumnos();
@@ -167,9 +94,8 @@ const Provider = ({children}) => {
         const ruta = '/api/alumnos/listar';
         axios.get(ruta).then(response => {           
             setearAlumnos(response.data);
+            setAlumnosFiltrados(response.data); //por defecto alumnosFiltrados tiene todos los alumnos
         });
-        dispatch({tipo : 'TERMINADO', id : 2});
-        //console.log(loQueSeVaProcesando);
     }
     
     useEffect(() => {
@@ -185,7 +111,6 @@ const Provider = ({children}) => {
         axios.get(ruta).then(response => {  
             setearTrabajos(response.data);
         });
-        dispatch({tipo : 'TERMINADO', id : 3});
     } 
         
     useEffect(() => {
@@ -200,7 +125,6 @@ const Provider = ({children}) => {
         axios.get(ruta).then(response => {  
             setearAreas(response.data);
         });
-        dispatch({tipo : 'TERMINADO', id : 4});
     } 
 
     useEffect(() => {
@@ -287,9 +211,7 @@ const Provider = ({children}) => {
         });
 
         setearTotalesTrabajos(datosTrabajosUpdate);
-        dispatch({tipo : 'TERMINADO', id : 5});
         setearCantidadTrabajosParaGrafico(cantTrabajosParaGrafico);
-        dispatch({tipo : 'TERMINADO', id : 6});
     }
 
     useEffect(() => {
@@ -334,7 +256,6 @@ const Provider = ({children}) => {
         }
 
         setearCantidadTrabajosPorEstado(datosTrabajosUpdate);
-        dispatch({tipo : 'TERMINADO', id : 7});
     }
 
     return (
@@ -366,7 +287,8 @@ const Provider = ({children}) => {
             setFuncionFiltradoProfesores,
             funcionFiltradoTrabajos, 
             setFuncionFiltradoTrabajos,
-            cargando
+            alumnosFiltrados,
+            setAlumnosFiltrados
         }}>
             {children}
         </ProviderContext.Provider>

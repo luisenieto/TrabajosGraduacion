@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {TableContainer} from '@mui/material';
 import {Paper} from '@mui/material';
 import { Table } from '@mui/material';
@@ -45,6 +45,20 @@ const Trabajos = (props) => {
         setearOrden(esAscendente ? 'desc' : 'asc');
         setearOrdenarPor(propiedad);
     }
+
+    useEffect(() => {
+        //el código a continuación se ejecuta cuando se desmonta el componente
+        //permite volver a mostrar todos los trabajos
+        return () => {
+            setFuncionFiltradoTrabajos({
+                funcion : items => {                  
+                    return items;
+                }
+            });
+        }
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps 
+    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
+
 
     const buscarOnChange = evento => {
         let valor = evento.target.value;

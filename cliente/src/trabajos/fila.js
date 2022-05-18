@@ -62,7 +62,7 @@ const Fila = ({trabajo, setearOpenPopup}) => {
                         {abierto ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
                     </IconButton>
                 </TableCell>
-                <TableCell>                        
+                <TableCell sx = {{maxWidth : 5}}>                        
                     <IconButton
                         size = 'small'
                         onClick = {() => botonEditarClic(_id)}
@@ -70,7 +70,7 @@ const Fila = ({trabajo, setearOpenPopup}) => {
                         <RiEditLine />
                     </IconButton>                        
                 </TableCell>
-                <TableCell>
+                <TableCell sx = {{maxWidth : 5}}>
                     <IconButton
                         size = 'small'
                         onClick = {() => botonBorrarClic()}
@@ -78,13 +78,13 @@ const Fila = ({trabajo, setearOpenPopup}) => {
                         <GoTrashcan />
                     </IconButton>
                 </TableCell>
-                <TableCell align = 'left'>{titulo}</TableCell>
-                <TableCell align = 'center' sx = {{maxWidth : 60}}>
+                <TableCell align = 'left' sx = {{maxWidth : 200}}>{titulo}</TableCell>
+                <TableCell align = 'center' sx = {{maxWidth : 20}}>
                     <MostrarAreas areasDelTrabajo = {areas} />
                 </TableCell>
-                <TableCell align = 'left'>{formatearFecha(fechaPresentacion)}</TableCell>
-                <TableCell align = 'center'>{formatearFecha(fechaAprobacion)}</TableCell>
-                <TableCell align = 'center'>{fechaFinalizacion ? formatearFecha(fechaFinalizacion) : '-'}</TableCell>
+                <TableCell align = 'left' sx = {{maxWidth : 20}}>{formatearFecha(fechaPresentacion)}</TableCell>
+                <TableCell align = 'center' sx = {{maxWidth : 20}}>{formatearFecha(fechaAprobacion)}</TableCell>
+                <TableCell align = 'center' sx = {{maxWidth : 20}}>{fechaFinalizacion ? formatearFecha(fechaFinalizacion) : '-'}</TableCell>
             </TableRow> 
             <TableRow>
                 <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {8}>

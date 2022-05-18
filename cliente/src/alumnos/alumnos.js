@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {TableContainer} from '@mui/material';
 import {Paper} from '@mui/material';
 import { Table } from '@mui/material';
@@ -16,6 +16,7 @@ import Alerta from './alerta';
 import { ProviderContext } from '../provider';
 import { BsSearch } from 'react-icons/bs';
 import { InputAdornment } from '@mui/material';
+import FiltrarPorTrabajos from './filtrarPorTrabajos';
 
 //Componente que muestra todo el listado de alumnos
 const Alumnos = (props) => {
@@ -44,6 +45,19 @@ const Alumnos = (props) => {
     });
     //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)    
 
+    useEffect(() => {
+        //el código a continuación se ejecuta cuando se desmonta el componente
+        //permite volver a mostrar todos los alumnos
+        return () => {
+            setFuncionFiltradoAlumnos({
+                funcion : items => {                  
+                    return items;
+                }
+            });
+        }
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps 
+    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
+
     const clases = useStyles(); 
     
     //configura el criterio de ordenamiento en asc o desc para ordenar los alumnos
@@ -53,12 +67,13 @@ const Alumnos = (props) => {
     }
 
     //setFuncionFiltradoAlumnos() guarda un objeto que tiene la definición de una función
-    //esa función recibe un conjunto de valores (items)
+    //esta función recibe un conjunto de valores (items)
     //Si lo que hay en el campo de búsqueda está vacío devuelve todos los ítems
     //y si no, devuelve los ítems que contengan lo que está en el campo de texto
     //Entonces, si ítems vale el vector con todos los alumnos
     //la función lo devolverá entero si no hay nada en el campo de búsqueda
     //u otro vector donde todos los alumnos tengan un apellido que contenga lo que hay en el campo de búsqueda
+    //CuerpoTabla es quien manda el vector de alumnos
     const buscarOnChange = evento => {
         let valor = evento.target.value;
         setFuncionFiltradoAlumnos({
@@ -70,7 +85,7 @@ const Alumnos = (props) => {
             }
         });
     }
-
+         
     return (
         <Box sx = {{marginTop : 3, width : '100%'}}>
             <Paper sx = {{width : '100%', marginBottom : 2}} elevation = {3}>
@@ -79,7 +94,7 @@ const Alumnos = (props) => {
                         estadoAlerta = {estadoAlerta}
                         setEstadoAlerta = {setEstadoAlerta}
                     />               
-                    <Grid item xs = {12}>
+                    <Grid item xs = {6}> 
                         <TextField 
                             id = "buscar-por-apellido"
                             label = "Buscar por apellido"
@@ -94,6 +109,9 @@ const Alumnos = (props) => {
                             }}
                             className = {clases.campoBuscar}
                             onChange = {evento => buscarOnChange(evento)}/>
+                    </Grid>
+                    <Grid item xs = {6}>
+                        <FiltrarPorTrabajos />
                     </Grid>
                     <Grid item xs = {12}>                        
                         <TableContainer sx = {{ maxHeight: 440 }}>
@@ -130,7 +148,7 @@ const Alumnos = (props) => {
                         <Button 
                             variant = 'contained' 
                             className = {clases.botonFinal} 
-                            onClick = {() => props.history.push('/alumno/nuevo')}
+                            onClick = { () => props.history.push('/alumno/nuevo') }
                         >
                             Nuevo Alumno
                         </Button>

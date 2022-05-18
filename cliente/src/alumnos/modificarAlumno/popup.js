@@ -12,7 +12,7 @@ import { constantesAlumnos } from '../../config/constantes';
 
 //Componente que permite la modificación de alumnos
 const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
-    const {alumno, alumnos, setearAlumnos} = useContext(ProviderContext);
+    const {alumno, alumnos, setearAlumnos, setAlumnosFiltrados} = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         setearOpenPopup({
@@ -62,6 +62,7 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     }                    
                 });
                 setearAlumnos(alumnosUpdate); 
+                setAlumnosFiltrados(alumnosUpdate);
             }
         });
     }

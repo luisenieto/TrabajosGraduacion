@@ -27,8 +27,6 @@ const Popup = ({titulo, texto, openPopup, setearOpenPopup, setEstadoAlerta}) => 
             })
         }
         else {
-            //console.log(`${ruta}${alumno._id}`);  
-            //console.log(alumno);          
             axios.delete(`${ruta}${alumno._id}`).then(response => {
                 if (response.data) {
                     const index = alumnos.findIndex(a => a._id === response.data._id);
