@@ -14,7 +14,7 @@ import { constantesAlumnos, constantesTrabajos } from '../config/constantes';
 //en caso que se pueda, lo borra
 //si no se puede borrar el alumno muestra un mensaje
 const Popup = ({titulo, texto, openPopup, setearOpenPopup, setEstadoAlerta}) => {
-    const {alumno, alumnos, setearAlumnos, trabajos} = useContext(ProviderContext);
+    const {alumno, alumnos, setearAlumnos, setAlumnosFiltrados, trabajos} = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         const ruta = '/api/alumnos/borrar?id=';
@@ -33,6 +33,7 @@ const Popup = ({titulo, texto, openPopup, setearOpenPopup, setEstadoAlerta}) => 
                     const alumnosUpdate = [...alumnos];
                     alumnosUpdate.splice(index, 1);                
                     setearAlumnos(alumnosUpdate);
+                    setAlumnosFiltrados(alumnosUpdate);
                 }
             });
         }        

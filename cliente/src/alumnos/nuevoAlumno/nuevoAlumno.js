@@ -13,7 +13,7 @@ import axios from 'axios';
 
 //Componente que se encarga de mostrar el formulario para la creación, y de la creación de alumnos
 const NuevoAlumno = () => {
-    const {alumno, setearAlumno, alumnos, setearAlumnos} = useContext(ProviderContext);
+    const {alumno, setearAlumno, alumnos, setearAlumnos, setAlumnosFiltrados} = useContext(ProviderContext);
 
     const [estadoAlerta, setEstadoAlerta] = useState({
         gravedad : 'error',
@@ -77,6 +77,7 @@ const NuevoAlumno = () => {
                     
                 });
                 setearAlumnos(alumnosUpdate); 
+                setAlumnosFiltrados(alumnosUpdate);
             }
         });            
     }
