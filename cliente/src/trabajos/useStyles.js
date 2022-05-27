@@ -9,6 +9,9 @@ const useStyles = makeStyles(tema => ({
         marginLeft: tema.spacing(1),
         width : '50%'
     },
+    autoCompleteFiltrar : {
+        margin : tema.spacing(1)
+    },
     campoTitulo : {
         marginTop: tema.spacing(1),
         marginRight: tema.spacing(1),

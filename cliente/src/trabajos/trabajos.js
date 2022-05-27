@@ -17,6 +17,7 @@ import { Chip } from '@mui/material';
 import { Stack } from '@mui/material';
 import { BsSearch } from 'react-icons/bs';
 import { InputAdornment } from '@mui/material';
+import FiltrarPorTrabajos from './filtrarPorTrabajos';
 
 //Componente que muestra todo el listado de trabajos
 const Trabajos = (props) => {   
@@ -76,7 +77,7 @@ const Trabajos = (props) => {
         <Box sx = {{marginTop : 3, width : '100%'}}>                                
             <Paper sx = {{width : '100%', marginBottom : 2}} elevation = {3}>
                 <Grid container spacing = {1}>
-                    <Grid item xs = {12}>
+                    <Grid item lg = {6} sm = {12} xs = {12}>
                         <TextField 
                             id = "buscar-por-titulo"
                             label = "Buscar por título"
@@ -90,8 +91,12 @@ const Trabajos = (props) => {
                                 )
                             }}
                             className = {clases.campoBuscar}
-                            onChange = {evento => buscarOnChange(evento)}/>
-                    </Grid>                    
+                            onChange = {evento => buscarOnChange(evento)}
+                        />
+                    </Grid> 
+                    <Grid item lg = {6} sm = {12} xs = {12}>
+                        <FiltrarPorTrabajos />
+                    </Grid>                   
                     <Grid item xs = {12}>
                         <TableContainer sx = {{ maxHeight: 400 }}>
                             <Table stickyHeader sx = {{minWidth : 750}} aria-labelledby = 'tableTitle' size = 'medium'>

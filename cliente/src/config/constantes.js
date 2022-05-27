@@ -81,7 +81,14 @@ const constantesTrabajos = {
     MENSAJE_CONFIRMAR_FINALIZACION : '¿Confirma la finalización del trabajo: ',
     MENSAJE_CONFIRMAR_MODIFICACION : '¿Confirma la modificación del trabajo: ',
     MENSAJE_CONFIRMAR_BAJA : '¿Confirma la baja del trabajo: ',
-    ANIO_PRIMER_TRABAJO : 2013
+    ANIO_PRIMER_TRABAJO : 2013,
+    FILTRAR_POR : 'Filtrar por',
+    FILTRAR_POR_TODOS : 'Todos los trabajos',
+    FILTRAR_POR_CANCELADOS : 'Trabajos cancelados',
+    FILTRAR_POR_SIN_FINALIZAR : 'Trabajos sin finalizar',
+    FILTRAR_POR_FINALIZADOS : 'Trabajos finalizados',
+    TITULO_HOME1 : 'Trabajos de Graduación',
+    TITULO_HOME2 : 'Ing. en Computación'
 }
 
 const constantesAlumnos = {

@@ -8,7 +8,7 @@ import Fila from './fila';
 //Componente que muestra el cuerpo de la tabla donde se listan todos los trabajos
 //Cada fila del cuerpo de la tabla se muestra mediante el componente Fila
 const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup}) => {
-    const {trabajos, funcionFiltradoTrabajos} = useContext(ProviderContext);
+    const {trabajosFiltrados, funcionFiltradoTrabajos} = useContext(ProviderContext);
 
     //Permite ordenar en orden ascendente o descendente
     function comparadorDescendente(a, b, ordenarPor) {
@@ -32,14 +32,14 @@ const CuerpoTabla = ({ordenarPor, orden, pagina, filasPorPagina, setearOpenPopup
     // Para evitar que la última página haga un salto cuando haya filas vacías
     const filasVacias = pagina > 0 
         ? 
-            Math.max(0, (1 + pagina) * filasPorPagina - trabajos.length) 
+            Math.max(0, (1 + pagina) * filasPorPagina - trabajosFiltrados.length) 
         : 
             0;
 
     return (
         <TableBody>
             {
-                funcionFiltradoTrabajos.funcion(trabajos).slice().sort(obtenerComparador(orden, ordenarPor))
+                funcionFiltradoTrabajos.funcion(trabajosFiltrados).slice().sort(obtenerComparador(orden, ordenarPor))
                 .slice(pagina * filasPorPagina, pagina * filasPorPagina + filasPorPagina)
                 .map((trabajo, i) => {                        
                     return (

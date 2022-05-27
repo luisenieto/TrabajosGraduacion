@@ -63,6 +63,9 @@ const Provider = ({children}) => {
     const [alumnosFiltrados, setAlumnosFiltrados] = useState([]);
     //tiene todos los alumnos, o los alumnos que no finalizaron sus trabajos, o los alumnos que sí finalizaron sus trabajos
 
+    const [trabajosFiltrados, setTrabajosFiltrados] = useState([]);
+    //tiene todos los trabajos, o los que fueron cancelados, o los que están sin finalizar, o los que están finalizados
+
     const [funcionFiltradoProfesores, setFuncionFiltradoProfesores] = useState({
         funcion : items => { return items }
     });
@@ -118,6 +121,7 @@ const Provider = ({children}) => {
         const ruta = '/api/trabajos/listarrango?desde=' + desdeAnio.toString() + '&hasta=' + hastaAnio.toString();
         axios.get(ruta).then(response => {  
             setearTrabajos(response.data);
+            setTrabajosFiltrados(response.data); //por defecto trabajosFiltrados tiene todos los trabajos
         });
     } 
         
@@ -338,7 +342,9 @@ const Provider = ({children}) => {
             setAlumnosFiltrados,
             cargando,
             estadoAlerta, 
-            setEstadoAlerta
+            setEstadoAlerta,
+            trabajosFiltrados,
+            setTrabajosFiltrados
         }}>
             {children}
         </ProviderContext.Provider>

@@ -82,6 +82,16 @@ router.get('/trabajos/listarsinfinalizar', (request, response) => {
     });
 });
 
+//ruta para listar todos los trabajos dados de baja
+router.get('/trabajos/listarbaja', (request, response) => {
+    //http://localhost:3001/api/trabajos/listarbaja
+    Trabajo.find({'alumnos.razon' : 'Dado de baja'}).exec((error, documento) => {
+        if(error)
+            return response.status(400).send(error);
+        response.status(200).send(documento);
+    });
+});
+
 //ruta para borrar un trabajo
 router.delete('/trabajos/borrar', authenticateJWT, (request, response) => {
     //http://localhost:3001/api/trabajos/borrar?id=615f24395a137070e292dc59
