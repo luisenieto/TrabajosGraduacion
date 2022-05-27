@@ -11,8 +11,8 @@ import axios from 'axios';
 import { constantesAlumnos } from '../../config/constantes';
 
 //Componente que permite la modificación de alumnos
-const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
-    const {alumno, alumnos, setearAlumnos, setAlumnosFiltrados} = useContext(ProviderContext);
+const Popup = ({titulo, openPopup, setearOpenPopup, alumno}) => {    
+    const {alumnos, setearAlumnos, setearAlumno, setAlumnosFiltrados, setEstadoAlerta} = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         setearOpenPopup({
@@ -26,7 +26,8 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                 gravedad : 'error',
                 titulo : 'Error',
                 texto : resultado,
-                mostrar : true
+                mostrar : true,
+                botonesInhabilitados : true
             });
             return;  
         } 
@@ -37,7 +38,8 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     gravedad : 'success',
                     titulo : titulo,
                     texto : `${constantesAlumnos.MENSAJE_MODIFICACION}`,
-                    mostrar : true
+                    mostrar : true,
+                    botonesInhabilitados : true
                 });
                 let alumnosUpdate = [...alumnos];
                 for(let i in alumnosUpdate) {
@@ -61,6 +63,7 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                             return 0;
                     }                    
                 });
+                setearAlumno(alumno);
                 setearAlumnos(alumnosUpdate); 
                 setAlumnosFiltrados(alumnosUpdate);
             }

@@ -11,8 +11,10 @@ import { validarTrabajoParaCreacion } from '../validaciones';
 
 //Componente que se encarga de mostrar los botones Aceptar y Cancelar en el formulario para la creación de un trabajo
 //También se encarga de la creación del trabajo
-const Botones = ({setEstadoAlerta}) => {
-    const {trabajo, trabajos, setearTrabajos} = useContext(ProviderContext);
+//const Botones = ({setEstadoAlerta}) => {
+const Botones = ({trabajo}) => {
+    //const {trabajo, trabajos, setearTrabajos, setEstadoAlerta} = useContext(ProviderContext);
+    const {trabajos, setearTrabajos, setearTrabajo, estadoAlerta, setEstadoAlerta} = useContext(ProviderContext);
     let history;
     const clases = useStyles();
 
@@ -23,11 +25,13 @@ const Botones = ({setEstadoAlerta}) => {
     const botonAceptar = () => {
         let resultado;
         if ((resultado = validarTrabajoParaCreacion(trabajo, trabajos)) !== constantesTrabajos.OK) {
+            setearTrabajo(trabajo);
             setEstadoAlerta({
                 gravedad : 'error',
                 titulo : 'Error',
                 texto : resultado,
-                mostrar : true
+                mostrar : true,
+                botonesInhabilitados : true
             });
             return;                
         }
@@ -67,7 +71,8 @@ const Botones = ({setEstadoAlerta}) => {
                     gravedad : 'success',
                     titulo : 'Nuevo trabajo',
                     texto : `Se creó el trabajo "${response.data.titulo}"`,
-                    mostrar : true
+                    mostrar : true,
+                    botonesInhabilitados : true
                 });
                 const trabajosUpdate = [...trabajos];
                 trabajosUpdate.push(response.data);
@@ -80,6 +85,7 @@ const Botones = ({setEstadoAlerta}) => {
                     else    
                         return 0;
                 });
+                setearTrabajo(trabajo);
                 setearTrabajos(trabajosUpdate); 
             }
         });        
@@ -91,13 +97,21 @@ const Botones = ({setEstadoAlerta}) => {
                 <Divider />                                                       
             </Grid>
             <Grid item xs = {6}>
-                <Button variant="contained" className = {clases.botonAceptar} onClick = {() => botonAceptar()}
+                <Button 
+                    variant="contained" 
+                    className = {clases.botonAceptar} 
+                    onClick = {() => botonAceptar()}
+                    disabled = {estadoAlerta.botonesInhabilitados}
                 >
                     {constantesTrabajos.ACEPTAR}
                 </Button>
             </Grid>
             <Grid item xs = {6}>
-                <Button variant="contained" className = {clases.botonCancelar} onClick = {() => botonCancelar()}
+                <Button 
+                    variant="contained" 
+                    className = {clases.botonCancelar} 
+                    onClick = {() => botonCancelar()}
+                    disabled = {estadoAlerta.botonesInhabilitados}
                 >
                     {constantesTrabajos.CANCELAR}
                 </Button>

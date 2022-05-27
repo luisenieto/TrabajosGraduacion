@@ -9,8 +9,7 @@ import useStyles from '../useStyles';
 import {constantesTrabajos} from '../../config/constantes';
 
 //Componente que se encarga de mostrar los campos para el tutor y cotutor del trabajo en el formulario
-const TutorYCotutor = () => {
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+const TutorYCotutor = ({trabajo, setearTrabajo}) => {    
     const {tutores, cotutores} = trabajo;
     //tutores: tutores del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
     const {profesores} = useContext(ProviderContext);

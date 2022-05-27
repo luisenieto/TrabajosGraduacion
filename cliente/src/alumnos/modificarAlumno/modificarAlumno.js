@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { ProviderContext } from '../../provider';
 import useStyles from '../useStyles';
 import { Paper } from '@mui/material';
@@ -7,14 +7,14 @@ import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import { constantesAlumnos, constantesTrabajos } from '../../config/constantes';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
 import Alerta from '../alerta';
 import Popup from './popup';
 import { apellidoYNombreOnKeyDown, dniYCXOnKeyDown, apellidoYNombreOnPaste, dniYCXOnPaste } from '../validaciones';
 
 //Componente que se encarga de mostrar el formulario para la modificación de alumnos
 const ModificarAlumno = (props) => {
-    const {alumno, setearAlumno} = useContext(ProviderContext);
+    const {alumno, estadoAlerta} = useContext(ProviderContext);
+    const [unAlumno, setearUnAlumno] = useState(alumno);
 
     const [openPopup, setearOpenPopup] = useState({
         mostrar : false,
@@ -22,56 +22,36 @@ const ModificarAlumno = (props) => {
     });
     //controla la visibilidad del popup (para confirmar si se guarda la modificación)
 
-    const [estadoAlerta, setEstadoAlerta] = useState({
-        gravedad : 'error',
-        titulo : '',
-        texto : '',
-        mostrar : false
-    });
-    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)
-
     const history = useHistory();
     const clases = useStyles(); 
 
-    useEffect(() => {
-        const _id = props.match.params.id;
-        const ruta = `/api/alumnos?id=${_id}`;
-        axios.get(ruta).then(response => {
-            setearAlumno(response.data);
-        });
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps    
-    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
-
     const botonCancelar = () => history.push('/alumnos/');
 
-    const botonAceptar = () => {        
+    const botonAceptar = () => {    
         setearOpenPopup({
             mostrar : true,
             texto : `${constantesAlumnos.MENSAJE_CONFIRMAR_MODIFICACION}`
-        })
+        });
     }
 
     return (
         <>
             {
-                alumno ?
+                unAlumno ?
                     <Paper className = {clases.pageContent}>
                         <form>
                             <Grid container spacing = {1}>
-                                <Alerta 
-                                    estadoAlerta = {estadoAlerta}
-                                    setEstadoAlerta = {setEstadoAlerta}
-                                />
+                                <Alerta />
                                 <Grid item lg = {6} sm = {12} xs = {12}>
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Apellidos'
-                                        value = {alumno.apellidos}
+                                        value = {unAlumno.apellidos}
                                         className = {clases.campoApellidos}
                                         inputProps = {{
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'apellidos' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'apellidos' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
@@ -79,12 +59,12 @@ const ModificarAlumno = (props) => {
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Nombres'
-                                        value = {alumno.nombres}
+                                        value = {unAlumno.nombres}
                                         className = {clases.campoNombres}
                                         inputProps = {{
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'nombres' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'nombres' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
@@ -93,12 +73,12 @@ const ModificarAlumno = (props) => {
                                         InputProps = {{disabled: true}}
                                         variant = 'outlined'
                                         label = 'DNI'
-                                        value = {alumno.dni}
+                                        value = {unAlumno.dni}
                                         className = {clases.campoDNI}
                                         inputProps = {{
                                             onKeyDown : (evento) => {dniYCXOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'dni' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'dni' : evento.target.value})}
                                         onPaste = {evento => dniYCXOnPaste(evento)}
                                     />
                                 </Grid>
@@ -106,40 +86,47 @@ const ModificarAlumno = (props) => {
                                     <TextField
                                         variant = 'outlined'
                                         label = 'CX'
-                                        value = {alumno.cx}
+                                        value = {unAlumno.cx}
                                         className = {clases.campoCX}
                                         inputProps = {{
                                             onKeyDown : (evento) => {dniYCXOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'cx' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'cx' : evento.target.value})}
                                         onPaste = {evento => dniYCXOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {6}>
-                                    <Button variant="contained" className = {clases.botonAceptar} onClick = {() => botonAceptar()}
+                                    <Button variant="contained" 
+                                        className = {clases.botonAceptar} 
+                                        onClick = {() => botonAceptar()}
+                                        disabled = {estadoAlerta.botonesInhabilitados}
                                     >
                                         {constantesAlumnos.ACEPTAR}                    
                                     </Button>
                                 </Grid>            
                                 <Grid item lg = {6} sm = {6} xs = {6}>
-                                    <Button variant="contained" className = {clases.botonCancelar} onClick = {() => botonCancelar()}
+                                    <Button variant="contained" 
+                                        className = {clases.botonCancelar} 
+                                        onClick = {() => botonCancelar()}
+                                        disabled = {estadoAlerta.botonesInhabilitados}
                                     >
                                         {constantesAlumnos.CANCELAR}
                                     </Button>
                                 </Grid> 
                                 <Popup 
-                                    titulo = {constantesTrabajos.TITULO_APLICACION}
+                                    titulo = {constantesTrabajos.TITULO_APLICACION} 
                                     openPopup = {openPopup}
                                     setearOpenPopup = {setearOpenPopup}
-                                    setEstadoAlerta = {setEstadoAlerta}
-                                />                                                                                                             
+                                    alumno = {unAlumno}
+                                    // setEstadoAlerta = {setEstadoAlerta}
+                                />
                             </Grid>
                         </form>
                     </Paper>
                 :
                     null
             }
-        </>
+        </>        
     )
 }
 

@@ -21,8 +21,7 @@ import { DialogActions } from '@mui/material';
 import { Button } from '@mui/material';
 
 //Componente que se encarga de mostrar los campos para los alumnos del trabajo en el formulario
-const Alumnos = () => {
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+const Alumnos = ({trabajo, setearTrabajo}) => {
     const {fechaAprobacion, fechaFinalizacion} = trabajo;
     const alumnosTrabajo = trabajo.alumnos;
     //alumnosTrabajo: alumnos del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]

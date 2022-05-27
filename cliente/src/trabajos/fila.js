@@ -33,6 +33,7 @@ const Fila = ({trabajo, setearOpenPopup}) => {
     //redirige a la ruta del tipo http://localhost:3001/api/trabajos?id=615f24395a137070e292dc5a
     //que permite mostrar un determinado trabajo
     const botonEditarClic = (_id) => {
+        setearTrabajo(trabajo);
         history.push(`/trabajos/${_id}`);       
     }
 

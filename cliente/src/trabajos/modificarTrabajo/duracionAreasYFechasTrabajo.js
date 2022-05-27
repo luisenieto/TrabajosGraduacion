@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import { Grid } from '@mui/material';
 import { TextField } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
@@ -9,11 +9,9 @@ import DateAdapter from '@mui/lab/AdapterDateFns';
 import esLocale from 'date-fns/locale/es';
 import useStyles from '../useStyles';
 import { constantesTrabajos } from '../../config/constantes';
-import { ProviderContext } from '../../provider';
 
 //Componente que se encarga de mostrar los campos para la duración, áreas y fechas del trabajo en el formulario
-const DuracionAreasYFechas = () => {    
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {    
     const {duracion, areas, fechaPresentacion, fechaAprobacion, fechaFinalizacion} = trabajo;
     const [valorFechaFinalizacion, setearValorFechaFinalizacion] = useState(fechaFinalizacion ? fechaFinalizacion : null);
     //maneja el datepicker fechaFinalizacion

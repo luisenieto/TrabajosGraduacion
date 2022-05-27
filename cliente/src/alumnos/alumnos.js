@@ -20,7 +20,7 @@ import FiltrarPorTrabajos from './filtrarPorTrabajos';
 
 //Componente que muestra todo el listado de alumnos
 const Alumnos = (props) => {
-    const {setFuncionFiltradoAlumnos} = useContext(ProviderContext);
+    const {setFuncionFiltradoAlumnos, setearAlumno} = useContext(ProviderContext);
 
     const ordenarPor = 'apellidos';
     //sólo se pueden ordenar los alumnos por apellido
@@ -36,14 +36,6 @@ const Alumnos = (props) => {
 
     const [openPopup, setearOpenPopup] = useState(false);
     //controla la visibilidad del popup (pregunta si se confirma el borrado del alumno)
-
-    const [estadoAlerta, setEstadoAlerta] = useState({
-        gravedad : 'error',
-        titulo : '',
-        texto : '',
-        mostrar : false
-    });
-    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)    
 
     useEffect(() => {
         //el código a continuación se ejecuta cuando se desmonta el componente
@@ -90,11 +82,8 @@ const Alumnos = (props) => {
         <Box sx = {{marginTop : 3, width : '100%'}}>
             <Paper sx = {{width : '100%', marginBottom : 2}} elevation = {3}>
                 <Grid container spacing = {1}>
-                    <Alerta 
-                        estadoAlerta = {estadoAlerta}
-                        setEstadoAlerta = {setEstadoAlerta}
-                    />               
-                    <Grid item xs = {6}> 
+                    <Alerta /> 
+                    <Grid item lg = {6} sm = {12} xs = {12}> 
                         <TextField 
                             id = "buscar-por-apellido"
                             label = "Buscar por apellido"
@@ -110,7 +99,7 @@ const Alumnos = (props) => {
                             className = {clases.campoBuscar}
                             onChange = {evento => buscarOnChange(evento)}/>
                     </Grid>
-                    <Grid item xs = {6}>
+                    <Grid item lg = {6} sm = {12} xs = {12}>
                         <FiltrarPorTrabajos />
                     </Grid>
                     <Grid item xs = {12}>                        
@@ -141,14 +130,21 @@ const Alumnos = (props) => {
                             texto = {constantesAlumnos.MENSAJE_CONFIRMAR_BORRADO}
                             openPopup = {openPopup}
                             setearOpenPopup = {setearOpenPopup}
-                            setEstadoAlerta = {setEstadoAlerta}
                         />
                     </Grid>
                     <Grid item xs = {12}>
                         <Button 
                             variant = 'contained' 
                             className = {clases.botonFinal} 
-                            onClick = { () => props.history.push('/alumno/nuevo') }
+                            onClick = { () => {
+                                setearAlumno({
+                                    apellidos : '',
+                                    nombres : '',
+                                    dni : '',
+                                    cx : ''
+                                });
+                                props.history.push('/alumno/nuevo');
+                            }}
                         >
                             Nuevo Alumno
                         </Button>

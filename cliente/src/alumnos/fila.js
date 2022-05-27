@@ -213,6 +213,7 @@ const Fila = ({unAlumno, setearOpenPopup}) => {
     //redirige a la ruta del tipo http://localhost:3001/api/alumnos?id=615f24395a137070e292dc5a
     //que permite mostrar un determinado alumno
     const botonEditarClic = (_id) => {
+        setearAlumno(unAlumno);
         history.push(`/alumnos/${_id}`);       
     }
 

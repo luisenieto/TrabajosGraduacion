@@ -21,8 +21,7 @@ import { IconButton } from '@mui/material';
 import { Tooltip } from '@mui/material';
 
 //Componente que se encarga de mostrar el campo para el cotutor del trabajo en el formulario
-const Cotutores = () => {
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+const Cotutores = ({trabajo, setearTrabajo}) => {
     const {cotutores, fechaAprobacion, fechaFinalizacion} = trabajo;
     //cotutores: cotutores del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
     const {profesores} = useContext(ProviderContext);

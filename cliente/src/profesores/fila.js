@@ -206,6 +206,7 @@ const Fila = ({unProfesor, setearOpenPopup}) => {
     //redirige a la ruta del tipo http://localhost:3001/api/profesores?id=615f24395a137070e292dc5a
     //que permite mostrar un determinado profesor
     const botonEditarClic = (_id) => {
+        setearProfesor(unProfesor);
         history.push(`/profesores/${_id}`);       
     }
 

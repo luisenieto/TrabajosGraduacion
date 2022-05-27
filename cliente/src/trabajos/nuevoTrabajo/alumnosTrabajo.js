@@ -9,8 +9,7 @@ import useStyles from '../useStyles';
 import { constantesTrabajos } from '../../config/constantes';
 
 //Componente que se encarga de mostrar los campos para los alumnos del trabajo en el formulario
-const Alumnos = () => {
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+const Alumnos = ({trabajo, setearTrabajo}) => {
     const alumnosTrabajo = trabajo.alumnos;
     
     //alumnosTrabajo: alumnos del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]

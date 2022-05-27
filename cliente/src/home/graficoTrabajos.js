@@ -27,7 +27,7 @@ const GraficoTrabajos = () => {
     return (
         <>
             {                
-                totalesTrabajos.length > 0 ? 
+                totalesTrabajos && totalesTrabajos.length > 0 ? 
                     <div style = {{height: 500}}>
                         <ResponsivePie
                             data = {totalesTrabajos}

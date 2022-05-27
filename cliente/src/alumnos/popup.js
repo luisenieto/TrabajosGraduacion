@@ -13,8 +13,8 @@ import { constantesAlumnos, constantesTrabajos } from '../config/constantes';
 //Componente que se encarga de preguntar si se quiere borrar un alumno
 //en caso que se pueda, lo borra
 //si no se puede borrar el alumno muestra un mensaje
-const Popup = ({titulo, texto, openPopup, setearOpenPopup, setEstadoAlerta}) => {
-    const {alumno, alumnos, setearAlumnos, setAlumnosFiltrados, trabajos} = useContext(ProviderContext);
+const Popup = ({titulo, texto, openPopup, setearOpenPopup}) => {
+    const {alumno, alumnos, setearAlumnos, setAlumnosFiltrados, trabajos, setEstadoAlerta} = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         const ruta = '/api/alumnos/borrar?id=';

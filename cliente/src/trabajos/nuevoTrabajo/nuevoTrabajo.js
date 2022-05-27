@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import { Paper } from '@mui/material';
 import { Grid } from '@mui/material';
 import { ProviderContext } from '../../provider';
@@ -13,118 +13,54 @@ import Alerta from '../alerta';
 
 //Componente que se encarga de mostrar el formulario para la creación, y de la creación de trabajos
 //Usa los componentes TituloTrabajo, DuracionAreasYFechas, TutorYCotutor, Jurado, Alumnos, Botones y Alerta
-const NuevoTrabajo = () => {
-    const clases = useStyles();    
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
-    const [estadoAlerta, setEstadoAlerta] = useState({
-        gravedad : 'error',
-        titulo : '',
-        texto : '',
-        mostrar : false
-    });
-    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)
+const NuevoTrabajo = () => {     
+    const {trabajo} = useContext(ProviderContext);
 
-    useEffect(() => {
-        setearTrabajo({
-            titulo : '',
-            duracion : '',
-            areas : '',
-            fechaPresentacion : '',
-            fechaAprobacion : '',
-            fechaFinalizacion : '',
-            tutores : [{
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            }],
-            cotutores : [{
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            }],
-            jurado : [{
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            },
-            {
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            },
-            {
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            }],
-            alumnos : [{
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            },
-            {
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            },
-            {
-                apellidos : null,
-                nombres : null,
-                dni : null,
-                desde : null,
-                hasta : null,
-                razon : null
-            }]
-        });
+    const [unTrabajo, setearUnTrabajo] = useState(trabajo);
 
+    //useEffect(() => {
         //el código a continuación se ejecuta cuando se desmonta el componente
         //permite resetear los valores para un trabajo
-        return () => {
-            setearTrabajo(null);
-        }
+        // return () => {
+        //     setearTrabajo(null);
+        // }
         
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps    
+    //}, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
+
+    const clases = useStyles();   
 
     return (
         <>
             {
-                trabajo ?
+                unTrabajo ?
                     <Paper className = {clases.pageContent}>
                         <form>
                             <Grid container spacing = {1}>
-                                <Alerta 
-                                    estadoAlerta = {estadoAlerta}
-                                    setEstadoAlerta = {setEstadoAlerta}
+                                <Alerta />
+                                <TituloTrabajo 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
                                 />
-                                <TituloTrabajo />
-                                <DuracionAreasYFechas />                                
-                                <TutorYCotutor />
-                                <Jurado />
-                                <Alumnos />
-                                <Botones                                     
-                                    setEstadoAlerta = {setEstadoAlerta}
+                                <DuracionAreasYFechas 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />                                
+                                <TutorYCotutor 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <Jurado 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <Alumnos 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <Botones 
+                                    trabajo = {unTrabajo}                                    
+                                    //setEstadoAlerta = {setEstadoAlerta}
                                 />                                
                             </Grid>
                         </form>

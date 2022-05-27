@@ -1,13 +1,10 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { Grid } from '@mui/material';
 import { TextField } from '@mui/material';
 import useStyles from '../useStyles';
-import { ProviderContext } from '../../provider';
 
 //Componente que se encarga de mostrar el campo para el título del trabajo en el formulario
-const TituloTrabajo = () => {    
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
-
+const TituloTrabajo = ({trabajo, setearTrabajo}) => {    
     const clases = useStyles();
     
     return (

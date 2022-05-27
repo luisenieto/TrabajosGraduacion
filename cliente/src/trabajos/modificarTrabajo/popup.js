@@ -12,8 +12,8 @@ import axios from 'axios';
 
 //Componente que muestra el popup que confirma la finalización/modificación de un trabajo
 //También se encarga de la tarea
-const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
-    const {trabajo, setearTrabajo, trabajos, setearTrabajos} = useContext(ProviderContext);
+const Popup = ({titulo, openPopup, setearOpenPopup, trabajo}) => {
+    const {trabajos, setearTrabajos, setearTrabajo, setEstadoAlerta } = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         setearOpenPopup({
@@ -42,7 +42,8 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                 gravedad : 'error',
                 titulo : 'Error',
                 texto : resultado,
-                mostrar : true
+                mostrar : true,
+                botonesInhabilitados : true
             });
             return;  
         } 
@@ -53,7 +54,8 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     gravedad : 'success',
                     titulo : titulo,
                     texto : `${texto}${response.data.titulo}`,
-                    mostrar : true
+                    mostrar : true,
+                    botonesInhabilitados : true
                 });
                 const trabajosUpdate = [...trabajos];
                 for(let i in trabajosUpdate) {
@@ -69,6 +71,7 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     else    
                         return 0;
                 });
+                setearTrabajo(trabajo);
                 setearTrabajos(trabajosUpdate); 
             }
         });
@@ -110,7 +113,8 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     gravedad : 'success',
                     titulo : titulo,
                     texto : `${texto}${response.data.titulo}`,
-                    mostrar : true
+                    mostrar : true,
+                    botonesInhabilitados : true
                 });
                 const trabajosUpdate = [...trabajos];
                 for(let i in trabajosUpdate) {

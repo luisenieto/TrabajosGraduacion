@@ -21,8 +21,7 @@ import { IconButton } from '@mui/material';
 import { Tooltip } from '@mui/material';
 
 //Componente que se encarga de mostrar los campos para el jurado del trabajo en el formulario
-const Jurado = () => {
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+const Jurado = ({trabajo, setearTrabajo}) => {
     const {jurado, fechaAprobacion, fechaFinalizacion} = trabajo;
     //jurado: jurado del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
     const {profesores} = useContext(ProviderContext);

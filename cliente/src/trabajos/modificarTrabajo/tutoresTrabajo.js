@@ -21,8 +21,7 @@ import { IconButton } from '@mui/material';
 import { Tooltip } from '@mui/material';
 
 //Componente que se encarga de mostrar el campo para el tutor del trabajo en el formulario
-const Tutores = () => {
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+const Tutores = ({trabajo, setearTrabajo}) => {
     const {tutores, fechaAprobacion, fechaFinalizacion} = trabajo;
     //tutores: tutores del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
     const {profesores} = useContext(ProviderContext);

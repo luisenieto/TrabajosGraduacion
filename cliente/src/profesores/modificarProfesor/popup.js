@@ -11,8 +11,8 @@ import axios from 'axios';
 import { constantesProfesores } from '../../config/constantes';
 
 //Componente que permite la modificación de profesores
-const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
-    const {profesor, profesores, setearProfesores} = useContext(ProviderContext);
+const Popup = ({titulo, openPopup, setearOpenPopup, profesor}) => {
+    const {profesores, setearProfesores, setearProfesor, setEstadoAlerta} = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         setearOpenPopup({
@@ -26,7 +26,8 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                 gravedad : 'error',
                 titulo : 'Error',
                 texto : resultado,
-                mostrar : true
+                mostrar : true,
+                botonesInhabilitados : true
             });
             return;  
         } 
@@ -37,7 +38,8 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     gravedad : 'success',
                     titulo : titulo,
                     texto : `${constantesProfesores.MENSAJE_MODIFICACION}`,
-                    mostrar : true
+                    mostrar : true,
+                    botonesInhabilitados : true
                 });
                 let profesoresUpdate = [...profesores];
                 for(let i in profesoresUpdate) {
@@ -62,6 +64,7 @@ const Popup = ({titulo, openPopup, setearOpenPopup, setEstadoAlerta}) => {
                     }
                     
                 });
+                setearProfesor(profesor);
                 setearProfesores(profesoresUpdate); 
             }
         });

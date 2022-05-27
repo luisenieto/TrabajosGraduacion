@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { ProviderContext } from '../../provider';
 import useStyles from '../useStyles';
 import { Paper } from '@mui/material';
@@ -7,7 +7,6 @@ import { TextField } from '@mui/material';
 import { Button } from '@mui/material';
 import { constantesProfesores, constantesTrabajos} from '../../config/constantes';
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
 import Alerta from '../alerta';
 import Popup from './popup';
 import { apellidoYNombreOnKeyDown, dniOnKeyDown, apellidoYNombreOnPaste, dniOnPaste } from '../validaciones';
@@ -15,7 +14,8 @@ import { Autocomplete } from '@mui/material';
 
 //Componente que se encarga de mostrar el formulario para la modificación de profesores
 const ModificarProfesor = (props) => {
-    const {profesor, setearProfesor} = useContext(ProviderContext);
+    const {profesor, estadoAlerta, cargos} = useContext(ProviderContext);
+    const [unProfesor, setearUnProfesor] = useState(profesor);
 
     const [openPopup, setearOpenPopup] = useState({
         mostrar : false,
@@ -23,29 +23,8 @@ const ModificarProfesor = (props) => {
     });
     //controla la visibilidad del popup (para confirmar si se guarda la modificación)
 
-    const [cargos, setCargos] = useState([]);
-
-    const [estadoAlerta, setEstadoAlerta] = useState({
-        gravedad : 'error',
-        titulo : '',
-        texto : '',
-        mostrar : false
-    });
-    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)
-
     const history = useHistory();
     const clases = useStyles(); 
-
-    useEffect(() => {
-        const _id = props.match.params.id;
-        let ruta = `/api/profesores?id=${_id}`;
-        axios.get(ruta).then(response => {
-            setearProfesor(response.data);
-        });
-        ruta = '/api/cargos/listar';
-        axios.get(ruta).then(response => setCargos(response.data));
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps    
-    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
 
     const botonCancelar = () => history.push('/profesores/');
 
@@ -59,7 +38,7 @@ const ModificarProfesor = (props) => {
     const autoCompleteOnChange = (valor) => {   
         for(let i in cargos) {
             if (valor === cargos[i].nombreCargo)
-                setearProfesor({...profesor, 
+                setearUnProfesor({...unProfesor, 
                     idCargo : cargos[i].idCargo,
                     nombreCargo : cargos[i].nombreCargo
                 });
@@ -74,24 +53,21 @@ const ModificarProfesor = (props) => {
     return (
         <>
             {
-                profesor && cargos ?
+                unProfesor && cargos ?
                     <Paper className = {clases.pageContent}>
                         <form>
                         <Grid container spacing = {1}>
-                                <Alerta 
-                                    estadoAlerta = {estadoAlerta}
-                                    setEstadoAlerta = {setEstadoAlerta}
-                                />
+                                <Alerta />
                                 <Grid item lg = {6} sm = {12} xs = {12}>
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Apellidos'
-                                        value = {profesor.apellidos}
+                                        value = {unProfesor.apellidos}
                                         className = {clases.campoApellidos}
                                         inputProps = {{
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearProfesor({...profesor, 'apellidos' : evento.target.value})}
+                                        onChange = {evento => setearUnProfesor({...unProfesor, 'apellidos' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
@@ -99,12 +75,12 @@ const ModificarProfesor = (props) => {
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Nombres'
-                                        value = {profesor.nombres}
+                                        value = {unProfesor.nombres}
                                         className = {clases.campoNombres}
                                         inputProps = {{
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearProfesor({...profesor, 'nombres' : evento.target.value})}
+                                        onChange = {evento => setearUnProfesor({...unProfesor, 'nombres' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
@@ -113,12 +89,12 @@ const ModificarProfesor = (props) => {
                                         InputProps = {{disabled: true}}                                      
                                         variant = 'outlined'
                                         label = 'DNI'
-                                        value = {profesor.dni}
+                                        value = {unProfesor.dni}
                                         className = {clases.campoDNI}
                                         inputProps = {{
                                             onKeyDown : (evento) => {dniOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearProfesor({...profesor, 'dni' : evento.target.value})}
+                                        onChange = {evento => setearUnProfesor({...unProfesor, 'dni' : evento.target.value})}
                                         onPaste = {evento => dniOnPaste(evento)}
                                     />
                                 </Grid>
@@ -131,19 +107,27 @@ const ModificarProfesor = (props) => {
                                          // id = "combo-box-tutores"
                                          //sx = {{width : 350}}
                                          renderInput = {(params) => <TextField {...params} label = {constantesProfesores.CARGO} />} 
-                                         value = {profesor ? profesor.nombreCargo : null}
+                                         value = {unProfesor ? unProfesor.nombreCargo : null}
                                          onChange = {(evento, valor) => autoCompleteOnChange(valor)}
                                          className = {clases.autoComplete}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {6}>
-                                    <Button variant="contained" className = {clases.botonAceptar} onClick = {() => botonAceptar()}
+                                    <Button 
+                                        variant="contained" 
+                                        className = {clases.botonAceptar} 
+                                        onClick = {() => botonAceptar()}
+                                        disabled = {estadoAlerta.botonesInhabilitados}
                                     >
                                         {constantesProfesores.ACEPTAR}                    
                                     </Button>
                                 </Grid>            
                                 <Grid item lg = {6} sm = {6} xs = {6}>
-                                    <Button variant="contained" className = {clases.botonCancelar} onClick = {() => botonCancelar()}
+                                    <Button 
+                                        variant="contained" 
+                                        className = {clases.botonCancelar} 
+                                        onClick = {() => botonCancelar()}
+                                        disabled = {estadoAlerta.botonesInhabilitados}
                                     >
                                         {constantesProfesores.CANCELAR}
                                     </Button>
@@ -152,7 +136,7 @@ const ModificarProfesor = (props) => {
                                     titulo = {constantesTrabajos.TITULO_APLICACION}
                                     openPopup = {openPopup}
                                     setearOpenPopup = {setearOpenPopup}
-                                    setEstadoAlerta = {setEstadoAlerta}
+                                    profesor = {unProfesor}
                                 /> 
                             </Grid>
                         </form>

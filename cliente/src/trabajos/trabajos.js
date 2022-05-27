@@ -20,7 +20,7 @@ import { InputAdornment } from '@mui/material';
 
 //Componente que muestra todo el listado de trabajos
 const Trabajos = (props) => {   
-    const { cantidadTrabajosPorEstado, setFuncionFiltradoTrabajos } = useContext(ProviderContext);
+    const { cantidadTrabajosPorEstado, setFuncionFiltradoTrabajos, setearTrabajo } = useContext(ProviderContext);
 
     const [ordenarPor, setearOrdenarPor] = useState('fechaAprobacion');
     //Se pueden ordenar los trabajos por título o fecha de aprobación
@@ -126,7 +126,81 @@ const Trabajos = (props) => {
                         <Button 
                             variant = 'contained' 
                             className = {clases.botonFinal}
-                            onClick = {() => props.history.push('/trabajo/nuevo')}
+                            onClick = {() => {
+                                setearTrabajo({
+                                    titulo : '',
+                                    duracion : '',
+                                    areas : '',
+                                    fechaPresentacion : '',
+                                    fechaAprobacion : '',
+                                    fechaFinalizacion : '',
+                                    tutores : [{
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    }],
+                                    cotutores : [{
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    }],
+                                    jurado : [{
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    },
+                                    {
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    },
+                                    {
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    }],
+                                    alumnos : [{
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    },
+                                    {
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    },
+                                    {
+                                        apellidos : null,
+                                        nombres : null,
+                                        dni : null,
+                                        desde : null,
+                                        hasta : null,
+                                        razon : null
+                                    }]
+                                });
+                                props.history.push('/trabajo/nuevo');
+                            }}
                         >
                             Nuevo Trabajo
                         </Button>

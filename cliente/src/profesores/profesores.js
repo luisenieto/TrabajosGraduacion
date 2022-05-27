@@ -19,7 +19,7 @@ import { InputAdornment } from '@mui/material';
 
 //Componente que muestra todo el listado de profesores
 const Profesores = (props) => {
-    const {setFuncionFiltradoProfesores} = useContext(ProviderContext);
+    const {setFuncionFiltradoProfesores, setearProfesor} = useContext(ProviderContext);
 
     const [ordenarPor, setearOrdenarPor] = useState('apellidos');
     //los profesores se pueden ordenar por apellido o cargo
@@ -35,15 +35,7 @@ const Profesores = (props) => {
 
     const [openPopup, setearOpenPopup] = useState(false); 
     //controla la visibilidad del popup (pregunta si se confirma el borrado del profesor)
-
-    const [estadoAlerta, setEstadoAlerta] = useState({
-        gravedad : 'error',
-        titulo : '',
-        texto : '',
-        mostrar : false
-    });  
-    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito) 
-    
+  
     useEffect(() => {
         //el código a continuación se ejecuta cuando se desmonta el componente
         //permite volver a mostrar todos los profesores
@@ -83,10 +75,7 @@ const Profesores = (props) => {
         <Box sx = {{marginTop : 3, width : '100%'}}>
             <Paper sx = {{width : '100%', marginBottom : 2}} elevation = {3}>
                 <Grid container spacing = {1}>
-                    <Alerta 
-                        estadoAlerta = {estadoAlerta}
-                        setEstadoAlerta = {setEstadoAlerta}
-                    />
+                    <Alerta />
                     <Grid item xs = {12}>
                         <TextField 
                             id = "buscar-por-apellido"
@@ -131,14 +120,21 @@ const Profesores = (props) => {
                             texto = {constantesProfesores.MENSAJE_CONFIRMAR_BORRADO}
                             openPopup = {openPopup}
                             setearOpenPopup = {setearOpenPopup}
-                            setEstadoAlerta = {setEstadoAlerta}
                         />
                     </Grid>
                     <Grid item xs = {6}>
                         <Button 
                             variant = 'contained' 
                             className = {clases.botonNuevo} 
-                            onClick = {() => props.history.push('/profesor/nuevo')}
+                            onClick = {() => {
+                                setearProfesor({
+                                    apellidos : '',
+                                    nombres : '',
+                                    dni : '',
+                                    idCargo : 1
+                                });
+                                props.history.push('/profesor/nuevo');
+                            }}
                         >
                             Nuevo Profesor
                         </Button>

@@ -5,14 +5,14 @@ import { constantesTrabajos } from './config/constantes';
 export const ProviderContext = createContext();
 
 const Provider = ({children}) => {
-    const [trabajos, setearTrabajos] = useState([]);
-    //todos los trabajos
+    const [trabajos, setearTrabajos] = useState(null);
+    //array con todos los trabajos
 
-    const [profesores, setearProfesores] = useState([]);
-    //todos los profesores
+    const [profesores, setearProfesores] = useState(null);
+    //array con todos los profesores
 
-    const [alumnos, setearAlumnos] = useState([]);
-    //todos los alumnos
+    const [alumnos, setearAlumnos] = useState(null);
+    //array con todos los alumnos
 
     const [trabajo, setearTrabajo] = useState(null);
     //un trabajo en particular
@@ -23,10 +23,13 @@ const Provider = ({children}) => {
     const [profesor, setearProfesor] = useState(null);
     //un profesor en particular
 
-    const [areas, setearAreas] = useState([]);
-    //todas las áreas
+    const [areas, setearAreas] = useState(null);
+    //array con todas las áreas
 
-    const [totalesTrabajos, setearTotalesTrabajos] = useState([]);
+    const [cargos, setearCargos] = useState(null);
+    //array con todos los cargos
+
+    const [totalesTrabajos, setearTotalesTrabajos] = useState(null);
     //array con los totales de trabajos discriminados por áreas 
     
     const [desdeAnio, setearDesdeAnio] = useState(constantesTrabajos.ANIO_PRIMER_TRABAJO); //2013
@@ -37,12 +40,12 @@ const Provider = ({children}) => {
     //año hasta el cual hacer los cálculos de los totales (año actual)
     //año hasta el cual hacer los cálculos de las estadísticas de profesores (año actual)    
 
-    const [cantidadTrabajosParaGrafico, setearCantidadTrabajosParaGrafico] = useState(0);
+    const [cantidadTrabajosParaGrafico, setearCantidadTrabajosParaGrafico] = useState(null);
     //tiene la cantidad total de trabajos que muestra el gráfico
     //se actualiza cada vez que se ejecuta el efecto que calcula los totales
     //no uso trabajos.length porque el gráfico puede estar filtrando trabajos por un rango menor de fechas
 
-    const [cantidadTrabajosPorEstado, setearCantidadTrabajosPorEstado] = useState({});
+    const [cantidadTrabajosPorEstado, setearCantidadTrabajosPorEstado] = useState(null);
     //tiene la cantidad de trabajos, discriminando:
     //los que están sin terminar (sin fechaFinalizacion)
     //los que estén finalizados (con fechaFinalizacion y al menos 1 jurado cuya razón sea "Finalización" (ver en las constantes))
@@ -70,8 +73,13 @@ const Provider = ({children}) => {
     });
     //permite filtrar los trabajos por título
 
+    const [cargando, setearCargando] = useState(true);
+    //permite manejar la ventana de splash
+    //mientras cargando sea true, se muestra la ventana de splash
+    //cuando cargando sea false, se muestra el componente Home
+
     useEffect(() => {
-        if (profesores.length === 0) 
+        if (profesores === null) 
             obtenerProfesores();
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
@@ -85,7 +93,7 @@ const Provider = ({children}) => {
     }  
        
     useEffect(() => {
-        if (alumnos.length === 0) 
+        if (alumnos === null) 
              obtenerAlumnos();
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
@@ -99,7 +107,7 @@ const Provider = ({children}) => {
     }
     
     useEffect(() => {
-        if (trabajos.length === 0) 
+        if (trabajos === null) 
              obtenerTrabajos();
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
@@ -114,7 +122,7 @@ const Provider = ({children}) => {
     } 
         
     useEffect(() => {
-        if (areas.length === 0) 
+        if (areas === null) 
              obtenerAreas();
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
@@ -128,7 +136,20 @@ const Provider = ({children}) => {
     } 
 
     useEffect(() => {
-        if (trabajos.length > 0)
+        if (cargos === null) 
+            obtenerCargos();
+    }, []); //eslint-disable-line react-hooks/exhaustive-deps    
+    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío        
+
+    const obtenerCargos = () => {
+        const ruta = '/api/cargos/listar';
+        axios.get(ruta).then(response => {   
+            setearCargos(response.data);
+        });
+    }  
+
+    useEffect(() => {
+        if (trabajos && trabajos.length > 0)
             obtenerTotalesPorArea();
     }, [trabajos, desdeAnio, hastaAnio]); //eslint-disable-line react-hooks/exhaustive-deps 
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
@@ -215,7 +236,7 @@ const Provider = ({children}) => {
     }
 
     useEffect(() => {
-        if (trabajos.length > 0)
+        if (trabajos && trabajos.length > 0)
             obtenerTotalesPorEstado();
     }, [trabajos]); //eslint-disable-line react-hooks/exhaustive-deps 
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
@@ -258,6 +279,30 @@ const Provider = ({children}) => {
         setearCantidadTrabajosPorEstado(datosTrabajosUpdate);
     }
 
+    const [estadoAlerta, setEstadoAlerta] = useState({
+        gravedad : 'error',
+        titulo : '',
+        texto : '',
+        mostrar : false,
+        botonesInhabilitados : false
+    });
+    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)
+
+    useEffect(() => {
+        if ((profesores !== null) && 
+            (alumnos !== null) && 
+            (trabajos !== null) && 
+            (areas !== null) && 
+            (cargos !== null) && 
+            (totalesTrabajos !== null) && 
+            (cantidadTrabajosParaGrafico !== null) && 
+            (cantidadTrabajosPorEstado !== null) &&
+            (cargando)) {
+            setearCargando(false);
+            }
+    }, [profesores, alumnos, trabajos, areas, cargos, totalesTrabajos, cantidadTrabajosParaGrafico, cantidadTrabajosPorEstado]); //eslint-disable-line react-hooks/exhaustive-deps  
+    
+
     return (
         <ProviderContext.Provider value = {{
             trabajos,
@@ -274,6 +319,8 @@ const Provider = ({children}) => {
             setearProfesor,
             areas, 
             setearAreas,
+            cargos, 
+            setearCargos,
             totalesTrabajos, 
             desdeAnio, 
             setearDesdeAnio,
@@ -288,7 +335,10 @@ const Provider = ({children}) => {
             funcionFiltradoTrabajos, 
             setFuncionFiltradoTrabajos,
             alumnosFiltrados,
-            setAlumnosFiltrados
+            setAlumnosFiltrados,
+            cargando,
+            estadoAlerta, 
+            setEstadoAlerta
         }}>
             {children}
         </ProviderContext.Provider>

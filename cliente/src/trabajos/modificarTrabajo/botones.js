@@ -8,8 +8,8 @@ import useStyles from '../useStyles';
 import { ProviderContext } from '../../provider';
 
 //Componente que se encarga de mostrar los botones Aceptar, Baja y Cancelar en el formulario para la modificación de un trabajo
-const Botones = ({setearOpenPopup}) => {
-    const {trabajo} = useContext(ProviderContext);
+const Botones = ({trabajo, setearOpenPopup}) => {  
+    const {estadoAlerta} = useContext(ProviderContext);  
     let history;
     const clases = useStyles();
 
@@ -39,25 +39,38 @@ const Botones = ({setearOpenPopup}) => {
     //Cuando se selecciona el botón Baja
 
     history = useHistory();
+
     return (
         <>
             <Grid item xs = {12}>
                 <Divider />                                                       
             </Grid>
             <Grid item xs = {4}>
-                <Button variant="contained" className = {clases.botonAceptar} onClick = {() => botonAceptar()}
+                <Button 
+                    variant="contained" 
+                    className = {clases.botonAceptar} 
+                    onClick = {() => botonAceptar()}
+                    disabled = {estadoAlerta.botonesInhabilitados}
                 >
                     {constantesTrabajos.ACEPTAR}                    
                 </Button>
             </Grid>            
             <Grid item xs = {4}>
-                <Button variant="contained" className = {clases.botonCancelar} onClick = {() => botonBaja()}
+                <Button 
+                    variant="contained" 
+                    className = {clases.botonCancelar} 
+                    onClick = {() => botonBaja()}
+                    disabled = {estadoAlerta.botonesInhabilitados}
                 >
                     {constantesTrabajos.DAR_DE_BAJA}
                 </Button>
             </Grid>
             <Grid item xs = {4}>
-                <Button variant="contained" className = {clases.botonFinal} onClick = {() => botonCancelar()}
+                <Button 
+                    variant="contained" 
+                    className = {clases.botonFinal} 
+                    onClick = {() => botonCancelar()}
+                    disabled = {estadoAlerta.botonesInhabilitados}
                 >
                     {constantesTrabajos.CANCELAR}
                 </Button>

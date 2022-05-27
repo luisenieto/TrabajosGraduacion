@@ -4,7 +4,7 @@ const constantesTrabajos = {
     MODIFICACION_TRABAJO : 'Modificación de trabajo',
     FINALIZACION_TRABAJO : 'Finalización de trabajo',
     BAJA_TRABAJO : 'Baja de trabajo',
-    MENSAJE_MODIFICACION : 'Se modificó el trabajo',
+    MENSAJE_MODIFICACION : 'Se modificó el trabajo ',
     MENSAJE_FINALIZACION : 'Se finalizó el trabajo ',
     MENSAJE_BAJA : 'Se dió de baja el trabajo ',
     TITULO : 'Título',

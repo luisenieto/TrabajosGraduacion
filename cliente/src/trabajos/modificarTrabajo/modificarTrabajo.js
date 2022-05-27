@@ -1,5 +1,4 @@
 import React, {useEffect, useContext, useState} from 'react';
-import axios from 'axios';
 import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
 import { ProviderContext } from '../../provider';
@@ -18,7 +17,8 @@ import Alerta from '../alerta';
 //Componente que se encarga de mostrar el formulario para la modificación, y de la modificación de trabajos
 //Usa los componentes TituloTrabajo, DuracionAreasYFechas, 
 const ModificarTrabajo = (props) => {
-    const {trabajo, setearTrabajo} = useContext(ProviderContext);
+    const {trabajo} = useContext(ProviderContext);
+    const [unTrabajo, setearUnTrabajo] = useState(trabajo);
 
     const [openPopup, setearOpenPopup] = useState({
         mostrar : false,
@@ -26,20 +26,23 @@ const ModificarTrabajo = (props) => {
     });
     //controla la visibilidad del popup 
     
-    const [estadoAlerta, setEstadoAlerta] = useState({
-        gravedad : 'error',
-        titulo : '',
-        texto : '',
-        mostrar : false
-    });
+    const clases = useStyles();  
+
+    // const [estadoAlerta, setEstadoAlerta] = useState({
+    //     gravedad : 'error',
+    //     titulo : '',
+    //     texto : '',
+    //     mostrar : false
+    // });
     //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)
     
     useEffect(() => {
-        const _id = props.match.params.id;
-        const ruta = `/api/trabajos?id=${_id}`;
-        axios.get(ruta).then(response => { 
+        // const _id = props.match.params.id;
+        // const ruta = `/api/trabajos?id=${_id}`;
+        // axios.get(ruta).then(response => { 
 
-            const trabajoUpdate = response.data;
+            //const trabajoUpdate = response.data;
+            const trabajoUpdate = unTrabajo;
             
             const tutoresUpdate = trabajoUpdate.tutores.map(tutor => ({
                 ...tutor,
@@ -73,51 +76,69 @@ const ModificarTrabajo = (props) => {
             // 'seEstaModificando' : para distinguir si se está agregando un tutor/cotutor/jurado o modificando la razón
             // 'razonOriginal' : para cuando se esté modificando la razón y se cancele el proceso
 
-            setearTrabajo({
+            setearUnTrabajo({
                 ...trabajoUpdate, 
                 tutores : tutoresUpdate, 
                 cotutores : cotutoresUpdate, 
                 jurado : juradoUpdate,
                 alumnos : alumnosUpdate
             });
-        });
+        //});
 
         //el código a continuación se ejecuta cuando se desmonta el componente
         //permite resetear los valores para un trabajo
-        return () => {
-            setearTrabajo(null);
-        }
+        // return () => {
+        //     setearTrabajo(null);
+        // }
         
     }, []); //eslint-disable-line react-hooks/exhaustive-deps    
     //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
-
-    const clases = useStyles();    
-
+      
     return (
         <>
             {
-                trabajo ? 
+                unTrabajo ? 
                     <Paper className = {clases.pageContent}>
                         <form>
                             <Grid container spacing = {1}>
                                 <Alerta 
-                                    estadoAlerta = {estadoAlerta}
-                                    setEstadoAlerta = {setEstadoAlerta}
+                                    //estadoAlerta = {estadoAlerta}
+                                    //setEstadoAlerta = {setEstadoAlerta}
                                 />
-                                <TituloTrabajo />
-                                <DuracionAreasYFechas />
-                                <Tutores />
-                                <Cotutores />
-                                <Jurado />
-                                <Alumnos />
+                                <TituloTrabajo 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <DuracionAreasYFechas 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <Tutores 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <Cotutores 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <Jurado 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
+                                <Alumnos 
+                                    trabajo = {unTrabajo}
+                                    setearTrabajo = {setearUnTrabajo}
+                                />
                                 <Botones 
+                                    trabajo = {unTrabajo}
                                     setearOpenPopup = {setearOpenPopup}
                                 />
                                 <Popup 
                                     titulo = {constantesTrabajos.TITULO_APLICACION}
                                     openPopup = {openPopup}
                                     setearOpenPopup = {setearOpenPopup}
-                                    setEstadoAlerta = {setEstadoAlerta}
+                                    trabajo = {unTrabajo}
+                                    //setEstadoAlerta = {setEstadoAlerta}
                                 />
                             </Grid>
                         </form>

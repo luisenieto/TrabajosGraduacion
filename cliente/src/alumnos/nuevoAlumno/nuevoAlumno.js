@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import { ProviderContext } from '../../provider';
 import { Paper } from '@mui/material';
 import { Grid } from '@mui/material';
@@ -13,50 +13,40 @@ import axios from 'axios';
 
 //Componente que se encarga de mostrar el formulario para la creación, y de la creación de alumnos
 const NuevoAlumno = () => {
-    const {alumno, setearAlumno, alumnos, setearAlumnos, setAlumnosFiltrados} = useContext(ProviderContext);
+    const {alumnos, alumno, setearAlumnos, setearAlumno, setAlumnosFiltrados, estadoAlerta, setEstadoAlerta} = useContext(ProviderContext);
+    
+    const [unAlumno, setearUnAlumno] = useState(alumno);
 
-    const [estadoAlerta, setEstadoAlerta] = useState({
-        gravedad : 'error',
-        titulo : '',
-        texto : '',
-        mostrar : false
-    });
-    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)
+    //const [botonesInhabilitados, setearBotonesInhabilitados] = useState(false);
+    //controla la habilitación de los botones Aceptar/Cancelar mientras esté visible la alerta
 
     const clases = useStyles(); 
     const history = useHistory();
 
-    useEffect(() => {        
-        setearAlumno({
-            apellidos : '',
-            nombres : '',
-            dni : '',
-            cx : ''
-        });        
-    }, []); //eslint-disable-line react-hooks/exhaustive-deps    
-    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
-
     const botonCancelar = () => history.push('/alumnos/');
 
-    const botonAceptar = () => {   
+    const botonAceptar = () => {           
         let resultado;
-        if ((resultado = validarAlumnoParaCreacion(alumno, alumnos)) !== constantesAlumnos.OK) {            
+        if ((resultado = validarAlumnoParaCreacion(unAlumno, alumnos)) !== constantesAlumnos.OK) { 
+            setearAlumno(unAlumno);
             setEstadoAlerta({
                 gravedad : 'error',
                 titulo : 'Error',
                 texto : resultado,
-                mostrar : true
+                mostrar : true,
+                botonesInhabilitados : true
             });
             return;                
         }  
-        const ruta = '/api/alumnos/crear';
-        axios.post(ruta, alumno).then(response => {
-            if (response.status === 200) {                
+        const ruta = '/api/alumnos/crear';        
+        axios.post(ruta, unAlumno).then(response => {
+            if (response.status === 200) {                      
                 setEstadoAlerta({
                     gravedad : 'success',
                     titulo : `${constantesAlumnos.NUEVO_ALUMNO}`,
                     texto : `${constantesAlumnos.MENSAJE_NUEVO_ALUMNO} ${response.data.apellidos}, ${response.data.nombres}"`,
-                    mostrar : true
+                    mostrar : true,
+                    botonesInhabilitados : true
                 });
                 let alumnosUpdate = [...alumnos];
                 alumnosUpdate.push(response.data);
@@ -76,6 +66,7 @@ const NuevoAlumno = () => {
                     }
                     
                 });
+                setearAlumno(unAlumno);
                 setearAlumnos(alumnosUpdate); 
                 setAlumnosFiltrados(alumnosUpdate);
             }
@@ -85,24 +76,21 @@ const NuevoAlumno = () => {
     return (
         <>
             {
-                alumno ?
+                unAlumno ?
                     <Paper className = {clases.pageContent}>
                         <form>
                             <Grid container spacing = {1}>
-                                <Alerta 
-                                    estadoAlerta = {estadoAlerta}
-                                    setEstadoAlerta = {setEstadoAlerta}
-                                />
+                                <Alerta />
                                 <Grid item lg = {6} sm = {12} xs = {12}>
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Apellidos'
-                                        value = {alumno.apellidos}
+                                        value = {unAlumno.apellidos}
                                         className = {clases.campoApellidos}
                                         inputProps = {{
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'apellidos' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'apellidos' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
@@ -110,12 +98,12 @@ const NuevoAlumno = () => {
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Nombres'
-                                        value = {alumno.nombres}
+                                        value = {unAlumno.nombres}
                                         className = {clases.campoNombres}
                                         inputProps = {{
                                             onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'nombres' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'nombres' : evento.target.value}) }
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
@@ -123,12 +111,12 @@ const NuevoAlumno = () => {
                                     <TextField                                        
                                         variant = 'outlined'
                                         label = 'DNI'
-                                        value = {alumno.dni}
+                                        value = {unAlumno.dni}
                                         className = {clases.campoDNI}
                                         inputProps = {{
                                             onKeyDown : (evento) => {dniYCXOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'dni' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'dni' : evento.target.value})}
                                         onPaste = {evento => dniYCXOnPaste(evento)}
                                     />
                                 </Grid>
@@ -136,23 +124,29 @@ const NuevoAlumno = () => {
                                     <TextField
                                         variant = 'outlined'
                                         label = 'CX'
-                                        value = {alumno.cx}
+                                        value = {unAlumno.cx}
                                         className = {clases.campoCX}
                                         inputProps = {{
                                             onKeyDown : (evento) => {dniYCXOnKeyDown(evento)}
                                         }}
-                                        onChange = {evento => setearAlumno({...alumno, 'cx' : evento.target.value})}
+                                        onChange = {evento => setearUnAlumno({...unAlumno, 'cx' : evento.target.value})}
                                         onPaste = {evento => dniYCXOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {6}>
-                                    <Button variant="contained" className = {clases.botonAceptar} onClick = {() => botonAceptar()}
+                                    <Button variant="contained" 
+                                        className = {clases.botonAceptar} 
+                                        onClick = {() => botonAceptar()}
+                                        disabled = {estadoAlerta.botonesInhabilitados}
                                     >
                                         {constantesAlumnos.ACEPTAR}                    
                                     </Button>
                                 </Grid>            
                                 <Grid item lg = {6} sm = {6} xs = {6}>
-                                    <Button variant="contained" className = {clases.botonCancelar} onClick = {() => botonCancelar()}
+                                    <Button variant="contained" 
+                                        className = {clases.botonCancelar} 
+                                        onClick = {() => botonCancelar()}
+                                        disabled = {estadoAlerta.botonesInhabilitados}
                                     >
                                         {constantesAlumnos.CANCELAR}
                                     </Button>
