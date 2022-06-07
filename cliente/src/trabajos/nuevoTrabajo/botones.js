@@ -14,7 +14,7 @@ import { validarTrabajoParaCreacion } from '../validaciones';
 //const Botones = ({setEstadoAlerta}) => {
 const Botones = ({trabajo}) => {
     //const {trabajo, trabajos, setearTrabajos, setEstadoAlerta} = useContext(ProviderContext);
-    const {trabajos, setearTrabajos, setearTrabajo, estadoAlerta, setEstadoAlerta} = useContext(ProviderContext);
+    const {trabajos, setearTrabajos, setTrabajosFiltrados, setearTrabajo, estadoAlerta, setEstadoAlerta} = useContext(ProviderContext);
     let history;
     const clases = useStyles();
 
@@ -35,7 +35,7 @@ const Botones = ({trabajo}) => {
             });
             return;                
         }
-
+        
         let trabajoUpdate = {...trabajo}; 
         trabajoUpdate.tutores[0].desde = trabajo.fechaAprobacion;
         if (trabajoUpdate.cotutores[0].dni === null)
@@ -63,7 +63,7 @@ const Botones = ({trabajo}) => {
             alumno3.desde = trabajo.fechaAprobacion;
             trabajoUpdate.alumnos.push(alumno3);
         }
-
+        
         const ruta = '/api/trabajos/crear';
         axios.post(ruta, trabajoUpdate).then(response => {
             if (response.status === 200) {
@@ -87,6 +87,7 @@ const Botones = ({trabajo}) => {
                 });
                 setearTrabajo(trabajo);
                 setearTrabajos(trabajosUpdate); 
+                setTrabajosFiltrados(trabajosUpdate);
             }
         });        
     }

@@ -15,16 +15,16 @@ import useStyles from '../useStyles';
 import moment from 'moment';
 import {constantesTrabajos} from '../../config/constantes';
 import {CgPlayListAdd} from 'react-icons/cg';
-import {GoTrashcan} from 'react-icons/go';
+//import {GoTrashcan} from 'react-icons/go';
 import {RiEditLine} from 'react-icons/ri';
 import { IconButton } from '@mui/material';
 import { Tooltip } from '@mui/material';
 
 //Componente que se encarga de mostrar el campo para el tutor del trabajo en el formulario
 const Tutores = ({trabajo, setearTrabajo}) => {
-    const {tutores, fechaAprobacion, fechaFinalizacion} = trabajo;
+    const {tutores, fechaFinalizacion} = trabajo;
     //tutores: tutores del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
-    const {profesores} = useContext(ProviderContext);
+    const {profesores, estadoAlerta} = useContext(ProviderContext);
     //profesores: listado de todos los profesores (para armar la lista con todos los profesores para el Autocomplete)    
       
     const clases = useStyles();
@@ -58,12 +58,12 @@ const Tutores = ({trabajo, setearTrabajo}) => {
     }
     //cuando se agrega un tutor
 
-    const botonQuitarTutorOnClic = (posicion) => {
-        const tutoresUpdate = [...tutores];
+    // const botonQuitarTutorOnClic = (posicion) => {
+    //     const tutoresUpdate = [...tutores];
 
-        tutoresUpdate.splice(posicion, 1);
-        setearTrabajo({...trabajo, tutores : tutoresUpdate});
-    }
+    //     tutoresUpdate.splice(posicion, 1);
+    //     setearTrabajo({...trabajo, tutores : tutoresUpdate});
+    // }
     //cuando se quita un tutor
 
     const botonCancelarClic = (posicion) => {
@@ -130,7 +130,7 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                         <Grid item lg = {3} sm = {12} xs = {12}>
                             <Autocomplete 
                                 {...defaultProps}
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 isOptionEqualToValue = {(option, value) => option.value === value.value}
                                 // disablePortal
                                 disableClearable
@@ -148,7 +148,7 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                         </Grid>
                         <Grid item lg = {2} sm = {6} xs = {6}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -164,7 +164,7 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                         </Grid>
                         <Grid item lg = {2} sm = {6} xs = {6}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -180,7 +180,7 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                         </Grid>
                         <Grid item lg = {2} sm = {9} xs = {9}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -197,7 +197,7 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                                         size = 'small'
                                         onClick = {() => mostrarVentanaDialogo(false, i)}
                                         className = {clases.botoncitos}
-                                        disabled = {(fechaFinalizacion || tutor.razon !== null) ? true : false}
+                                        disabled = {(fechaFinalizacion || tutor.razon !== null || estadoAlerta.botonesInhabilitados) ? true : false}
                                     >
                                         <CgPlayListAdd />
                                     </IconButton>
@@ -222,12 +222,17 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                                     />
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button onClick = {() => botonAceptarClic(i)}>Aceptar</Button>
+                                    <Button 
+                                        onClick = {() => botonAceptarClic(i)}
+                                        disabled = {!tutor.razon || tutor.razon === '' ? true : false}
+                                    >
+                                        Aceptar
+                                    </Button>
                                     <Button onClick = {() => botonCancelarClic(i)}>Cancelar</Button>
                                 </DialogActions>
                             </Dialog>
                         </Grid>
-                        <Grid item lg = {1} sm = {1} xs = {1}>
+                        {/* <Grid item lg = {1} sm = {1} xs = {1}>
                             <Tooltip title = {constantesTrabajos.QUITAR_TUTOR} placement = 'top'>
                                 <span>
                                     <IconButton
@@ -240,7 +245,7 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                                     </IconButton>
                                 </span>
                             </Tooltip>
-                        </Grid>
+                        </Grid> */}
 
                         <Grid item lg = {1} sm = {1} xs = {1}>
                             <Tooltip title = {constantesTrabajos.MODIFICAR_RAZON} placement = 'top'>
@@ -249,7 +254,7 @@ const Tutores = ({trabajo, setearTrabajo}) => {
                                         size = 'small'
                                         onClick = {() => mostrarVentanaDialogo(true, i)}
                                         className = {clases.botoncitos}
-                                        disabled = {(fechaFinalizacion || tutor.razon === null)  ? true : false}
+                                        disabled = {(fechaFinalizacion || tutor.razon === null || estadoAlerta.botonesInhabilitados)  ? true : false}
                                     >
                                         <RiEditLine />
                                     </IconButton>

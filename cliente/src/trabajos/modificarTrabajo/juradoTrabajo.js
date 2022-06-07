@@ -15,16 +15,16 @@ import useStyles from '../useStyles';
 import moment from 'moment';
 import { constantesTrabajos } from '../../config/constantes';
 import {CgPlayListAdd} from 'react-icons/cg';
-import {GoTrashcan} from 'react-icons/go';
+//import {GoTrashcan} from 'react-icons/go';
 import {RiEditLine} from 'react-icons/ri';
 import { IconButton } from '@mui/material';
 import { Tooltip } from '@mui/material';
 
 //Componente que se encarga de mostrar los campos para el jurado del trabajo en el formulario
 const Jurado = ({trabajo, setearTrabajo}) => {
-    const {jurado, fechaAprobacion, fechaFinalizacion} = trabajo;
+    const {jurado, fechaFinalizacion} = trabajo;
     //jurado: jurado del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
-    const {profesores} = useContext(ProviderContext);
+    const {profesores, estadoAlerta} = useContext(ProviderContext);
     //profesores: listado de todos los profesores (para armar la lista con todos los profesores para el Autocomplete)
       
     const clases = useStyles();
@@ -58,12 +58,12 @@ const Jurado = ({trabajo, setearTrabajo}) => {
     }
     //cuando se agrega un miembro al jurado
 
-    const botonQuitarJuradoOnClic = (posicion) => {
-        const juradoUpdate = [...jurado];
+    // const botonQuitarJuradoOnClic = (posicion) => {
+    //     const juradoUpdate = [...jurado];
 
-        juradoUpdate.splice(posicion, 1);
-        setearTrabajo({...trabajo, jurado : juradoUpdate});
-    }
+    //     juradoUpdate.splice(posicion, 1);
+    //     setearTrabajo({...trabajo, jurado : juradoUpdate});
+    // }
     //cuando se quita un miembro del jurado
 
     const botonCancelarClic = (posicion) => {
@@ -130,7 +130,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                         <Grid item lg = {3} sm = {12} xs = {12}>
                             <Autocomplete 
                                 {...defaultProps}
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 isOptionEqualToValue = {(option, value) => option.value === value.value}
                                 // disablePortal
                                 disableClearable
@@ -148,7 +148,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                         </Grid>                                                    
                         <Grid item lg = {2} sm = {6} xs = {6}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -164,7 +164,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                         </Grid>
                         <Grid item lg = {2} sm = {6} xs = {6}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -179,7 +179,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                         </Grid>
                         <Grid item lg = {2} sm = {9} xs = {9}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -196,7 +196,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                                         size = 'small'
                                         onClick = {() => mostrarVentanaDialogo(false, i)}
                                         className = {clases.botoncitos}
-                                        disabled = {(fechaFinalizacion || jurado.razon !== null) ? true : false}
+                                        disabled = {(fechaFinalizacion || jurado.razon !== null || estadoAlerta.botonesInhabilitados) ? true : false}
                                     >
                                         <CgPlayListAdd />
                                     </IconButton>
@@ -221,12 +221,17 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                                     />
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button onClick = {() => botonAceptarClic(i)}>Aceptar</Button>
+                                    <Button 
+                                        onClick = {() => botonAceptarClic(i)}
+                                        disabled = {!jurado.razon || jurado.razon === '' ? true : false}
+                                    >
+                                        Aceptar
+                                    </Button>
                                     <Button onClick = {() => botonCancelarClic(i)}>Cancelar</Button>
                                 </DialogActions>
                             </Dialog>
                         </Grid>
-                        <Grid item lg = {1} sm = {1} xs = {1}>
+                        {/* <Grid item lg = {1} sm = {1} xs = {1}>
                             <Tooltip title = {constantesTrabajos.QUITAR_JURADO} placement = 'top'>
                                 <span>
                                     <IconButton
@@ -239,7 +244,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                                     </IconButton>
                                 </span>
                             </Tooltip>
-                        </Grid>
+                        </Grid> */}
 
                         <Grid item lg = {1} sm = {1} xs = {1}>
                             <Tooltip title = {constantesTrabajos.MODIFICAR_RAZON} placement = 'top'>
@@ -248,7 +253,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                                         size = 'small'
                                         onClick = {() => mostrarVentanaDialogo(true, i)}
                                         className = {clases.botoncitos}
-                                        disabled = {(fechaFinalizacion || jurado.razon === null) ? true : false}
+                                        disabled = {(fechaFinalizacion || jurado.razon === null || estadoAlerta.botonesInhabilitados) ? true : false}
                                     >
                                         <RiEditLine />
                                     </IconButton>

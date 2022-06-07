@@ -12,7 +12,7 @@ import {constantesTrabajos} from '../../config/constantes';
 const TutorYCotutor = ({trabajo, setearTrabajo}) => {    
     const {tutores, cotutores} = trabajo;
     //tutores: tutores del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
-    const {profesores} = useContext(ProviderContext);
+    const {profesores, estadoAlerta} = useContext(ProviderContext);
     //profesores: listado de todos los profesores (para armar la lista con todos los profesores para el Autocomplete)    
            
     const clases = useStyles();
@@ -71,6 +71,7 @@ const TutorYCotutor = ({trabajo, setearTrabajo}) => {
                     disableClearable
                     // id = "combo-box-tutores"
                     //sx = {{width : 350}}
+                    disabled = {estadoAlerta.botonesInhabilitados ? true : false}
                     renderInput = {(params) => <TextField {...params} label = {constantesTrabajos.TUTOR} />} 
                     value = {tutores[0].apellidos ?
                             `${tutores[0].apellidos}, ${tutores[0].nombres} (${tutores[0].dni})`
@@ -90,6 +91,7 @@ const TutorYCotutor = ({trabajo, setearTrabajo}) => {
                     clearOnEscape                        
                     // id = "combo-box-tutores"
                     //sx = {{width : 350}}
+                    disabled = {estadoAlerta.botonesInhabilitados ? true : false}
                     renderInput = {(params) => <TextField {...params} label = {constantesTrabajos.COTUTOR} />} 
                     value = {cotutores[0] && cotutores[0].apellidos ?
                             `${cotutores[0].apellidos}, ${cotutores[0].nombres} (${cotutores[0].dni})`

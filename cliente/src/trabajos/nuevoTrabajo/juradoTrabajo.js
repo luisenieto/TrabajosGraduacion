@@ -12,7 +12,7 @@ import { constantesTrabajos } from '../../config/constantes';
 const Jurado = ({trabajo, setearTrabajo}) => {
     const {jurado} = trabajo;
     //jurado: jurado del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
-    const {profesores} = useContext(ProviderContext);
+    const {profesores, estadoAlerta} = useContext(ProviderContext);
     //profesores: listado de todos los profesores (para armar la lista con todos los profesores para el Autocomplete)
        
     const clases = useStyles();
@@ -53,6 +53,7 @@ const Jurado = ({trabajo, setearTrabajo}) => {
                                 disableClearable
                                 // id = "combo-box-jurado"
                                 //sx = {{width : 350}}
+                                disabled = {estadoAlerta.botonesInhabilitados ? true : false}
                                 renderInput = {(params) => <TextField {...params} label = {constantesTrabajos.JURADO} />} 
                                 value = {jurado.apellidos ?
                                         `${jurado.apellidos}, ${jurado.nombres} (${jurado.dni})`

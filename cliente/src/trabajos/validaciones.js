@@ -1,7 +1,7 @@
 import { constantesTrabajos } from "../config/constantes";
 
 const validarTrabajoParaCreacion = (trabajo, trabajos) => {
-    let resultado;
+    let resultado;    
     if ((resultado = validarTitulo(null, trabajo.titulo, trabajos)) !== constantesTrabajos.OK)
         return resultado;
     if ((resultado = validarDuracion(trabajo.duracion)) !== constantesTrabajos.OK)
@@ -9,11 +9,11 @@ const validarTrabajoParaCreacion = (trabajo, trabajos) => {
     if ((resultado = validarAreas(trabajo.areas)) !== constantesTrabajos.OK)
         return resultado;
     if ((resultado = validarFechas(trabajo.fechaPresentacion, trabajo.fechaAprobacion, null)) !== constantesTrabajos.OK)
-        return resultado;
+        return resultado;    
     if ((resultado = validarTutorYCotutor(trabajo.tutores[0], trabajo.cotutores[0])) !== constantesTrabajos.OK)
         return resultado;
     if ((resultado = validarJuradoParaCreacion(trabajo.jurado, trabajo.tutores, trabajo.cotutores, trabajo.fechaFinalizacion)) !== constantesTrabajos.OK)
-        return resultado;      
+        return resultado;  
     if ((resultado = validarAlumnosParaCreacion(trabajo.alumnos, trabajos)) !== constantesTrabajos.OK)
         return resultado;
     return constantesTrabajos.OK
@@ -30,9 +30,9 @@ const validarTrabajoParaModificacion = (trabajo, trabajos) => {
         return resultado;
     if ((resultado = validarFechas(trabajo.fechaPresentacion, trabajo.fechaAprobacion, trabajo.fechaFinalizacion)) !== constantesTrabajos.OK)
         return resultado;
-    if ((resultado = validarTutores(trabajo.tutores, trabajo.fechaFinalizacion)) !== constantesTrabajos.OK)
+    if ((resultado = validarTutores(trabajo.tutores, trabajo.cotutores, trabajo.fechaFinalizacion)) !== constantesTrabajos.OK)
         return resultado;
-    if ((resultado = validarCotutores(trabajo.cotutores, trabajo.fechaFinalizacion)) !== constantesTrabajos.OK)
+    if ((resultado = validarCotutores(trabajo.cotutores, trabajo.tutores, trabajo.fechaFinalizacion)) !== constantesTrabajos.OK)
         return resultado;
     if ((resultado = validarJuradoParaModificacion(trabajo.jurado, trabajo.tutores, trabajo.cotutores, trabajo.fechaFinalizacion)) !== constantesTrabajos.OK)
         return resultado;      
@@ -77,7 +77,6 @@ const validarAreas = (areas) => {
 //valida que el trabajo tenga al menos un área
 
 const validarFechas = (fechaPresentacion, fechaAprobacion, fechaFinalizacion) => {
-    //console.log(fechaFinalizacion)
     if (fechaPresentacion === null || fechaPresentacion === '')
         return constantesTrabajos.FECHA_PRESENTACION_INVALIDA;
     if (fechaAprobacion === null || fechaAprobacion === '')
@@ -97,10 +96,16 @@ const validarFechas = (fechaPresentacion, fechaAprobacion, fechaFinalizacion) =>
 //cuando se modifica un trabajo, se le puede asignar una fecha de finalización
 //si tiene fecha de finalización, la misma debe ser posterior a la de aprobación
 
-const validarTutores = (tutores, fechaFinalizacion) => {
+const validarTutores = (tutores, cotutores, fechaFinalizacion) => {
     for(let i in tutores) {
         if (tutores[i].apellidos === null)
             return constantesTrabajos.TUTOR_INVALIDO;
+    }
+    for(let i = 0; i < tutores.length - 1; i++) {
+        for(let j = i + 1; j < tutores.length; j++) {
+            if (tutores[i].dni === tutores[j].dni) 
+                return constantesTrabajos.TUTOR_DUPLICADO;
+        }
     }
     if (fechaFinalizacion) { //finalización del trabajo
         let cantidadTutoresConRazon = 0;
@@ -120,16 +125,27 @@ const validarTutores = (tutores, fechaFinalizacion) => {
         if (cantidadTutoresSinRazon > 1)
             return constantesTrabajos.TUTOR_ACTIVO;    
     }
-    return constantesTrabajos.OK;
+    //return constantesTrabajos.OK;
+    return tutoresDistintosACotutores(tutores, cotutores);
 }
 //valida que los tutores del trabajo sean válidos
-//un trabajo no puede tener un tutor nulo
+//un trabajo no puede tener un tutor nulo (apellido nulo)
+//si hay más de un tutor, deben ser distintos
+//en la modificación de un trabajo, no puede haber más de un tutor con razón nula
+//en la finalización de un trabajo, no puede haber más de un tutor con razón = constantesTrabajos.FINALIZACION
+//si hay cotutores, no pueden ser tutores
 //se la utiliza en la modificación de un trabajo
 
-const validarCotutores = (cotutores, fechaFinalizacion) => {
+const validarCotutores = (cotutores, tutores, fechaFinalizacion) => {
     for(let i in cotutores) {
         if (cotutores[i].apellidos === null)
             return constantesTrabajos.COTUTOR_INVALIDO2;
+    }
+    for(let i = 0; i < cotutores.length - 1; i++) {
+        for(let j = i + 1; j < cotutores.length; j++) {
+            if (cotutores[i].dni === cotutores[j].dni) 
+                return constantesTrabajos.COTUTOR_DUPLICADO;
+        }
     }
     if (fechaFinalizacion) { //finalización del trabajo
         let cantidadCotutoresConRazon = 0;
@@ -149,12 +165,27 @@ const validarCotutores = (cotutores, fechaFinalizacion) => {
         if (cantidadCotutoresSinRazon > 1)
             return constantesTrabajos.COTUTOR_ACTIVO;    
     }
-
-    return constantesTrabajos.OK;
+    return tutoresDistintosACotutores(tutores, cotutores);
+    //return constantesTrabajos.OK;
 }  
 //valida que los cotutores del trabajo sean válidos
-//un trabajo no puede tener un cotutor nulo
+//un trabajo no puede tener un cotutor nulo (apellido nulo)
+//si hay más de un cotutor, deben ser distintos
+//en la modificación de un trabajo, no puede haber más de un cotutor con razón nula
+//en la finalización de un trabajo, no puede haber más de un cotutor con razón = constantesTrabajos.FINALIZACION
+//si hay cotutores, no pueden ser tutores
 //se la utiliza en la modificación de un trabajo
+
+const tutoresDistintosACotutores = (tutores, cotutores) => {
+    for(let i in tutores) {
+        for (let j in cotutores) {
+            if(tutores[i].dni === cotutores[j].dni)
+                return constantesTrabajos.TUTORES_IGUALES_A_COTUTORES;
+        }
+    }
+    return constantesTrabajos.OK;
+}
+//valida que ninún tutor sea cotutor y viceversa
 
 const validarTutorYCotutor = (tutor, cotutor) => {
     if (tutor.apellidos === null)
@@ -229,7 +260,6 @@ const validarJuradoParaModificacion = (jurado, tutores, cotutores, fechaFinaliza
             if (jurado[i].razon === constantesTrabajos.FINALIZACION)
                 cantidadJuradoConRazon++;
         }
-        //console.log(cantidadJuradoSinRazon)
         if (cantidadJuradoConRazon !== 3)
             return constantesTrabajos.JURADO_ACTIVO;
     }
@@ -239,7 +269,6 @@ const validarJuradoParaModificacion = (jurado, tutores, cotutores, fechaFinaliza
             if (jurado[i].razon === null)
                 cantidadJuradoSinRazon++;
         }
-        //console.log(cantidadJuradoSinRazon)
         if (cantidadJuradoSinRazon > 3)
             return constantesTrabajos.JURADO_ACTIVO2;
 

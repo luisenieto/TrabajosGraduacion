@@ -13,7 +13,7 @@ import axios from 'axios';
 //Componente que muestra el popup que confirma la finalización/modificación de un trabajo
 //También se encarga de la tarea
 const Popup = ({titulo, openPopup, setearOpenPopup, trabajo}) => {
-    const {trabajos, setearTrabajos, setearTrabajo, setEstadoAlerta } = useContext(ProviderContext);
+    const {trabajos, setearTrabajos, setTrabajosFiltrados, setearTrabajo, setEstadoAlerta } = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         setearOpenPopup({
@@ -73,6 +73,7 @@ const Popup = ({titulo, openPopup, setearOpenPopup, trabajo}) => {
                 });
                 setearTrabajo(trabajo);
                 setearTrabajos(trabajosUpdate); 
+                setTrabajosFiltrados(trabajosUpdate);
             }
         });
     }
@@ -123,6 +124,7 @@ const Popup = ({titulo, openPopup, setearOpenPopup, trabajo}) => {
                 }
                 setearTrabajo(trabajoUpdate);
                 setearTrabajos(trabajosUpdate); 
+                setTrabajosFiltrados(trabajosUpdate);
             }
         });
     }

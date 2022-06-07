@@ -13,7 +13,7 @@ const Alumnos = ({trabajo, setearTrabajo}) => {
     const alumnosTrabajo = trabajo.alumnos;
     
     //alumnosTrabajo: alumnos del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
-    const {alumnos} = useContext(ProviderContext);
+    const {alumnos, estadoAlerta} = useContext(ProviderContext);
     //alumnos: listado de todos los alumnos (para armar la lista con todos los alumnos para el Autocomplete)
     const clases = useStyles();
 
@@ -64,6 +64,7 @@ const Alumnos = ({trabajo, setearTrabajo}) => {
                                 clearOnEscape
                                 // id = "combo-box-alumnos"
                                 //sx = {{width : 350}}
+                                disabled = {estadoAlerta.botonesInhabilitados ? true : false}
                                 renderInput = {(params) => <TextField {...params} label = {constantesTrabajos.ALUMNO} />} 
                                 value = {alumno.apellidos ?
                                         `${alumno.apellidos}, ${alumno.nombres} (${alumno.dni})`

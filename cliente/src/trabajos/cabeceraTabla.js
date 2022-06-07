@@ -64,9 +64,9 @@ const CabeceraTabla = ({orden, alQuererOrdenar}) => {
                         </Box>                            
                     </TableSortLabel>
                 </CeldaConEstilo>
-                <CeldaConEstilo sx = {{maxWidth : 20}} align = 'center'>{constantesTrabajos.AREAS} </CeldaConEstilo>
-                <CeldaConEstilo sx = {{maxWidth : 20}} align = 'center'>{constantesTrabajos.PRESENTACION} </CeldaConEstilo>                    
-                <CeldaConEstilo sortDirection = {orden} sx = {{maxWidth : 20}} align = 'center'>
+                <CeldaConEstilo sx = {{maxWidth : 60}}>{constantesTrabajos.AREAS} </CeldaConEstilo>
+                <CeldaConEstilo sx = {{maxWidth : 80}}>{constantesTrabajos.PRESENTACION} </CeldaConEstilo>                    
+                <CeldaConEstilo sortDirection = {orden} sx = {{maxWidth : 80}}>
                     <TableSortLabel
                         sx = {{
                             '&.MuiTableSortLabel-root': {
@@ -97,7 +97,7 @@ const CabeceraTabla = ({orden, alQuererOrdenar}) => {
                         </Box>                            
                     </TableSortLabel>                        
                 </CeldaConEstilo>                    
-                <CeldaConEstilo sortDirection = {orden} sx = {{maxWidth : 20}} align = 'center'>
+                <CeldaConEstilo sortDirection = {orden} sx = {{maxWidth : 70}}>
                     <TableSortLabel active = {false} direction = {orden} onClick = {(evento) => createSortHandler(evento, 'fechaFinalizacion')}>
                         {constantesTrabajos.FINALIZACION}                             
                         <Box component = "span" sx = {visuallyHidden}>

@@ -80,12 +80,12 @@ const Fila = ({trabajo, setearOpenPopup}) => {
                     </IconButton>
                 </TableCell>
                 <TableCell align = 'left' sx = {{maxWidth : 200}}>{titulo}</TableCell>
-                <TableCell align = 'center' sx = {{maxWidth : 20}}>
+                <TableCell align = 'center' sx = {{maxWidth : 60}}>
                     <MostrarAreas areasDelTrabajo = {areas} />
                 </TableCell>
-                <TableCell align = 'left' sx = {{maxWidth : 20}}>{formatearFecha(fechaPresentacion)}</TableCell>
-                <TableCell align = 'center' sx = {{maxWidth : 20}}>{formatearFecha(fechaAprobacion)}</TableCell>
-                <TableCell align = 'center' sx = {{maxWidth : 20}}>{fechaFinalizacion ? formatearFecha(fechaFinalizacion) : '-'}</TableCell>
+                <TableCell align = 'left' sx = {{maxWidth : 80}}>{formatearFecha(fechaPresentacion)}</TableCell>
+                <TableCell align = 'left' sx = {{maxWidth : 80}}>{formatearFecha(fechaAprobacion)}</TableCell>
+                <TableCell align = 'left' sx = {{maxWidth : 70}}>{fechaFinalizacion ? formatearFecha(fechaFinalizacion) : '-'}</TableCell>
             </TableRow> 
             <TableRow>
                 <TableCell style = {{ paddingBottom: 0, paddingTop: 0 }} colSpan = {8}>

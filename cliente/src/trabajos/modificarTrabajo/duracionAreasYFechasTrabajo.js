@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Grid } from '@mui/material';
 import { TextField } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
@@ -9,9 +9,11 @@ import DateAdapter from '@mui/lab/AdapterDateFns';
 import esLocale from 'date-fns/locale/es';
 import useStyles from '../useStyles';
 import { constantesTrabajos } from '../../config/constantes';
+import { ProviderContext } from '../../provider';
 
 //Componente que se encarga de mostrar los campos para la duración, áreas y fechas del trabajo en el formulario
-const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {    
+const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => { 
+    const {estadoAlerta} = useContext(ProviderContext);     
     const {duracion, areas, fechaPresentacion, fechaAprobacion, fechaFinalizacion} = trabajo;
     const [valorFechaFinalizacion, setearValorFechaFinalizacion] = useState(fechaFinalizacion ? fechaFinalizacion : null);
     //maneja el datepicker fechaFinalizacion
@@ -132,7 +134,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
         <>            
             <Grid item lg = {1} sm = {2} xs = {12}>
                 <TextField
-                    InputProps = {fechaFinalizacion ? {disabled: true} : {disabled: false}}
+                    InputProps = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? {disabled: true} : {disabled: false}}
                     variant = 'outlined'
                     label = {constantesTrabajos.DURACION}
                     type = 'Number'
@@ -146,7 +148,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             </Grid>
             <Grid item lg = {2} sm = {3} xs = {4}>
                 <FormControlLabel
-                    control = {<Checkbox disabled = {fechaFinalizacion ? true : false}/>}
+                    control = {<Checkbox disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}/>}
                     label = {constantesTrabajos.HARDWARE}
                     className = {clases.checkBox}
                     checked = {tieneEstaArea(1)}
@@ -155,7 +157,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             </Grid>
             <Grid item lg = {1} sm = {3} xs = {4}>
                 <FormControlLabel
-                    control = {<Checkbox disabled = {fechaFinalizacion ? true : false}/>}
+                    control = {<Checkbox disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}/>}
                     label = {constantesTrabajos.REDES}
                     className = {clases.checkBox}
                     checked = {tieneEstaArea(2)}
@@ -164,7 +166,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             </Grid>
             <Grid item lg = {2} sm = {3} xs = {4}>
                 <FormControlLabel
-                    control = {<Checkbox disabled = {fechaFinalizacion ? true : false}/>}
+                    control = {<Checkbox disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}/>}
                     label = {constantesTrabajos.SOFTWARE}
                     className = {clases.checkBox}
                     checked = {tieneEstaArea(3)}
@@ -211,7 +213,8 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             </Grid>
             <Grid item lg = {2} xs = {4}>
                 <LocalizationProvider dateAdapter = {DateAdapter} locale = {esLocale}>
-                    <DatePicker                            
+                    <DatePicker         
+                        disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}                   
                         label = {constantesTrabajos.FINALIZACION}
                         //value = {fechaFinalizacion ? fechaFinalizacion : null}  
                         value = {valorFechaFinalizacion}

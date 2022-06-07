@@ -15,16 +15,28 @@ import useStyles from '../useStyles';
 import moment from 'moment';
 import { constantesTrabajos } from '../../config/constantes';
 import {CgPlayListAdd} from 'react-icons/cg';
-import {GoTrashcan} from 'react-icons/go';
+//import {GoTrashcan} from 'react-icons/go';
 import {RiEditLine} from 'react-icons/ri';
 import { IconButton } from '@mui/material';
 import { Tooltip } from '@mui/material';
 
 //Componente que se encarga de mostrar el campo para el cotutor del trabajo en el formulario
 const Cotutores = ({trabajo, setearTrabajo}) => {
-    const {cotutores, fechaAprobacion, fechaFinalizacion} = trabajo;
+    const {cotutores, fechaFinalizacion} = trabajo;
+    //const {fechaFinalizacion} = trabajo;
+    // const cotutores = trabajo.cotutores.length > 0 ?
+    //     trabajo.cotutores
+    // :
+    //     [{
+    //         apellidos : null,
+    //         nombres : null,
+    //         dni : null,
+    //         desde : null,
+    //         hasta : null,
+    //         razon : null
+    //     }]
     //cotutores: cotutores del trabajo [{apellidos: 'xx', nombres : 'xx', dni: xx, desde : 'xx', hasta : 'xx', razon : 'xx'}]
-    const {profesores} = useContext(ProviderContext);
+    const {profesores, estadoAlerta} = useContext(ProviderContext);
     //profesores: listado de todos los profesores (para armar la lista con todos los profesores para el Autocomplete)
        
     const clases = useStyles();
@@ -58,12 +70,12 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
     }
     //cuando se agrega un cotutor
 
-    const botonQuitarCotutorOnClic = (posicion) => {
-        const cotutoresUpdate = [...cotutores];
+    // const botonQuitarCotutorOnClic = (posicion) => {
+    //     const cotutoresUpdate = [...cotutores];
 
-        cotutoresUpdate.splice(posicion, 1);
-        setearTrabajo({...trabajo, cotutores : cotutoresUpdate});
-    }
+    //     cotutoresUpdate.splice(posicion, 1);
+    //     setearTrabajo({...trabajo, cotutores : cotutoresUpdate});
+    // }
     //cuando se quita un cotutor
 
     const botonCancelarClic = (posicion) => {
@@ -135,7 +147,7 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                         <Grid item lg = {3} sm = {12} xs = {12}>
                             <Autocomplete 
                                 {...defaultProps}
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 isOptionEqualToValue = {(option, value) => option.value === value.value}
                                 // disablePortal
                                 disableClearable
@@ -153,7 +165,7 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                         </Grid>                            
                         <Grid item lg = {2} sm = {6} xs = {6}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -169,7 +181,7 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                         </Grid>
                         <Grid item lg = {2} sm = {6} xs = {6}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -184,7 +196,7 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                         </Grid>
                         <Grid item lg = {2} sm = {9} xs = {9}>
                             <TextField
-                                disabled = {fechaFinalizacion ? true : false}
+                                disabled = {fechaFinalizacion || estadoAlerta.botonesInhabilitados ? true : false}
                                 InputProps = {{
                                     readOnly: true
                                 }}
@@ -201,7 +213,7 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                                         size = 'small'
                                         onClick = {() => mostrarVentanaDialogo(false, i)}
                                         className = {clases.botoncitos}
-                                        disabled = {(fechaFinalizacion || cotutor.razon !== null) ? true : false}
+                                        disabled = {(fechaFinalizacion || cotutor.razon !== null || estadoAlerta.botonesInhabilitados) ? true : false}
                                     >
                                         <CgPlayListAdd />
                                     </IconButton>
@@ -226,12 +238,17 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                                     />
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button onClick = {() => botonAceptarClic(i)}>Aceptar</Button>
+                                    <Button 
+                                        onClick = {() => botonAceptarClic(i)}
+                                        disabled = {!cotutor.razon || cotutor.razon === '' ? true : false}
+                                    >
+                                        Aceptar
+                                    </Button>
                                     <Button onClick = {() => botonCancelarClic(i)}>Cancelar</Button>
                                 </DialogActions>
                             </Dialog>
                         </Grid>
-                        <Grid item lg = {1} sm = {1} xs = {1}>
+                        {/* <Grid item lg = {1} sm = {1} xs = {1}>
                             <Tooltip title = {constantesTrabajos.QUITAR_COTUTOR} placement = 'top'>
                                 <span>
                                     <IconButton
@@ -244,7 +261,7 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                                     </IconButton>
                                 </span>
                             </Tooltip>
-                        </Grid>
+                        </Grid> */}
 
                         <Grid item lg = {1} sm = {1} xs = {1}>
                             <Tooltip title = {constantesTrabajos.MODIFICAR_RAZON} placement = 'top'>
@@ -253,7 +270,7 @@ const Cotutores = ({trabajo, setearTrabajo}) => {
                                         size = 'small'
                                         onClick = {() => mostrarVentanaDialogo(true, i)}
                                         className = {clases.botoncitos}
-                                        disabled = {(fechaFinalizacion || cotutor.razon === null) ? true : false}
+                                        disabled = {(fechaFinalizacion || cotutor.razon === null || estadoAlerta.botonesInhabilitados) ? true : false}
                                     >
                                         <RiEditLine />
                                     </IconButton>

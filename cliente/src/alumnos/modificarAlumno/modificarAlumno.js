@@ -40,17 +40,19 @@ const ModificarAlumno = (props) => {
                 unAlumno ?
                     <Paper className = {clases.pageContent}>
                         <form>
-                            <Grid container spacing = {1}>
-                                <Alerta />
+                            <Grid container spacing = {1}>                                
                                 <Grid item lg = {6} sm = {12} xs = {12}>
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Apellidos'
                                         value = {unAlumno.apellidos}
                                         className = {clases.campoApellidos}
-                                        inputProps = {{
-                                            onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
-                                        }}
+                                        inputProps = {
+                                            {
+                                                onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)},
+                                                disabled : estadoAlerta.botonesInhabilitados ? true : false
+                                            }
+                                        }
                                         onChange = {evento => setearUnAlumno({...unAlumno, 'apellidos' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
@@ -61,23 +63,26 @@ const ModificarAlumno = (props) => {
                                         label = 'Nombres'
                                         value = {unAlumno.nombres}
                                         className = {clases.campoNombres}
-                                        inputProps = {{
-                                            onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
-                                        }}
+                                        inputProps = {
+                                            {
+                                                onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)},
+                                                disabled : estadoAlerta.botonesInhabilitados ? true : false
+                                            }                                            
+                                        }
                                         onChange = {evento => setearUnAlumno({...unAlumno, 'nombres' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {12}>
                                     <TextField
-                                        InputProps = {{disabled: true}}
+                                        inputProps = {{disabled: true}}
                                         variant = 'outlined'
                                         label = 'DNI'
                                         value = {unAlumno.dni}
                                         className = {clases.campoDNI}
-                                        inputProps = {{
-                                            onKeyDown : (evento) => {dniYCXOnKeyDown(evento)}
-                                        }}
+                                        // inputProps = {{
+                                        //         onKeyDown : (evento) => {dniYCXOnKeyDown(evento)}
+                                        // }}
                                         onChange = {evento => setearUnAlumno({...unAlumno, 'dni' : evento.target.value})}
                                         onPaste = {evento => dniYCXOnPaste(evento)}
                                     />
@@ -88,13 +93,17 @@ const ModificarAlumno = (props) => {
                                         label = 'CX'
                                         value = {unAlumno.cx}
                                         className = {clases.campoCX}
-                                        inputProps = {{
-                                            onKeyDown : (evento) => {dniYCXOnKeyDown(evento)}
-                                        }}
+                                        inputProps = {
+                                            {
+                                                onKeyDown : (evento) => {dniYCXOnKeyDown(evento)},
+                                                disabled : estadoAlerta.botonesInhabilitados ? true : false
+                                            }                                            
+                                        }
                                         onChange = {evento => setearUnAlumno({...unAlumno, 'cx' : evento.target.value})}
                                         onPaste = {evento => dniYCXOnPaste(evento)}
                                     />
                                 </Grid>
+                                <Alerta />
                                 <Grid item lg = {6} sm = {6} xs = {6}>
                                     <Button variant="contained" 
                                         className = {clases.botonAceptar} 

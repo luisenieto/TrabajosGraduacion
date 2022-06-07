@@ -12,7 +12,7 @@ import axios from 'axios';
 //en caso que se pueda, lo borra
 //si no se puede borrar el trabajo muestra un mensaje
 const Popup = ({titulo, texto, openPopup, setearOpenPopup}) => {
-    const {trabajo, trabajos, setearTrabajos} = useContext(ProviderContext);
+    const {trabajo, trabajos, setearTrabajos, setTrabajosFiltrados} = useContext(ProviderContext);
 
     const botonAceptarClic = () => {
         const ruta = '/api/trabajos/borrar?id=';
@@ -22,6 +22,7 @@ const Popup = ({titulo, texto, openPopup, setearOpenPopup}) => {
                 const trabajosUpdate = [...trabajos];
                 trabajosUpdate.splice(index, 1);                
                 setearTrabajos(trabajosUpdate);
+                setTrabajosFiltrados(trabajosUpdate);
             }
         });
         setearOpenPopup(false);

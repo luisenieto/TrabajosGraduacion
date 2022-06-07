@@ -27,62 +27,54 @@ const ModificarTrabajo = (props) => {
     //controla la visibilidad del popup 
     
     const clases = useStyles();  
-
-    // const [estadoAlerta, setEstadoAlerta] = useState({
-    //     gravedad : 'error',
-    //     titulo : '',
-    //     texto : '',
-    //     mostrar : false
-    // });
-    //controla la visibilidad de la alerta, su tipo y contenido (para los mensajes de error/éxito)
-    
+   
     useEffect(() => {
         // const _id = props.match.params.id;
         // const ruta = `/api/trabajos?id=${_id}`;
         // axios.get(ruta).then(response => { 
 
             //const trabajoUpdate = response.data;
-            const trabajoUpdate = unTrabajo;
-            
-            const tutoresUpdate = trabajoUpdate.tutores.map(tutor => ({
-                ...tutor,
-                abierto : false, 
-                seEstaModificando : false,
-                razonOriginal : ''
-            }));
-                        
-            const cotutoresUpdate = trabajoUpdate.cotutores.map(cotutor => ({
-                ...cotutor,
-                abierto : false, 
-                seEstaModificando : false,
-                razonOriginal : ''
-            }));
-            
-            const juradoUpdate = trabajoUpdate.jurado.map(j => ({
-                ...j,
-                abierto : false, 
-                seEstaModificando : false,
-                razonOriginal : ''
-            }));
+        const trabajoUpdate = unTrabajo;
+        
+        const tutoresUpdate = trabajoUpdate.tutores.map(tutor => ({
+            ...tutor,
+            abierto : false, 
+            seEstaModificando : false,
+            razonOriginal : ''
+        }));
+                    
+        const cotutoresUpdate = trabajoUpdate.cotutores.map(cotutor => ({
+            ...cotutor,
+            abierto : false, 
+            seEstaModificando : false,
+            razonOriginal : ''
+        }));
+        
+        const juradoUpdate = trabajoUpdate.jurado.map(j => ({
+            ...j,
+            abierto : false, 
+            seEstaModificando : false,
+            razonOriginal : ''
+        }));
 
-            const alumnosUpdate = trabajoUpdate.alumnos.map(alumno => ({
-                ...alumno,
-                abierto : false, 
-                seEstaModificando : false,
-                razonOriginal : ''
-            }));
-            //a cada elemento se le agregan las claves:
-            // 'abierto': controla la ventana de diálogo
-            // 'seEstaModificando' : para distinguir si se está agregando un tutor/cotutor/jurado o modificando la razón
-            // 'razonOriginal' : para cuando se esté modificando la razón y se cancele el proceso
+        const alumnosUpdate = trabajoUpdate.alumnos.map(alumno => ({
+            ...alumno,
+            abierto : false, 
+            seEstaModificando : false,
+            razonOriginal : ''
+        }));
+        //a cada elemento se le agregan las claves:
+        // 'abierto': controla la ventana de diálogo
+        // 'seEstaModificando' : para distinguir si se está agregando un tutor/cotutor/jurado o modificando la razón
+        // 'razonOriginal' : para cuando se esté modificando la razón y se cancele el proceso
 
-            setearUnTrabajo({
-                ...trabajoUpdate, 
-                tutores : tutoresUpdate, 
-                cotutores : cotutoresUpdate, 
-                jurado : juradoUpdate,
-                alumnos : alumnosUpdate
-            });
+        setearUnTrabajo({
+            ...trabajoUpdate, 
+            tutores : tutoresUpdate, 
+            cotutores : cotutoresUpdate, 
+            jurado : juradoUpdate,
+            alumnos : alumnosUpdate
+        });
         //});
 
         //el código a continuación se ejecuta cuando se desmonta el componente
@@ -101,10 +93,6 @@ const ModificarTrabajo = (props) => {
                     <Paper className = {clases.pageContent}>
                         <form>
                             <Grid container spacing = {1}>
-                                <Alerta 
-                                    //estadoAlerta = {estadoAlerta}
-                                    //setEstadoAlerta = {setEstadoAlerta}
-                                />
                                 <TituloTrabajo 
                                     trabajo = {unTrabajo}
                                     setearTrabajo = {setearUnTrabajo}
@@ -129,6 +117,7 @@ const ModificarTrabajo = (props) => {
                                     trabajo = {unTrabajo}
                                     setearTrabajo = {setearUnTrabajo}
                                 />
+                                <Alerta />
                                 <Botones 
                                     trabajo = {unTrabajo}
                                     setearOpenPopup = {setearOpenPopup}
@@ -138,7 +127,6 @@ const ModificarTrabajo = (props) => {
                                     openPopup = {openPopup}
                                     setearOpenPopup = {setearOpenPopup}
                                     trabajo = {unTrabajo}
-                                    //setEstadoAlerta = {setEstadoAlerta}
                                 />
                             </Grid>
                         </form>

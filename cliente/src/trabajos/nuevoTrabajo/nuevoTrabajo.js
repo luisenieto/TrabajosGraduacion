@@ -18,16 +18,6 @@ const NuevoTrabajo = () => {
 
     const [unTrabajo, setearUnTrabajo] = useState(trabajo);
 
-    //useEffect(() => {
-        //el código a continuación se ejecuta cuando se desmonta el componente
-        //permite resetear los valores para un trabajo
-        // return () => {
-        //     setearTrabajo(null);
-        // }
-        
-    //}, []); //eslint-disable-line react-hooks/exhaustive-deps    
-    //el comentario anterior es para que en la consola no aparezca el warning diciendo que el array de depdencias de useEffect está vacío    
-
     const clases = useStyles();   
 
     return (
@@ -36,8 +26,7 @@ const NuevoTrabajo = () => {
                 unTrabajo ?
                     <Paper className = {clases.pageContent}>
                         <form>
-                            <Grid container spacing = {1}>
-                                <Alerta />
+                            <Grid container spacing = {1}>                                
                                 <TituloTrabajo 
                                     trabajo = {unTrabajo}
                                     setearTrabajo = {setearUnTrabajo}
@@ -58,9 +47,9 @@ const NuevoTrabajo = () => {
                                     trabajo = {unTrabajo}
                                     setearTrabajo = {setearUnTrabajo}
                                 />
+                                <Alerta />
                                 <Botones 
                                     trabajo = {unTrabajo}                                    
-                                    //setEstadoAlerta = {setEstadoAlerta}
                                 />                                
                             </Grid>
                         </form>

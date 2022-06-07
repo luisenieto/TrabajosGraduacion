@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Grid } from '@mui/material';
 import { TextField } from '@mui/material';
 import { FormControlLabel } from '@mui/material';
@@ -9,9 +9,11 @@ import DateAdapter from '@mui/lab/AdapterDateFns';
 import esLocale from 'date-fns/locale/es';
 import useStyles from '../useStyles';
 import { constantesTrabajos } from '../../config/constantes';
+import { ProviderContext } from '../../provider';
 
 //Componente que se encarga de mostrar los campos para la duración, áreas y fechas del trabajo en el formulario
-const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {        
+const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {     
+    const {estadoAlerta} = useContext(ProviderContext);       
     //const {trabajo, setearTrabajo} = useContext(ProviderContext);
     const {duracion, areas, fechaPresentacion, fechaAprobacion} = trabajo;
 
@@ -95,6 +97,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
                     InputLabelProps = {{
                         shrink: true
                     }}
+                    InputProps = {estadoAlerta.botonesInhabilitados ? {disabled: true} : {disabled: false}}
                     value = {duracion}
                     onChange = {evento => setearTrabajo({...trabajo, duracion: evento.target.value})}
                     className = {clases.campoDuracion}
@@ -102,7 +105,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             </Grid>
             <Grid item lg = {2} sm = {2} xs = {4}>
                 <FormControlLabel
-                    control = {<Checkbox />}
+                    control = {<Checkbox disabled = {estadoAlerta.botonesInhabilitados ? true : false}/>}
                     label = {constantesTrabajos.HARDWARE}
                     className = {clases.checkBox}
                     checked = {tieneEstaArea(1)}
@@ -111,7 +114,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             </Grid>
             <Grid item lg = {2} sm = {2} xs = {4}>
                 <FormControlLabel
-                    control = {<Checkbox />}
+                    control = {<Checkbox disabled = {estadoAlerta.botonesInhabilitados ? true : false}/>}
                     label = {constantesTrabajos.REDES}
                     className = {clases.checkBox}
                     checked = {tieneEstaArea(2)}
@@ -120,7 +123,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             </Grid>
             <Grid item lg = {2} sm = {2} xs = {4}>
                 <FormControlLabel
-                    control = {<Checkbox />}
+                    control = {<Checkbox disabled = {estadoAlerta.botonesInhabilitados ? true : false}/>}
                     label = {constantesTrabajos.SOFTWARE}
                     className = {clases.checkBox}
                     checked = {tieneEstaArea(3)}
@@ -130,6 +133,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             <Grid item lg = {2} sm = {2} xs = {6}>
                 <LocalizationProvider dateAdapter = {DateAdapter} locale = {esLocale}>
                     <DatePicker
+                        disabled = {estadoAlerta.botonesInhabilitados ? true : false}                   
                         label = {constantesTrabajos.PRESENTACION}
                         value = {valorFechaPresentacion}
                         className = {clases.datePicker}
@@ -141,6 +145,7 @@ const DuracionAreasYFechas = ({trabajo, setearTrabajo}) => {
             <Grid item lg = {2} sm = {2} xs = {6}>
                 <LocalizationProvider dateAdapter = {DateAdapter} locale = {esLocale}>
                     <DatePicker
+                        disabled = {estadoAlerta.botonesInhabilitados ? true : false}                   
                         label = {constantesTrabajos.APROBACION}
                         value = {valorFechaAprobacion}
                         className = {clases.datePicker}

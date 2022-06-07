@@ -9,7 +9,7 @@ import { constantesProfesores, constantesTrabajos} from '../../config/constantes
 import { useHistory } from "react-router-dom";
 import Alerta from '../alerta';
 import Popup from './popup';
-import { apellidoYNombreOnKeyDown, dniOnKeyDown, apellidoYNombreOnPaste, dniOnPaste } from '../validaciones';
+import { apellidoYNombreOnKeyDown, apellidoYNombreOnPaste, dniOnPaste } from '../validaciones';
 import { Autocomplete } from '@mui/material';
 
 //Componente que se encarga de mostrar el formulario para la modificación de profesores
@@ -56,17 +56,19 @@ const ModificarProfesor = (props) => {
                 unProfesor && cargos ?
                     <Paper className = {clases.pageContent}>
                         <form>
-                        <Grid container spacing = {1}>
-                                <Alerta />
+                            <Grid container spacing = {1}>                                
                                 <Grid item lg = {6} sm = {12} xs = {12}>
                                     <TextField
                                         variant = 'outlined'
                                         label = 'Apellidos'
                                         value = {unProfesor.apellidos}
                                         className = {clases.campoApellidos}
-                                        inputProps = {{
-                                            onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
-                                        }}
+                                        inputProps = {
+                                            {
+                                                onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)},
+                                                disabled : estadoAlerta.botonesInhabilitados ? true : false
+                                            }
+                                        }
                                         onChange = {evento => setearUnProfesor({...unProfesor, 'apellidos' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
@@ -77,41 +79,46 @@ const ModificarProfesor = (props) => {
                                         label = 'Nombres'
                                         value = {unProfesor.nombres}
                                         className = {clases.campoNombres}
-                                        inputProps = {{
-                                            onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)}
-                                        }}
+                                        inputProps = {
+                                            {
+                                                onKeyDown : (evento) => {apellidoYNombreOnKeyDown(evento)},
+                                                disabled : estadoAlerta.botonesInhabilitados ? true : false
+                                            }
+                                        }
                                         onChange = {evento => setearUnProfesor({...unProfesor, 'nombres' : evento.target.value})}
                                         onPaste = {evento => apellidoYNombreOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {12}>
                                     <TextField  
-                                        InputProps = {{disabled: true}}                                      
+                                        inputProps = {{disabled: true}}                                      
                                         variant = 'outlined'
                                         label = 'DNI'
                                         value = {unProfesor.dni}
                                         className = {clases.campoDNI}
-                                        inputProps = {{
-                                            onKeyDown : (evento) => {dniOnKeyDown(evento)}
-                                        }}
+                                        // inputProps = {{
+                                        //     onKeyDown : (evento) => {dniOnKeyDown(evento)}
+                                        // }}
                                         onChange = {evento => setearUnProfesor({...unProfesor, 'dni' : evento.target.value})}
                                         onPaste = {evento => dniOnPaste(evento)}
                                     />
                                 </Grid>
                                 <Grid item lg = {6} sm = {6} xs = {12}>
                                     <Autocomplete 
-                                         {...defaultProps}
-                                         isOptionEqualToValue = {(option, value) => option.value === value.value}
-                                         // disablePortal
-                                         disableClearable
-                                         // id = "combo-box-tutores"
-                                         //sx = {{width : 350}}
-                                         renderInput = {(params) => <TextField {...params} label = {constantesProfesores.CARGO} />} 
-                                         value = {unProfesor ? unProfesor.nombreCargo : null}
-                                         onChange = {(evento, valor) => autoCompleteOnChange(valor)}
-                                         className = {clases.autoComplete}
+                                            {...defaultProps}
+                                            isOptionEqualToValue = {(option, value) => option.value === value.value}
+                                            // disablePortal
+                                            disableClearable
+                                            // id = "combo-box-tutores"
+                                            //sx = {{width : 350}}
+                                            disabled = {estadoAlerta.botonesInhabilitados ? true : false}
+                                            renderInput = {(params) => <TextField {...params} label = {constantesProfesores.CARGO} />} 
+                                            value = {unProfesor ? unProfesor.nombreCargo : null}
+                                            onChange = {(evento, valor) => autoCompleteOnChange(valor)}
+                                            className = {clases.autoComplete}
                                     />
                                 </Grid>
+                                <Alerta />
                                 <Grid item lg = {6} sm = {6} xs = {6}>
                                     <Button 
                                         variant="contained" 
