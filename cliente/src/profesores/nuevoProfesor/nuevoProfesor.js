@@ -36,6 +36,7 @@ const NuevoProfesor = () => {
             });
             return;                
         }  
+        
         const ruta = '/api/profesores/crear';   
         axios.post(ruta, unProfesor).then(response => {
             if (response.status === 200) {
@@ -47,7 +48,13 @@ const NuevoProfesor = () => {
                     botonesInhabilitados : true
                 });
                 let profesoresUpdate = [...profesores];
-                profesoresUpdate.push(response.data);
+
+                let profesorNuevo = response.data;
+                profesorNuevo['nombreCargo'] = unProfesor.nombreCargo;
+                //al guardar en la BD no se guarda el nombre del cargo
+                //por lo que response.data no tiene el nombre del cargo, por eso se lo agrega
+
+                profesoresUpdate.push(profesorNuevo);
                 //se ordenan los profesores por apellido. Si hay 2 con el mismo por nombre
                 profesoresUpdate = profesoresUpdate.sort((a, b) => {
                     if (a.apellidos < b.apellidos)
@@ -150,7 +157,8 @@ const NuevoProfesor = () => {
                                          //sx = {{width : 350}}
                                          disabled = {estadoAlerta.botonesInhabilitados ? true : false}
                                          renderInput = {(params) => <TextField {...params} label = {constantesProfesores.CARGO} />} 
-                                         value = {cargos[profesor.idCargo - 1] ? cargos[profesor.idCargo - 1].nombreCargo : null}
+                                         //value = {cargos[profesor.idCargo - 1] ? cargos[profesor.idCargo - 1].nombreCargo : null}
+                                         value = {profesor.nombreCargo}
                                          onChange = {(evento, valor) => autoCompleteOnChange(valor)}
                                          className = {clases.autoComplete}
                                     />

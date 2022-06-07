@@ -131,7 +131,8 @@ const Profesores = (props) => {
                                     apellidos : '',
                                     nombres : '',
                                     dni : '',
-                                    idCargo : 1
+                                    idCargo : 1,
+                                    nombreCargo : 'Titular'
                                 });
                                 props.history.push('/profesor/nuevo');
                             }}
