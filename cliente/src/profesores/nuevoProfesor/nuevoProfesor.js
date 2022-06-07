@@ -156,7 +156,7 @@ const NuevoProfesor = () => {
                                     />
                                 </Grid>
                                 <Alerta />
-                                <Grid item lg = {6} sm = {6} xs = {6}>
+                                <Grid item lg = {6} sm = {6} xs = {12}>
                                     <Button 
                                         variant="contained" 
                                         className = {clases.botonAceptar} 
@@ -166,7 +166,7 @@ const NuevoProfesor = () => {
                                         {constantesProfesores.ACEPTAR}                    
                                     </Button>
                                 </Grid>            
-                                <Grid item lg = {6} sm = {6} xs = {6}>
+                                <Grid item lg = {6} sm = {6} xs = {12}>
                                     <Button 
                                         variant="contained" 
                                         className = {clases.botonCancelar} 

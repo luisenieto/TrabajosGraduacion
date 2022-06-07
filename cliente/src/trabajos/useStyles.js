@@ -6,8 +6,8 @@ const useStyles = makeStyles(tema => ({
         padding : tema.spacing(1)
     }, 
     campoBuscar : {
-        marginLeft: tema.spacing(1),
-        width : '50%'
+        margin: tema.spacing(1),        
+        width : '96%'
     },
     autoCompleteFiltrar : {
         margin : tema.spacing(1)

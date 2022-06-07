@@ -76,7 +76,7 @@ const Profesores = (props) => {
             <Paper sx = {{width : '100%', marginBottom : 2}} elevation = {3}>
                 <Grid container spacing = {1}>
                     <Alerta />
-                    <Grid item xs = {12}>
+                    <Grid item lg = {6} sm = {12} xs = {12}>
                         <TextField 
                             id = "buscar-por-apellido"
                             label = "Buscar por apellido"
