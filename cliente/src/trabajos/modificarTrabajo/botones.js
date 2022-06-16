@@ -50,7 +50,7 @@ const Botones = ({trabajo, setearOpenPopup}) => {
                     variant="contained" 
                     className = {clases.botonAceptar} 
                     onClick = {() => botonAceptar()}
-                    disabled = {trabajo.fechaFinalizacion || estadoAlerta.botonesInhabilitados}
+                    disabled = {estadoAlerta.botonesInhabilitados}
                 >
                     {constantesTrabajos.ACEPTAR}                    
                 </Button>
@@ -60,7 +60,7 @@ const Botones = ({trabajo, setearOpenPopup}) => {
                     variant="contained" 
                     className = {clases.botonCancelar} 
                     onClick = {() => botonBaja()}
-                    disabled = {trabajo.fechaFinalizacion || estadoAlerta.botonesInhabilitados}
+                    disabled = {estadoAlerta.botonesInhabilitados}
                 >
                     {constantesTrabajos.DAR_DE_BAJA}
                 </Button>

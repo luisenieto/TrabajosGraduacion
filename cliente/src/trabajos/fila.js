@@ -67,6 +67,7 @@ const Fila = ({trabajo, setearOpenPopup}) => {
                     <IconButton
                         size = 'small'
                         onClick = {() => botonEditarClic(_id)}
+                        disabled = {trabajo.fechaFinalizacion}
                     >
                         <RiEditLine />
                     </IconButton>                        
