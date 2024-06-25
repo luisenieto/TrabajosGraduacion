@@ -10,7 +10,8 @@ const configuracion = {
     },
     default : {
         SECRET : 'superSecretPassword123',
-        BD : 'mongodb://localhost:27017/trabajosGraduacion',
+        BD : 'mongodb+srv://luisenieto:Gasparin1973@trabajosgraduacion.gapmp.mongodb.net/trabajosGraduacion?retryWrites=true&w=majority',
+        //BD : 'mongodb://localhost:27017/trabajosGraduacion',
         PUERTO : 3001
     }
 }
